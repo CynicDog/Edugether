@@ -4,8 +4,10 @@ import io.vertx.core.Vertx;
 import io.vertx.core.http.HttpMethod;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.handler.StaticHandler;
-import org.example.service.UserService;
+
 import org.jboss.logging.Logger;
+
+import static org.example.util.constant.Location.HTML_ROOT;
 
 public class HomeController {
 
@@ -22,7 +24,11 @@ public class HomeController {
         router.route(HttpMethod.GET, "/home").handler(routingContext -> {
             routingContext.response()
                     .putHeader("Content-Type", "text/html")
-                    .sendFile("src/main/resources/public/home.html");
+                    .sendFile(HTML_ROOT + "home.html");
         });
     }
+
+    public String[] publicUrls = {
+            "/home"
+    };
 }

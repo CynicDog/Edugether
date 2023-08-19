@@ -35,7 +35,7 @@ public class User {
     private TYPE type;
 
     @Enumerated(EnumType.STRING)
-    private ACTIVE active;
+    private ACTIVE active = ACTIVE.YES;
 
     @ManyToMany
     @JoinTable(
@@ -46,6 +46,13 @@ public class User {
     private Set<Post> likedPosts = new HashSet<>();
 
     public User() {
+    }
+
+    public User(String username, String password, String email, TYPE type) {
+        this.username = username;
+        this.password = password;
+        this.email = email;
+        this.type = type;
     }
 
     public Long getId() {

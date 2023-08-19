@@ -4,6 +4,7 @@ import io.vertx.core.AbstractVerticle;
 import io.vertx.core.Promise;
 import io.vertx.core.Vertx;
 import io.vertx.core.http.HttpServer;
+import io.vertx.ext.auth.PubSecKeyOptions;
 import io.vertx.ext.web.Router;
 import org.example.controller.HomeController;
 import org.example.controller.UserController;

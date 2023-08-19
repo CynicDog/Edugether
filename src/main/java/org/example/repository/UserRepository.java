@@ -4,5 +4,7 @@ import org.example.entity.users.User;
 
 public interface UserRepository {
 
-    public User loadUserByUsername(String username);
+    User loadUserByUsername(String username);
+
+    void insertUser(User user);
 }

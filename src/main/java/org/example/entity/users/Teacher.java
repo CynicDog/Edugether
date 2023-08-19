@@ -1,5 +1,7 @@
 package org.example.entity.users;
 
+import org.example.util.enums.TYPE;
+
 import javax.persistence.*;
 import java.util.Set;
 
@@ -17,6 +19,10 @@ public class Teacher extends User{
     private Integer salary;
 
     public Teacher() {
+    }
+
+    public Teacher(String username, String password, String email, TYPE type) {
+        super(username, password, email, type);
     }
 
     public Set<String> getQualifications() {

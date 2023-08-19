@@ -1,6 +1,7 @@
 package org.example.entity.users;
 
 import org.example.util.enums.RELATIONSHIP;
+import org.example.util.enums.TYPE;
 
 import javax.persistence.*;
 import java.util.Set;
@@ -20,6 +21,10 @@ public class Student extends User {
     private RELATIONSHIP relationship;
 
     public Student() {
+    }
+
+    public Student(String username, String password, String email, TYPE type) {
+        super(username, password, email, type);
     }
 
     public Set<String> getInterests() {
