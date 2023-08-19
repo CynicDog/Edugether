@@ -1,0 +1,5 @@
+package org.example.util.enums;
+
+public enum REVIEW_SENTIMENT {
+    NEUTRAL, LOVED, LIKED, DISLIKED, IMPRESSED, MIXED, CONFUSED, INSPIRED, OVERWHELMED
+}
