@@ -1,8 +1,5 @@
 package org.example.controller;
 
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.security.Keys;
 import io.vertx.core.Vertx;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.web.Router;
@@ -11,14 +8,11 @@ import io.vertx.ext.web.handler.BodyHandler;
 import io.vertx.ext.web.handler.SessionHandler;
 import io.vertx.ext.web.handler.StaticHandler;
 import io.vertx.ext.web.sstore.LocalSessionStore;
+import org.example.entity.users.User;
+import org.example.projection.UserProjection;
 import org.example.service.UserService;
 import org.example.util.enums.TYPE;
 import org.jboss.logging.Logger;
-
-import javax.crypto.SecretKey;
-import java.nio.charset.StandardCharsets;
-import java.util.Map;
-import java.util.Optional;
 
 import static org.example.util.constant.PageLocation.PUBLIC;
 
@@ -27,6 +21,8 @@ public class UserController implements Controller {
     private final String signingKey;
     private final Logger logger = Logger.getLogger(UserController.class);
     private final UserService userService;
+    private UserProjection userProjection = null;
+
     public String[] publicUrls = {"/signup/**", "/login",};
 
     public UserController(UserService userService, String signingKey) {
@@ -50,12 +46,8 @@ public class UserController implements Controller {
             routingContext.response().putHeader("Content-Type", "text/html").sendFile(PUBLIC + "login.html");
         });
 
-        router.get("/my-page").handler(routingContext -> {
-            routingContext.response().putHeader("Content-Type", "text/html").sendFile(PUBLIC + "my-page.html");
-        });
-
-        // http -h POST http://localhost:8080/my-page Authorization:{jwt}
-        router.post("/my-page").handler(this::handleMyPage);
+        // http GET http://localhost:8080/my-page
+        router.get("/my-page").handler(this::handleMyPage);
 
         // http -h POST http://localhost:8080/signup/student username=simon password=1234 email=simon@test.com
         router.post("/signup/student").handler(BodyHandler.create()).handler(this::handleStudentSignup);
@@ -69,25 +61,15 @@ public class UserController implements Controller {
 
     private void handleMyPage(RoutingContext routingContext) {
 
-        String jwt = Optional.ofNullable(routingContext.request().getHeader("Authorization")).orElse(null);
+        UserProjection authenticated = routingContext.session().get("Authentication");
 
-        if (jwt != null) {
-            SecretKey key = Keys.hmacShaKeyFor(signingKey.getBytes(StandardCharsets.UTF_8));
-            Claims claims = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(jwt).getBody();
-
-            String username = String.valueOf(claims.get("username"));
-            logger.info(username);
-
-            routingContext.response()
-                    .setStatusCode(200)
-                    .putHeader("Content-Type", "text/html")
-                    .putHeader("Location", "/my-page")
-                    .end();
+        if (authenticated != null) {
+            logger.info("Authentication (" + authenticated.getUsername() + ")");
+            routingContext.response().putHeader("Content-Type", "text/html").sendFile(PUBLIC + "my-page.html");
         } else {
-            routingContext.response()
-                    .setStatusCode(400)
-                    .setStatusMessage("to Authentication entry point..")
-                    .end();
+            logger.info("Authentication entry point..");
+            // to authentication entry point
+            routingContext.response().putHeader("Content-Type", "text/html").sendFile(PUBLIC + "login.html");
         }
     }
 
@@ -115,13 +97,12 @@ public class UserController implements Controller {
 
         JsonObject credentials = routingContext.getBodyAsJson();
 
-        if (userService.authenticate(credentials)) {
-            SecretKey key = Keys.hmacShaKeyFor(signingKey.getBytes(StandardCharsets.UTF_8));
-            String jwt = Jwts.builder().setClaims(Map.of("username", credentials.getString("username"))).signWith(key).compact();
+        User authenticated = userService.authenticate(credentials);
 
-            routingContext.response().setStatusCode(200).putHeader("Authorization", jwt).putHeader("Location", "/home").end();
-        } else {
-            routingContext.response().setStatusCode(400).setStatusMessage("Bad credentials!").end();
-        }
+        this.userProjection = new UserProjection(authenticated.getId(), authenticated.getUsername());
+        routingContext.session().put("Authentication", this.userProjection);
+        // TODO: Encoding on authentication object in session
+
+        routingContext.response().setStatusCode(200).putHeader("Location", "/home").end();
     }
 }

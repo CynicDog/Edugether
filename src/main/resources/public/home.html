@@ -18,22 +18,9 @@
 
         const myPage = document.getElementById('myPage');
 
-        myPage.addEventListener('click', function (event) {
-            event.preventDefault();
-
-            fetch('/my-page', {
-                method: "POST",
-                headers: {
-                    "Authorization": localStorage.getItem('jwt')
-                }
-            }).then(response => {
-                if (response.ok) {
-                    window.location.href = response.headers.get("Location");
-                } else {
-                    alert(`${response.statusText}`)
-                }
-            })
-        })
+        myPage.addEventListener('click', function () {
+            window.location.href = '/my-page';
+        });
     })
 </script>
 </html>
