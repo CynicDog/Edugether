@@ -56,7 +56,6 @@ public class UserController implements Controller {
     private void handleMyPage(RoutingContext routingContext) {
 
         Principal authenticatedPrincipal = routingContext.session().get("Authentication");
-        logger.info("[ Fetching principal ...] - " + authenticatedPrincipal.getName());
 
         if (authenticatedPrincipal != null) {
             routingContext.response().putHeader("Content-Type", "text/html").sendFile(PUBLIC + "my-page.html");
