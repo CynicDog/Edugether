@@ -31,6 +31,7 @@ public class HomeController implements Controller {
 
         router.route().handler(StaticHandler.create());
         router.route().handler(SessionHandler.create(LocalSessionStore.create(vertx)));
+
         {   // GET handlers
             router.get("/home").handler(routingContext -> {
                 routingContext.response().putHeader("Content-Type", "text/html").sendFile(PUBLIC + "home.html");
@@ -51,8 +52,11 @@ public class HomeController implements Controller {
             router.get("/nav-anonymous").handler(routingContext -> {
                 routingContext.response().putHeader("Content-Type", "text/html").sendFile(PUBLIC + "nav-anonymous.html");
             });
-        }
 
+            router.get("/nav-blank").handler(routingContext -> {
+                routingContext.response().putHeader("Content-Type", "text/html").sendFile(PUBLIC + "nav-blank.html");
+            });
+        }
         {   // POST handlers
             router.post("/logout").handler(BodyHandler.create()).handler(this::handleLogout);
             router.post("/login").handler(BodyHandler.create()).handler(this::handleLogin);

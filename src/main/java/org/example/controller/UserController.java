@@ -34,18 +34,50 @@ public class UserController implements Controller {
 
         router.route().handler(StaticHandler.create());
         router.route().handler(SessionHandler.create(LocalSessionStore.create(vertx)));
+
         {   // GET handlers
             router.get("/signup").handler(routingContext -> {
                 routingContext.response().putHeader("Content-Type", "text/html").sendFile(PUBLIC + "signup.html");
             });
 
+            router.get("/signup/student").handler(routingContext -> {
+                routingContext.response().putHeader("Content-Type", "text/html").sendFile(PUBLIC + "signup-student.html");
+            });
+
+            router.get("/signup/teacher").handler(routingContext -> {
+                routingContext.response().putHeader("Content-Type", "text/html").sendFile(PUBLIC + "signup-teacher.html");
+            });
+            
             router.get("/my-page").handler(this::handleMyPage);
+            router.get("/user/check-username").handler(this::handleCheckUsername);
+            router.get("/user/check-email").handler(this::handleCheckEmail);
         }
         {   // POST handlers
             router.post("/signup/student").handler(BodyHandler.create()).handler(this::handleStudentSignup);
             router.post("/signup/teacher").handler(BodyHandler.create()).handler(this::handleTeacherSignup);
         }
 
+    }
+
+    private void handleCheckUsername(RoutingContext routingContext) {
+
+        String username = routingContext.request().getParam("username");
+
+        if (userService.isUsernameUnique(username)) {
+            routingContext.response().setStatusCode(200).end();
+        } else {
+            routingContext.response().setStatusCode(400).end();
+        }
+    }
+
+    private void handleCheckEmail(RoutingContext routingContext) {
+        String email = routingContext.request().getParam("email");
+
+        if (userService.isEmailUnique(email)) {
+            routingContext.response().setStatusCode(200).end();
+        } else {
+            routingContext.response().setStatusCode(400).end();
+        }
     }
 
     // Authenticated

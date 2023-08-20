@@ -54,4 +54,14 @@ public class UserService {
 
         return result.verified ? user : null;
     }
+
+    public boolean isUsernameUnique(String username) {
+
+        return userRepository.isUsernameUnique(username);
+    }
+
+    public boolean isEmailUnique(String email) {
+
+        return userRepository.isEmailUnique(email);
+    }
 }
