@@ -1,11 +1,13 @@
 package org.example.repository.implementation;
 
 import org.example.entity.users.User;
+import org.example.projection.UserProjection;
 import org.example.repository.UserRepository;
 import org.example.util.JpaOperationUtil;
 import org.jboss.logging.Logger;
 
 import javax.persistence.EntityManagerFactory;
+import java.util.List;
 
 public class UserRepositoryImpl implements UserRepository {
 
@@ -14,6 +16,15 @@ public class UserRepositoryImpl implements UserRepository {
 
     public UserRepositoryImpl(EntityManagerFactory entityManagerFactory) {
         this.entityManagerFactory = entityManagerFactory;
+    }
+
+    @Override
+    public List<UserProjection> getUsersRandomlyLimitBy(Integer limit) {
+        return JpaOperationUtil.apply(entityManagerFactory, em -> {
+            return em.createQuery("select new org.example.projection.UserProjection(u.id, u.username, u.email, u.type) from User u order by function('RAND')", UserProjection.class)
+                    .setMaxResults(limit)
+                    .getResultList();
+        });
     }
 
     @Override

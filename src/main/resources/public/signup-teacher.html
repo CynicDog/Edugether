@@ -10,17 +10,44 @@
 <body>
 <div id="navbar-placeholder"></div>
 <div class="container">
-    <div class="row text-center my-5">
-        <div class="row my-5">
-            <div class="col my-3">
-                <div class="fw-lighter fs-1">You are a.. </div>
+    <div class="row justify-content-center align-items-center my-3">
+        <div class="col-md-6">
+            <div class="card shadow my-5 p-5">
+                <div class="fw-lighter fs-2 ">Teacher Sign Up</div>
+                <div class="card-body my-3">
+                    <div class="form-floating my-3">
+                        <input type="text" class="form-control" name="username" id="username" placeholder=""/>
+                        <label class="fw-lighter d-flex" for="username">username
+                            <div class="ms-auto">
+                                <div id="usernameLoadingSpinner"
+                                     class="spinner-border spinner-border-sm text-primary m-1" role="status"
+                                     style="display: none;">
+                                    <span class="visually-hidden">Loading...</span>
+                                </div>
+                            </div>
+                        </label>
+                    </div>
+                    <div class="form-floating my-3">
+                        <input type="password" class="form-control" name="password" id="password" placeholder=""/>
+                        <label class="fw-lighter" for="password">password</label>
+                    </div>
+                    <div class="form-floating my-3">
+                        <input type="email" class="form-control" name="email" id="email" placeholder=""/>
+                        <label class="fw-lighter d-flex" for="email">email
+                            <div class="ms-auto">
+                                <div id="emailLoadingSpinner" class="spinner-border spinner-border-sm text-primary m-1" role="status" style="display: none;">
+                                    <span class="visually-hidden">Loading...</span>
+                                </div>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+                <div class="text-center">
+                    <button id="signupButton" class="btn btn-light btn-sm" disabled>
+                        signup
+                    </button>
+                </div>
             </div>
-        </div>
-        <div class="row">
-            <div id="studentSignupButton" class="col fw-light my-3"><span class="btn btn-light" href="/signup/student">✏️ Student</span></div>
-        </div>
-        <div class="row">
-            <div id="teacherSignupButton" class="col fw-light my-3"><span class="btn btn-light" href="/signup/teacher">🖋️ Teacher</span></div>
         </div>
     </div>
 </div>
@@ -33,6 +60,161 @@
             .then(data => {
                 document.getElementById('navbar-placeholder').innerHTML = data;
             });
+
+        const usernameInput = document.querySelector('input[name="username"]');
+        const passwordInput = document.querySelector('input[name="password"]');
+        const emailInput = document.querySelector('input[name="email"]');
+
+        const usernameSpinner = usernameInput.parentElement.querySelector('.spinner-border')
+        const emailSpinner = emailInput.parentElement.querySelector('.spinner-border');
+
+        let validationStatus = {
+            usernameInput: false,
+            passwordInput: false,
+            emailInput: false
+        }
+
+        const signupButton = document.getElementById('signupButton');
+
+        usernameInput.addEventListener("blur", function () {
+            removeErrorMessage(this);
+            if (this.value.trim() === '') {
+                displayErrorMessage(this, "Required");
+                validationStatus.usernameInput = false;
+            } else if (this.value.trim().includes(' ')) {
+                displayErrorMessage(this, "Shouldn't contain blank in username.");
+                validationStatus.usernameInput = false;
+            } else {
+                const username = encodeURIComponent(this.value.trim())
+                usernameSpinner.style.display = "block";
+
+                fetch(`/user/check-username?username=${username}`, {
+                    method: "GET"
+                }).then(response => {
+                    usernameSpinner.style.display = "none";
+                    if (response.ok) {
+                        removeSuccessMessage(this);
+                        displaySuccessMessage(this);
+
+                        validationStatus.usernameInput = true;
+                        updateSubmitButton();
+                    } else {
+                        removeErrorMessage(this)
+                        displayErrorMessage(this, "Already taken username.");
+                        validationStatus.usernameInput = false;
+                        updateSubmitButton();
+                    }
+                })
+            }
+            updateSubmitButton();
+        });
+
+        passwordInput.addEventListener("blur", function () {
+            removeErrorMessage(this);
+            if (this.value.trim() === '') {
+                displayErrorMessage(this, "Required.");
+                validationStatus.passwordInput = false;
+            } else if (this.value.trim().includes(' ')) {
+                displayErrorMessage(this, "Shouldn't contain blank in username.");
+                validationStatus.usernameInput = false;
+            } else {
+                removeSuccessMessage(this);
+                displaySuccessMessage(this);
+
+                validationStatus.passwordInput = true;
+            }
+            updateSubmitButton();
+        });
+
+        emailInput.addEventListener("blur", function () {
+
+            removeErrorMessage(this);
+            const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailPattern.test(this.value.trim())) {
+                displayErrorMessage(this, "Not a valid form of an email address.");
+                validationStatus.emailInput = false;
+            } else {
+                const email = encodeURIComponent(this.value.trim())
+                emailSpinner.style.display = "block";
+
+                fetch(`/user/check-email?email=${email}`, {
+                    method: "GET"
+                }).then(response => {
+                    emailSpinner.style.display = "none";
+                    if (response.ok) {
+                        removeSuccessMessage(this);
+                        displaySuccessMessage(this);
+
+                        validationStatus.emailInput = true;
+                        updateSubmitButton();
+                    } else {
+                        removeErrorMessage(this)
+                        displayErrorMessage(this, "Already taken email address.");
+                        validationStatus.emailInput = false;
+                        updateSubmitButton();
+                    }
+                })
+            }
+            updateSubmitButton();
+        });
+
+        signupButton.addEventListener('click', function () {
+
+            const formData = {
+                username: usernameInput.value.trim(),
+                password: passwordInput.value.trim(),
+                email: emailInput.value.trim()
+            }
+
+            fetch(`/signup/teacher`, {
+                method: "POST",
+                body: JSON.stringify(formData)
+            }).then(response => {
+                if (response.ok) {
+                    window.location.href = '/login';
+                }
+            })
+        })
+
+        function displayErrorMessage(input, message) {
+
+            input.classList.add('is-invalid');
+
+            const errorDiv = document.createElement('div');
+            errorDiv.className = 'invalid-feedback';
+            errorDiv.textContent = message;
+
+            const parentDiv = input.parentElement;
+            parentDiv.appendChild(errorDiv);
+        }
+
+        function removeErrorMessage(input) {
+
+            input.classList.remove('is-invalid');
+
+            const parentDiv = input.parentElement;
+            const errorDiv = parentDiv.querySelector('.invalid-feedback');
+            if (errorDiv) {
+                parentDiv.removeChild(errorDiv);
+            }
+        }
+
+        function displaySuccessMessage(input) {
+            input.classList.add("is-valid");
+        }
+
+        function removeSuccessMessage(input) {
+            input.classList.remove("is-valid");
+        }
+
+        function updateSubmitButton() {
+
+            if (Object.values(validationStatus).every(status => status === true)) {
+                signupButton.removeAttribute("disabled");
+            } else {
+                signupButton.setAttribute("disabled", "disabled");
+            }
+        }
     })
 </script>
 </html>

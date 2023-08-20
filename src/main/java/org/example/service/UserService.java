@@ -5,10 +5,12 @@ import io.vertx.core.json.JsonObject;
 import org.example.entity.users.Student;
 import org.example.entity.users.Teacher;
 import org.example.entity.users.User;
+import org.example.projection.UserProjection;
 import org.example.repository.UserRepository;
 import org.example.util.enums.TYPE;
 import org.jboss.logging.Logger;
 
+import java.util.List;
 import java.util.Optional;
 
 public class UserService {
@@ -63,5 +65,10 @@ public class UserService {
     public boolean isEmailUnique(String email) {
 
         return userRepository.isEmailUnique(email);
+    }
+
+    public List<UserProjection> getUsersRandomlyLimitBy(Integer limit) {
+
+        return userRepository.getUsersRandomlyLimitBy(limit);
     }
 }

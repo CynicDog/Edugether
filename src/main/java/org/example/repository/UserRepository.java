@@ -1,6 +1,9 @@
 package org.example.repository;
 
 import org.example.entity.users.User;
+import org.example.projection.UserProjection;
+
+import java.util.List;
 
 public interface UserRepository {
 
@@ -13,4 +16,6 @@ public interface UserRepository {
     boolean isUsernameUnique(String username);
 
     boolean isEmailUnique(String email);
+
+    List<UserProjection> getUsersRandomlyLimitBy(Integer limit);
 }

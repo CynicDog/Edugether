@@ -14,6 +14,7 @@ import org.example.service.UserService;
 import org.jboss.logging.Logger;
 
 import java.security.Principal;
+import java.util.List;
 
 import static org.example.util.constant.PageLocation.PUBLIC;
 
@@ -33,34 +34,30 @@ public class HomeController implements Controller {
         router.route().handler(SessionHandler.create(LocalSessionStore.create(vertx)));
 
         {   // GET handlers
-            router.get("/home").handler(routingContext -> {
-                routingContext.response().putHeader("Content-Type", "text/html").sendFile(PUBLIC + "home.html");
-            });
+            router.get("/home").handler(routingContext -> { routingContext.response().putHeader("Content-Type", "text/html").sendFile(PUBLIC + "home.html"); });
+            router.get("/").handler(routingContext -> { routingContext.response().putHeader("Content-Type", "text/html").sendFile(PUBLIC + "home.html"); });
+            router.get("/login").handler(routingContext -> { routingContext.response().putHeader("Content-Type", "text/html").sendFile(PUBLIC + "login.html"); });
 
-            router.get("/").handler(routingContext -> {
-                routingContext.response().putHeader("Content-Type", "text/html").sendFile(PUBLIC + "home.html");
-            });
+            router.get("/nav-authenticated").handler(routingContext -> { routingContext.response().putHeader("Content-Type", "text/html").sendFile(PUBLIC + "nav-authenticated.html"); });
+            router.get("/nav-anonymous").handler(routingContext -> { routingContext.response().putHeader("Content-Type", "text/html").sendFile(PUBLIC + "nav-anonymous.html"); });
+            router.get("/nav-blank").handler(routingContext -> { routingContext.response().putHeader("Content-Type", "text/html").sendFile(PUBLIC + "nav-blank.html"); });
 
-            router.get("/login").handler(routingContext -> {
-                routingContext.response().putHeader("Content-Type", "text/html").sendFile(PUBLIC + "login.html");
-            });
-
-            router.get("/nav-authenticated").handler(routingContext -> {
-                routingContext.response().putHeader("Content-Type", "text/html").sendFile(PUBLIC + "nav-authenticated.html");
-            });
-
-            router.get("/nav-anonymous").handler(routingContext -> {
-                routingContext.response().putHeader("Content-Type", "text/html").sendFile(PUBLIC + "nav-anonymous.html");
-            });
-
-            router.get("/nav-blank").handler(routingContext -> {
-                routingContext.response().putHeader("Content-Type", "text/html").sendFile(PUBLIC + "nav-blank.html");
-            });
+            router.get("/user/fetch-randomly").handler(this::handleFetchRandomly);
         }
         {   // POST handlers
             router.post("/logout").handler(BodyHandler.create()).handler(this::handleLogout);
             router.post("/login").handler(BodyHandler.create()).handler(this::handleLogin);
         }
+    }
+
+    private void handleFetchRandomly(RoutingContext routingContext) {
+
+        Integer limit = Integer.parseInt(routingContext.request().getParam("limit"));
+
+        List<UserProjection> users= userService.getUsersRandomlyLimitBy(limit);
+        JsonObject data = new JsonObject().put("users", users);
+
+        routingContext.response().setStatusCode(200).putHeader("Content-Type", "application/json").end(data.encode());
     }
 
     private void handleLogout(RoutingContext routingContext) {

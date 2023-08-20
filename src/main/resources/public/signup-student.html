@@ -81,6 +81,9 @@
             if (this.value.trim() === '') {
                 displayErrorMessage(this, "Required");
                 validationStatus.usernameInput = false;
+            } else if (this.value.trim().length > 13) {
+                displayErrorMessage(this, "Should be under 13 characters.");
+                validationStatus.usernameInput = false;
             } else if (this.value.trim().includes(' ')) {
                 displayErrorMessage(this, "Shouldn't contain blank in username.");
                 validationStatus.usernameInput = false;
