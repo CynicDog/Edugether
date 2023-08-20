@@ -60,10 +60,7 @@ public class HomeController implements Controller {
     private void handleLogout(RoutingContext routingContext) {
 
         String username = routingContext.getBodyAsJson().getString("username");
-        logger.info("[ Removing principal ...] - " + username);
-
         Principal authenticatedPrincipal = routingContext.session().get("Authentication");
-        logger.info("[ Fetching principal ...] - " + authenticatedPrincipal.getName());
 
         if (authenticatedPrincipal.getName().equals(username)) {
             routingContext.session().remove("Authentication");
@@ -82,9 +79,6 @@ public class HomeController implements Controller {
         if (found != null) {
             Principal authenticatedPrincipal = new UserProjection(found.getId(), found.getUsername());
             routingContext.session().put("Authentication", authenticatedPrincipal);
-
-            logger.info("[ Storing principal ...] - " + authenticatedPrincipal.getName());
-            // TODO: Encoding on authentication object in session
 
             JsonObject userInfo = new JsonObject().put("username", authenticatedPrincipal.getName());
 

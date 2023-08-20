@@ -8,8 +8,6 @@ import io.vertx.ext.web.handler.BodyHandler;
 import io.vertx.ext.web.handler.SessionHandler;
 import io.vertx.ext.web.handler.StaticHandler;
 import io.vertx.ext.web.sstore.LocalSessionStore;
-import org.example.entity.users.User;
-import org.example.projection.UserProjection;
 import org.example.service.UserService;
 import org.example.util.enums.TYPE;
 import org.jboss.logging.Logger;
@@ -36,23 +34,21 @@ public class UserController implements Controller {
 
         router.route().handler(StaticHandler.create());
         router.route().handler(SessionHandler.create(LocalSessionStore.create(vertx)));
+        {   // GET handlers
+            router.get("/signup").handler(routingContext -> {
+                routingContext.response().putHeader("Content-Type", "text/html").sendFile(PUBLIC + "signup.html");
+            });
 
-        // http GET http://localhost:8080/signup
-        router.get("/signup").handler(routingContext -> {
-            routingContext.response().putHeader("Content-Type", "text/html").sendFile(PUBLIC + "signup.html");
-        });
-
-        // http GET http://localhost:8080/my-page
-        router.get("/my-page").handler(this::handleMyPage);
-
-        // http -h POST http://localhost:8080/signup/student username=simon password=1234 email=simon@test.com
-        router.post("/signup/student").handler(BodyHandler.create()).handler(this::handleStudentSignup);
-
-        // http -h POST http://localhost:8080/signup/teacher username=sammy password=1234 email=sammy@test.com
-        router.post("/signup/teacher").handler(BodyHandler.create()).handler(this::handleTeacherSignup);
+            router.get("/my-page").handler(this::handleMyPage);
+        }
+        {   // POST handlers
+            router.post("/signup/student").handler(BodyHandler.create()).handler(this::handleStudentSignup);
+            router.post("/signup/teacher").handler(BodyHandler.create()).handler(this::handleTeacherSignup);
+        }
 
     }
 
+    // Authenticated
     private void handleMyPage(RoutingContext routingContext) {
 
         Principal authenticatedPrincipal = routingContext.session().get("Authentication");
