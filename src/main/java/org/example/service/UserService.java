@@ -9,6 +9,8 @@ import org.example.repository.UserRepository;
 import org.example.util.enums.TYPE;
 import org.jboss.logging.Logger;
 
+import java.util.Optional;
+
 public class UserService {
 
     private final Logger logger = Logger.getLogger(UserService.class);
@@ -41,7 +43,7 @@ public class UserService {
         userRepository.insertUser(user);
     }
 
-    public boolean authenticate(JsonObject credentials) {
+    public User authenticate(JsonObject credentials) {
 
         String username = credentials.getString("username");
         String password = credentials.getString("password");
@@ -50,6 +52,6 @@ public class UserService {
 
         BCrypt.Result result = BCrypt.verifyer().verify(password.toCharArray(), user.getPassword());
 
-        return result.verified;
+        return result.verified ? user : null;
     }
 }

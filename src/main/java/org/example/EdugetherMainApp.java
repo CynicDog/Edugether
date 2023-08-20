@@ -44,7 +44,6 @@ public class EdugetherMainApp extends AbstractVerticle {
         CourseController courseController = new CourseController(userService, courseService, signingKey);
         courseController.registerRoutes(vertx, router);
 
-
         server.requestHandler(router).listen(8080, result -> {
             if (result.succeeded()) {
                 startPromise.complete();
