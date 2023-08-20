@@ -29,14 +29,15 @@ public class EdugetherMainApp extends AbstractVerticle {
         HttpServer server = vertx.createHttpServer();
         Router router = Router.router(vertx);
 
-        HomeController homeController = new HomeController();
-        homeController.registerRoutes(vertx, router);
-
         // Components on `User` domain
         UserRepository userRepository = new UserRepositoryImpl(emf);
         UserService userService = new UserService(userRepository);
         UserController userController = new UserController(userService, signingKey);
         userController.registerRoutes(vertx, router);
+
+        // Components on homepage rendering and security operations
+        HomeController homeController = new HomeController(userService);
+        homeController.registerRoutes(vertx, router);
 
         // Components on `Course` domain
         CourseRepository courseRepository = new CourseRepositoryImpl(emf);

@@ -18,6 +18,5 @@ public class CourseRepositoryImpl implements CourseRepository {
     @Override
     public void insertCourse(Course course) {
 
-
     }
 }

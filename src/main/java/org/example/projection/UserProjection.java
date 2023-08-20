@@ -1,9 +1,12 @@
 package org.example.projection;
 
-public class UserProjection {
+import java.security.Principal;
+
+public class UserProjection implements Principal {
 
     private Long id;
     private String username;
+
 
     public UserProjection(Long id, String username) {
         this.id = id;
@@ -14,7 +17,8 @@ public class UserProjection {
         return id;
     }
 
-    public String getUsername() {
+    @Override
+    public String getName() {
         return username;
     }
 }

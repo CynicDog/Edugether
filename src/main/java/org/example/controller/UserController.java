@@ -14,6 +14,8 @@ import org.example.service.UserService;
 import org.example.util.enums.TYPE;
 import org.jboss.logging.Logger;
 
+import java.security.Principal;
+
 import static org.example.util.constant.PageLocation.PUBLIC;
 
 public class UserController implements Controller {
@@ -21,7 +23,6 @@ public class UserController implements Controller {
     private final String signingKey;
     private final Logger logger = Logger.getLogger(UserController.class);
     private final UserService userService;
-    private UserProjection userProjection = null;
 
     public String[] publicUrls = {"/signup/**", "/login",};
 
@@ -41,11 +42,6 @@ public class UserController implements Controller {
             routingContext.response().putHeader("Content-Type", "text/html").sendFile(PUBLIC + "signup.html");
         });
 
-        // http GET http://localhost:8080/login
-        router.get("/login").handler(routingContext -> {
-            routingContext.response().putHeader("Content-Type", "text/html").sendFile(PUBLIC + "login.html");
-        });
-
         // http GET http://localhost:8080/my-page
         router.get("/my-page").handler(this::handleMyPage);
 
@@ -55,20 +51,16 @@ public class UserController implements Controller {
         // http -h POST http://localhost:8080/signup/teacher username=sammy password=1234 email=sammy@test.com
         router.post("/signup/teacher").handler(BodyHandler.create()).handler(this::handleTeacherSignup);
 
-        // http -h POST http://localhost:8080/login username=sammy password=1234
-        router.post("/login").handler(BodyHandler.create()).handler(this::handleLogin);
     }
 
     private void handleMyPage(RoutingContext routingContext) {
 
-        UserProjection authenticated = routingContext.session().get("Authentication");
+        Principal authenticatedPrincipal = routingContext.session().get("Authentication");
+        logger.info("[ Fetching principal ...] - " + authenticatedPrincipal.getName());
 
-        if (authenticated != null) {
-            logger.info("Authentication (" + authenticated.getUsername() + ")");
+        if (authenticatedPrincipal != null) {
             routingContext.response().putHeader("Content-Type", "text/html").sendFile(PUBLIC + "my-page.html");
         } else {
-            logger.info("Authentication entry point..");
-            // to authentication entry point
             routingContext.response().putHeader("Content-Type", "text/html").sendFile(PUBLIC + "login.html");
         }
     }
@@ -80,7 +72,7 @@ public class UserController implements Controller {
 
         userService.registerTeacher(userCommand);
 
-        routingContext.response().setStatusCode(200).putHeader("PageLocation", "/login").end();
+        routingContext.response().setStatusCode(200).end();
     }
 
     private void handleStudentSignup(RoutingContext routingContext) {
@@ -90,19 +82,8 @@ public class UserController implements Controller {
 
         userService.registerStudent(userCommand);
 
-        routingContext.response().setStatusCode(200).putHeader("PageLocation", "/login").end();
+        routingContext.response().setStatusCode(200).end();
     }
 
-    private void handleLogin(RoutingContext routingContext) {
 
-        JsonObject credentials = routingContext.getBodyAsJson();
-
-        User authenticated = userService.authenticate(credentials);
-
-        this.userProjection = new UserProjection(authenticated.getId(), authenticated.getUsername());
-        routingContext.session().put("Authentication", this.userProjection);
-        // TODO: Encoding on authentication object in session
-
-        routingContext.response().setStatusCode(200).putHeader("Location", "/home").end();
-    }
 }

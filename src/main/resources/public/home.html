@@ -9,18 +9,27 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
 </head>
 <body>
-    <div id="myPage" class="btn btn-light btn-sm">
-        myPage
-    </div>
+<div id="navbar-placeholder"></div>
+<div class="p-5 fw-lighter"> Welcome to Edugether! </div>
 </body>
 <script>
     document.addEventListener("DOMContentLoaded", function () {
 
-        const myPage = document.getElementById('myPage');
+        const username = localStorage.getItem("Authentication");
 
-        myPage.addEventListener('click', function () {
-            window.location.href = '/my-page';
-        });
+        if (username !== null) {
+            fetch(`/nav-authenticated`)
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById('navbar-placeholder').innerHTML = data;
+                });
+        } else {
+            fetch(`/nav-anonymous`)
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById('navbar-placeholder').innerHTML = data;
+                })
+        }
     })
 </script>
 </html>
