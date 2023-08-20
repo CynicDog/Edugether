@@ -4,24 +4,21 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="83ac0769-501d-47c5-aa4c-9efb288ea6db" name="Changes" comment="init (dependencies, entities)">
-      <change afterPath="$PROJECT_DIR$/.idea/dataSources.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/command/UserCommand.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/util/JpaOperationUtil.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/util/constant/Location.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/public/login.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/public/signup.html" afterDir="false" />
+    <list default="true" id="83ac0769-501d-47c5-aa4c-9efb288ea6db" name="Changes" comment="user insertion / authentication">
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/controller/Controller.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/repository/CourseRepository.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/repository/implementation/CourseRepositoryImpl.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/service/CourseService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/public/my-page.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/App.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/App.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/App.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/EdugetherMainApp.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/controller/CourseController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/controller/CourseController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/example/controller/HomeController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/controller/HomeController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/example/controller/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/controller/UserController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/entity/users/Student.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/entity/users/Student.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/entity/users/Teacher.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/entity/users/Teacher.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/entity/users/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/entity/users/User.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/repository/UserRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/repository/UserRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/repository/implementation/UserRepositoryImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/repository/implementation/UserRepositoryImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/service/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/service/UserService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/util/constant/Location.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/util/constant/PageLocation.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/public/home.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/public/home.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/public/login.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/public/login.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/org/example/AppTest.java" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -31,11 +28,11 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="Interface" />
         <option value="Enum" />
         <option value="package-info" />
-        <option value="HTML File" />
         <option value="Class" />
+        <option value="Interface" />
+        <option value="HTML File" />
       </list>
     </option>
   </component>
@@ -64,6 +61,9 @@
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
+    "project.structure.last.edited": "Project",
+    "project.structure.proportion": "0.0",
+    "project.structure.side.proportion": "0.0",
     "vue.rearranger.settings.migration": "true"
   },
   "keyToStringList": {
@@ -76,13 +76,16 @@
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/src/main/resources" />
     </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/main/resources/public" />
+    </key>
     <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
       <recent name="org.example.util" />
     </key>
   </component>
   <component name="RunManager">
-    <configuration name="App" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="org.example.App" />
+    <configuration name="EdugetherMainApp" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="org.example.EdugetherMainApp" />
       <module name="Edugether" />
       <extension name="coverage">
         <pattern>
@@ -96,7 +99,7 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Application.App" />
+        <item itemvalue="Application.EdugetherMainApp" />
       </list>
     </recent_temporary>
   </component>
@@ -108,7 +111,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1692444255877</updated>
-      <workItem from="1692444257173" duration="17710000" />
+      <workItem from="1692444257173" duration="28035000" />
     </task>
     <task id="LOCAL-00001" summary="init (dependencies, entities)">
       <created>1692451459255</created>
@@ -117,7 +120,14 @@
       <option name="project" value="LOCAL" />
       <updated>1692451459255</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="user insertion / authentication">
+      <created>1692462293087</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1692462293087</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -136,6 +146,7 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="init (dependencies, entities)" />
-    <option name="LAST_COMMIT_MESSAGE" value="init (dependencies, entities)" />
+    <MESSAGE value="user insertion / authentication" />
+    <option name="LAST_COMMIT_MESSAGE" value="user insertion / authentication" />
   </component>
 </project>

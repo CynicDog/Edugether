@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body style="display: none;">
+myPage!
+</body>
+<script>
+
+    // TODO: Client JWT validation!
+    const jwt = localStorage.getItem('jwt')
+    console.log(jwt)
+    if (jwt === null) {
+        alert("entry point")
+    } else {
+
+        document.body.style.display = 'block';
+    }
+    document.addEventListener("DOMContentLoaded", function () {
+    });
+</script>
+</html>

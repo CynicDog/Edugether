@@ -4,20 +4,24 @@ import io.vertx.core.AbstractVerticle;
 import io.vertx.core.Promise;
 import io.vertx.core.Vertx;
 import io.vertx.core.http.HttpServer;
-import io.vertx.ext.auth.PubSecKeyOptions;
 import io.vertx.ext.web.Router;
+import org.example.controller.CourseController;
 import org.example.controller.HomeController;
 import org.example.controller.UserController;
+import org.example.repository.CourseRepository;
 import org.example.repository.UserRepository;
+import org.example.repository.implementation.CourseRepositoryImpl;
 import org.example.repository.implementation.UserRepositoryImpl;
+import org.example.service.CourseService;
 import org.example.service.UserService;
 
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 
-public class App extends AbstractVerticle {
+public class EdugetherMainApp extends AbstractVerticle {
 
-    EntityManagerFactory emf = Persistence.createEntityManagerFactory("edugether");
+    private final String signingKey = "None has ever caught him yet, for Tom, he is the Master";
+    private final EntityManagerFactory emf = Persistence.createEntityManagerFactory("edugether");
 
     @Override
     public void start(Promise<Void> startPromise) throws Exception {
@@ -25,13 +29,21 @@ public class App extends AbstractVerticle {
         HttpServer server = vertx.createHttpServer();
         Router router = Router.router(vertx);
 
-        UserRepository userRepository = new UserRepositoryImpl(emf);
-        UserService userService = new UserService(userRepository);
-        UserController userController = new UserController(userService);
-        userController.registerRoutes(vertx, router);
-
         HomeController homeController = new HomeController();
         homeController.registerRoutes(vertx, router);
+
+        // Components on `User` domain
+        UserRepository userRepository = new UserRepositoryImpl(emf);
+        UserService userService = new UserService(userRepository);
+        UserController userController = new UserController(userService, signingKey);
+        userController.registerRoutes(vertx, router);
+
+        // Components on `Course` domain
+        CourseRepository courseRepository = new CourseRepositoryImpl(emf);
+        CourseService courseService = new CourseService(courseRepository);
+        CourseController courseController = new CourseController(userService, courseService, signingKey);
+        courseController.registerRoutes(vertx, router);
+
 
         server.requestHandler(router).listen(8080, result -> {
             if (result.succeeded()) {
@@ -46,6 +58,6 @@ public class App extends AbstractVerticle {
     public static void main( String[] args ) {
 
         Vertx vertx = Vertx.vertx();
-        vertx.deployVerticle(new App());
+        vertx.deployVerticle(new EdugetherMainApp());
     }
 }
