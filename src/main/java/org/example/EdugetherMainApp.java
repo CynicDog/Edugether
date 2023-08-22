@@ -7,12 +7,16 @@ import io.vertx.core.http.HttpServer;
 import io.vertx.ext.web.Router;
 import org.example.controller.CourseController;
 import org.example.controller.HomeController;
+import org.example.controller.SocietyController;
 import org.example.controller.UserController;
 import org.example.repository.CourseRepository;
+import org.example.repository.SocietyRepository;
 import org.example.repository.UserRepository;
 import org.example.repository.implementation.CourseRepositoryImpl;
+import org.example.repository.implementation.SocietyRepositoryImpl;
 import org.example.repository.implementation.UserRepositoryImpl;
 import org.example.service.CourseService;
+import org.example.service.SocietyService;
 import org.example.service.UserService;
 
 import javax.persistence.EntityManagerFactory;
@@ -41,9 +45,15 @@ public class EdugetherMainApp extends AbstractVerticle {
 
         // Components on `Course` domain
         CourseRepository courseRepository = new CourseRepositoryImpl(emf);
-        CourseService courseService = new CourseService(courseRepository);
+        CourseService courseService = new CourseService(courseRepository, userRepository);
         CourseController courseController = new CourseController(userService, courseService, signingKey);
         courseController.registerRoutes(vertx, router);
+
+        // Components on `Society, SocietyEvent` domain
+        SocietyRepository societyRepository = new SocietyRepositoryImpl(emf);
+        SocietyService societyService = new SocietyService(societyRepository);
+        SocietyController societyController = new SocietyController(userService, societyService, signingKey);
+        societyController.registerRoutes(vertx, router);
 
         server.requestHandler(router).listen(8080, result -> {
             if (result.succeeded()) {

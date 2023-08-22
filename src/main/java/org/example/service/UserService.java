@@ -71,4 +71,9 @@ public class UserService {
 
         return userRepository.getUsersRandomlyLimitBy(limit);
     }
+
+    public Teacher getUserByUsername(String name) {
+
+        return (Teacher) userRepository.loadUserByUsername(name);
+    }
 }

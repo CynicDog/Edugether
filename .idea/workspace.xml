@@ -4,21 +4,40 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="83ac0769-501d-47c5-aa4c-9efb288ea6db" name="Changes" comment="student signup">
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/entity/society/Society.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/entity/society/SocietyEvent.java" afterDir="false" />
+    <list default="true" id="83ac0769-501d-47c5-aa4c-9efb288ea6db" name="Changes" comment="modified">
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/controller/SocietyController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/entity/socials/Society.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/entity/socials/SocietyEvent.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/repository/SocietyRepository.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/repository/implementation/SocietyRepositoryImpl.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/service/SocietyService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/util/enums/EVENT_STATUS.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/util/enums/SUBJECT_TITLE.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/public/course-entry.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/public/society-entry.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/org/example/CardinalityTest.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/controller/HomeController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/controller/HomeController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/EdugetherMainApp.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/EdugetherMainApp.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/controller/CourseController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/controller/CourseController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/example/controller/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/controller/UserController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/projection/UserProjection.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/projection/UserProjection.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/entity/academics/Course.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/entity/academics/Course.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/entity/society/Society.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/entity/society/SocietyEvent.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/entity/users/Student.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/entity/users/Student.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/entity/users/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/entity/users/User.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/repository/CourseRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/repository/CourseRepository.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/example/repository/UserRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/repository/UserRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/repository/implementation/CourseRepositoryImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/repository/implementation/CourseRepositoryImpl.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/example/repository/implementation/UserRepositoryImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/repository/implementation/UserRepositoryImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/service/CourseService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/service/CourseService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/example/service/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/service/UserService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/public/home.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/public/home.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/util/enums/COURSE_STATUS.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/util/enums/COURSE_STATUS.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/util/enums/REVIEW_SENTIMENT.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/util/enums/REVIEW_SENTIMENT.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/public/login.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/public/login.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/public/nav-anonymous.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/public/nav-anonymous.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/public/nav-authenticated.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/public/nav-authenticated.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/public/signup-student.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/public/signup-student.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/public/signup-teacher.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/public/signup-teacher.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/public/signup.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/public/signup.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/public/nav-blank.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/public/nav-blank.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/public/signup.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/public/signup-entry.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -28,11 +47,11 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="Enum" />
         <option value="package-info" />
-        <option value="Interface" />
-        <option value="HTML File" />
         <option value="CSS File" />
+        <option value="HTML File" />
+        <option value="Interface" />
+        <option value="Enum" />
         <option value="Class" />
       </list>
     </option>
@@ -92,7 +111,7 @@
       <recent name="org.example.util" />
     </key>
   </component>
-  <component name="RunManager">
+  <component name="RunManager" selected="Application.EdugetherMainApp">
     <configuration name="EdugetherMainApp" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="org.example.EdugetherMainApp" />
       <module name="Edugether" />
@@ -106,9 +125,59 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="CardinalityTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="Edugether" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="org.example.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="org.example" />
+      <option name="MAIN_CLASS_NAME" value="org.example.CardinalityTest" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="CardinalityTest.connectionTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="Edugether" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="org.example.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="org.example" />
+      <option name="MAIN_CLASS_NAME" value="org.example.CardinalityTest" />
+      <option name="METHOD_NAME" value="connectionTest" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="CardinalityTest.studentSocietyEventCardinality" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="Edugether" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="org.example.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="org.example" />
+      <option name="MAIN_CLASS_NAME" value="org.example.CardinalityTest" />
+      <option name="METHOD_NAME" value="studentSocietyEventCardinality" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <recent_temporary>
       <list>
         <item itemvalue="Application.EdugetherMainApp" />
+        <item itemvalue="JUnit.CardinalityTest.studentSocietyEventCardinality" />
+        <item itemvalue="JUnit.CardinalityTest" />
+        <item itemvalue="JUnit.CardinalityTest.connectionTest" />
         <item itemvalue="Application.EdugetherMainApp" />
       </list>
     </recent_temporary>
@@ -124,7 +193,11 @@
       <workItem from="1692444257173" duration="28035000" />
       <workItem from="1692492696609" duration="2950000" />
       <workItem from="1692513635901" duration="17337000" />
-      <workItem from="1692537907988" duration="2269000" />
+      <workItem from="1692537907988" duration="2523000" />
+      <workItem from="1692575945400" duration="4841000" />
+      <workItem from="1692580830986" duration="11353000" />
+      <workItem from="1692627361381" duration="6511000" />
+      <workItem from="1692671422501" duration="2719000" />
     </task>
     <task id="LOCAL-00001" summary="init (dependencies, entities)">
       <created>1692451459255</created>
@@ -182,7 +255,14 @@
       <option name="project" value="LOCAL" />
       <updated>1692519055221</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="modified">
+      <created>1692540434999</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1692540434999</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -202,9 +282,9 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="init (dependencies, entities)" />
     <MESSAGE value="user insertion / authentication" />
-    <MESSAGE value="modified" />
     <MESSAGE value="logout" />
     <MESSAGE value="student signup" />
-    <option name="LAST_COMMIT_MESSAGE" value="student signup" />
+    <MESSAGE value="modified" />
+    <option name="LAST_COMMIT_MESSAGE" value="modified" />
   </component>
 </project>

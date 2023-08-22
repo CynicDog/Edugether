@@ -7,9 +7,7 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
@@ -43,7 +41,7 @@ public class User {
             joinColumns = @JoinColumn(name = "userId"),
             inverseJoinColumns = @JoinColumn(name = "postId")
     )
-    private Set<Post> likedPosts = new HashSet<>();
+    private List<Post> likedPosts = new ArrayList<>();
 
     public User() {
     }
@@ -107,11 +105,11 @@ public class User {
         this.active = active;
     }
 
-    public Set<Post> getLikedPosts() {
+    public List<Post> getLikedPosts() {
         return likedPosts;
     }
 
-    public void setLikedPosts(Set<Post> likedPosts) {
+    public void setLikedPosts(List<Post> likedPosts) {
         this.likedPosts = likedPosts;
     }
 }

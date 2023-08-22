@@ -36,9 +36,15 @@ public class UserController implements Controller {
         router.route().handler(SessionHandler.create(LocalSessionStore.create(vertx)));
 
         {   // GET handlers
-            router.get("/signup").handler(routingContext -> { routingContext.response().putHeader("Content-Type", "text/html").sendFile(PUBLIC + "signup.html"); });
-            router.get("/signup/student").handler(routingContext -> { routingContext.response().putHeader("Content-Type", "text/html").sendFile(PUBLIC + "signup-student.html"); });
-            router.get("/signup/teacher").handler(routingContext -> { routingContext.response().putHeader("Content-Type", "text/html").sendFile(PUBLIC + "signup-teacher.html");});
+            router.get("/signup").handler(routingContext -> {
+                routingContext.response().putHeader("Content-Type", "text/html").sendFile(PUBLIC + "signup-entry.html");
+            });
+            router.get("/signup/student").handler(routingContext -> {
+                routingContext.response().putHeader("Content-Type", "text/html").sendFile(PUBLIC + "signup-student.html");
+            });
+            router.get("/signup/teacher").handler(routingContext -> {
+                routingContext.response().putHeader("Content-Type", "text/html").sendFile(PUBLIC + "signup-teacher.html");
+            });
             router.get("/my-page").handler(this::handleMyPage);
             router.get("/user/check-username").handler(this::handleCheckUsername);
             router.get("/user/check-email").handler(this::handleCheckEmail);
@@ -76,11 +82,13 @@ public class UserController implements Controller {
 
         Principal authenticatedPrincipal = routingContext.session().get("Authentication");
 
-        if (authenticatedPrincipal != null) {
-            routingContext.response().putHeader("Content-Type", "text/html").sendFile(PUBLIC + "my-page.html");
-        } else {
+        if (authenticatedPrincipal == null) {
+            // authentication entry point
             routingContext.response().putHeader("Content-Type", "text/html").sendFile(PUBLIC + "login.html");
+            return;
         }
+
+        routingContext.response().putHeader("Content-Type", "text/html").sendFile(PUBLIC + "my-page.html");
     }
 
     private void handleTeacherSignup(RoutingContext routingContext) {

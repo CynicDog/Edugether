@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Application</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+</head>
+<body>
+<div id="navbar-placeholder"></div>
+<div class="container">
+    <div class="row text-center my-3">
+        <div class="row my-3">
+            <div class="col my-3">
+                <div class="fw-lighter fs-2 my-3 bg-">Courses of ours</div>
+                <div class="fw-light fs-5 mb-5">
+                    <span class="bg-light">
+                        "Let's invite students to discover a realm of knowledge and possibilities!"
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div id="courseToastButton" class="col fw-light my-3"><span
+                    class="btn btn-light fw-lighter">📕 Add yours</span></div>
+        </div>
+    </div>
+</div>
+
+<div class="container px-4 py-5" id="custom-cards">
+    <div class="text-end">
+        <div class="pb-2 border-bottom fw-lighter">
+            <span type="button" class="badge bg-primary-subtle text-primary-emphasis rounded-pill">Newest</span>
+            <span type="button" class="badge bg-info-subtle text-info-emphasis rounded-pill">Popular</span>
+            <span type="button" class="badge bg-success-subtle text-success-emphasis rounded-pill">Acclaimed</span>
+            <span type="button" class="badge bg-warning-subtle text-warning-emphasis rounded-pill">Mixed</span>
+            <span type="button" class="badge bg-danger-subtle text-danger-emphasis rounded-pill">Criticized</span>
+        </div>
+
+    </div>
+    <div class="row row-cols-1 row-cols-lg-3 align-items-stretch g-4 py-5">
+        <div class="col">
+            <div class="card card-cover h-100 overflow-hidden text-bg-dark rounded-4 shadow-lg"
+                 style="background-image: url('unsplash-photo-1.jpg');">
+                <div class="d-flex flex-column h-100 p-5 pb-3 text-white text-shadow-1">
+                    <h3 class="pt-5 mt-5 mb-4 display-6 lh-1 fw-bold">Short title, long jacket</h3>
+                    <ul class="d-flex list-unstyled mt-auto">
+                        <li class="ms-auto d-flex align-items-center me-3">
+                            <svg class="bi me-2" width="1em" height="1em">
+                                <use xlink:href="#geo-fill"/>
+                            </svg>
+                            <small>Earth</small>
+                        </li>
+                        <li class="d-flex align-items-center">
+                            <svg class="bi me-2" width="1em" height="1em">
+                                <use xlink:href="#calendar3"/>
+                            </svg>
+                            <small>3d</small>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="col">
+            <div class="card card-cover h-100 overflow-hidden text-bg-dark rounded-4 shadow-lg"
+                 style="background-image: url('unsplash-photo-1.jpg');">
+                <div class="d-flex flex-column h-100 p-5 pb-3 text-white text-shadow-1">
+                    <h3 class="pt-5 mt-5 mb-4 display-6 lh-1 fw-bold">Short title, long jacket</h3>
+                    <ul class="d-flex list-unstyled mt-auto">
+                        <li class="ms-auto d-flex align-items-center me-3">
+                            <svg class="bi me-2" width="1em" height="1em">
+                                <use xlink:href="#geo-fill"/>
+                            </svg>
+                            <small>Earth</small>
+                        </li>
+                        <li class="d-flex align-items-center">
+                            <svg class="bi me-2" width="1em" height="1em">
+                                <use xlink:href="#calendar3"/>
+                            </svg>
+                            <small>3d</small>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="col">
+            <div class="card card-cover h-100 overflow-hidden text-bg-dark rounded-4 shadow-lg"
+                 style="background-image: url('unsplash-photo-1.jpg');">
+                <div class="d-flex flex-column h-100 p-5 pb-3 text-white text-shadow-1">
+                    <h3 class="pt-5 mt-5 mb-4 display-6 lh-1 fw-bold">Short title, long jacket</h3>
+                    <ul class="d-flex list-unstyled mt-auto">
+                        <li class="ms-auto d-flex align-items-center me-3">
+                            <svg class="bi me-2" width="1em" height="1em">
+                                <use xlink:href="#geo-fill"/>
+                            </svg>
+                            <small>Earth</small>
+                        </li>
+                        <li class="d-flex align-items-center">
+                            <svg class="bi me-2" width="1em" height="1em">
+                                <use xlink:href="#calendar3"/>
+                            </svg>
+                            <small>3d</small>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="toast-container position-fixed bottom-0 end-0 p-4">
+    <div id="messagingToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="d-flex">
+            <div class="toast-body">
+            </div>
+            <button type="button" class="btn-close btn-close-white me-2 m-auto"
+                    data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+    </div>
+    <div id="courseAddToast" class="toast toast-add-course" role="alert" aria-live="assertive" aria-atomic="true"
+         data-bs-autohide="false">
+        <div class="toast-body">
+            <div class="row">
+                <div class="col">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <div class="fw-lighter fs-4">📚 Course</div>
+                        <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                    </div>
+                    <div class="p-3">
+                        <div class="my-2">
+                            <div class="form-floating">
+                                <input type="text" class="form-control-plaintext" id="name" name="name" placeholder="">
+                                <label class="fw-lighter d-flex" for="name">name
+                                    <div class="ms-auto">
+                                        <div class="validation name mx-3 text-danger"
+                                             style="display: none;">
+                                        </div>
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="my-2">
+                            <div class="form-floating">
+                                <input type="text" class="form-control-plaintext" id="description" name="description"
+                                       placeholder="">
+                                <label class="fw-lighter d-flex" for="description">description
+                                    <div class="ms-auto">
+                                        <div class="validation description mx-3 text-danger"
+                                             style="display: none;">
+                                        </div>
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="my-2">
+                            <div class="form-floating">
+                                <input type="text" class="form-control-plaintext" name="subject"
+                                       id="subject" placeholder="" disabled/>
+                                <label class="fw-lighter d-flex" for="subject">Subject
+                                    <div class="ms-auto">
+                                        <div class="validation mx-3 text-success"
+                                             style="display: block;">
+                                            (choose one)
+                                        </div>
+                                    </div>
+                                </label>
+                            </div>
+                            <div id="subjects" class="fs-6 mx-3 my-1">
+                            </div>
+                        </div>
+                        <div class="">
+                            <div class="fw-lighter d-flex mt-4">Schedule</div>
+                            <div class="fs-6 mx-3 my-2" id="days">
+                                <div class="my-3">
+                                    <div class="my-1">
+                                        <label for="startingDay" class="fw-lighter fs-6">starting</label>
+                                        <input id="startingDay" class="form-control-plaintext fw-light" type="date"
+                                               name="startingDay">
+                                    </div>
+                                    <div class="my-1">
+                                        <label for="closingDay" class="fw-lighter fs-6">closing</label>
+                                        <input id="closingDay" class="form-control-plaintext fw-light" type="date"
+                                               name="closingDay">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="text-end">
+                            <div id="courseSubmitButton"
+                                 class="btn btn-light btn-sm mt-5 mb-3 mx-2 disabled fw-lighter">
+                                submit
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="d-flex justify-content-end align-items-end">
+                    <i type="button" id="courseAddRequestIcon" class="bi bi-pencil-square fs-6 m-1"
+                       style="color: #838383; display: none"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+
+        fetch(`/nav-blank`)
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('navbar-placeholder').innerHTML = data;
+            });
+
+        const nameInput = document.querySelector('input[name=name]');
+        const descriptionInput = document.querySelector('input[name=description]')
+        let subjectInput = null
+        const startingDayInput = document.querySelector('input[name=startingDay]')
+        const closingDayInput = document.querySelector('input[name=closingDay]')
+
+        const requiredStoreInputs = [
+            nameInput, descriptionInput
+        ]
+
+        requiredStoreInputs.forEach(input => {
+            input.addEventListener('blur', function () {
+
+                removeErrorMessage(this);
+                removeSuccessMessage(this);
+
+                let currentInputName = this.name;
+
+                if (this.value.trim() === '') {
+                    displayErrorMessage(this, "Required.");
+                    courseInputsValidationStatus[currentInputName] = false;
+                } else {
+                    displaySuccessMessage(this);
+                    courseInputsValidationStatus[currentInputName] = true;
+                }
+            })
+        })
+
+        const courseToastButton = document.getElementById('courseToastButton')
+        courseToastButton.addEventListener('click', function () {
+            let courseAddToast = document.getElementById('courseAddToast')
+            const courseAddToastBootstrap = bootstrap.Toast.getOrCreateInstance(courseAddToast)
+
+            fetch(`/course/subjects`, {
+                method: "GET"
+            }).then(response => {
+                if (response.ok) {
+                    subjectsDiv.innerHTML = ``;
+                    return response.json()
+                }
+            }).then(data => {
+                data.subjectNames.forEach(datum => {
+                    subjectsDiv.innerHTML += `
+                    <div type="button" class="badge rounded-pill text-bg-light subjectButton">${datum}</div>
+                `
+                })
+
+                const subjectButtons = document.querySelectorAll('.subjectButton')
+                subjectsDiv.addEventListener('click', function (event) {
+
+                    // clearance previous inputs
+                    if (subjectInput != null) {
+                        subjectInput = null;
+                        courseInputsValidationStatus.subject = false;
+                    }
+
+                    if (event.target.classList.contains('subjectButton')) {
+
+                        // clearance previous inputs
+                        subjectButtons.forEach(button => {
+                            if (button.classList.contains('text-bg-light')) {
+                                enableButton(button);
+                            }
+                        });
+
+                        const selectedSubjectButton = event.target;
+                        const selectedSubjectName = selectedSubjectButton.textContent.trim();
+
+                        selectedSubjectButton.classList.toggle('text-bg-primary');
+                        selectedSubjectButton.classList.toggle('text-bg-light');
+
+                        if (selectedSubjectButton.classList.contains('text-bg-primary')) {
+                            subjectInput = selectedSubjectName;
+                            courseInputsValidationStatus.subject = true;
+
+                            subjectButtons.forEach(button => {
+                                if (button.classList.contains('text-bg-light')) {
+                                    disableButton(button);
+                                }
+                            });
+                        }
+                    }
+                    flushSubmitButton()
+                });
+            })
+            courseAddToastBootstrap.show()
+        })
+
+        const subjectsDiv = document.getElementById('subjects')
+
+        const courseInputsValidationStatus = {
+            name: false,
+            description: false,
+            subject: false,
+        }
+
+        const courseSubmitButton = document.getElementById('courseSubmitButton')
+
+        courseSubmitButton.addEventListener('click', function () {
+
+            const formData = {
+                name: nameInput.value.trim(),
+                description: descriptionInput.value.trim(),
+                subject: subjectInput,
+                startingDay: startingDayInput.value,
+                closingDay: closingDayInput.value
+            }
+
+            fetch('/course/register', {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(formData)
+            }).then(response => {
+
+                if (response.status === 302) {
+                    // Authentication entry point
+                    window.location.href = "/login?error=anonymous"
+                }
+
+                if (response.ok) {
+                    showMessagingToast(response.statusText);
+                    courseToastButton.close();
+                }
+            })
+        })
+
+        function showMessagingToast(message) {
+            const messagingToast = document.getElementById('messagingToast');
+            const toastBody = messagingToast.querySelector('.toast-body');
+
+            toastBody.textContent = message;
+
+            const successfulToastBootstrap = bootstrap.Toast.getOrCreateInstance(messagingToast);
+            successfulToastBootstrap.show();
+        }
+
+        function displayErrorMessage(input, message) {
+
+            const parentLabel = input.parentElement;
+            const nameValidationDiv = parentLabel.querySelector(`.validation.${input.name}`);
+
+            if (nameValidationDiv) {
+                nameValidationDiv.style.display = 'block'
+                nameValidationDiv.innerHTML = message;
+            }
+        }
+
+        function removeErrorMessage(input) {
+
+            const parentLabel = input.parentElement;
+            const nameValidationDiv = parentLabel.querySelector(`.validation.${input.name}`);
+
+            if (nameValidationDiv) {
+                nameValidationDiv.innerHTML = '';
+            }
+        }
+
+        function displaySuccessMessage(input) {
+            const parentLabel = input.parentElement;
+            const nameValidationDiv = parentLabel.querySelector(`.validation.${input.name}`);
+
+            if (nameValidationDiv) {
+                nameValidationDiv.style.display = 'block'
+                nameValidationDiv.innerHTML = '<i class="bi bi-check-lg text-success"></i>'
+            }
+        }
+
+        function removeSuccessMessage(input) {
+            const parentLabel = input.parentElement;
+            const nameValidationDiv = parentLabel.querySelector(`.validation.${input.name}`);
+
+            if (nameValidationDiv) {
+                nameValidationDiv.innerHTML = '';
+            }
+        }
+
+        function disableButton(button) {
+            button.style.pointerEvents = "none";
+            button.classList.add('text-bg-disabled', 'text-secondary');
+            button.classList.remove('text-bg-primary');
+        }
+
+        function enableButton(button) {
+            button.removeAttribute('style')
+            button.classList.remove('text-bg-disabled', 'text-secondary')
+            button.classList.add('text-bg-light')
+        }
+
+        function flushSubmitButton() {
+
+            const allValid = Object.values(courseInputsValidationStatus).every(status => status === true)
+
+            if (allValid) {
+                courseSubmitButton.classList.remove('disabled');
+            } else {
+                courseSubmitButton.classList.add('disabled');
+            }
+        }
+    })
+</script>
+</html>

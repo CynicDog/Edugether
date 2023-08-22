@@ -1,11 +1,15 @@
 package org.example.entity.academics;
 
+import org.example.entity.users.Student;
 import org.example.entity.users.Teacher;
 import org.example.util.enums.COURSE_STATUS;
+import org.example.util.enums.SUBJECT_TITLE;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 public class Course {
@@ -17,21 +21,45 @@ public class Course {
     private String name;
 
     @Column(nullable = false)
-    private Integer quota;
-
-    private Integer registrationCount;
+    private String description;
+    private Integer registrationCount = 0;
 
     @Enumerated(EnumType.STRING)
-    private COURSE_STATUS courseStatus;
+    private COURSE_STATUS courseStatus = COURSE_STATUS.OPEN;
 
     @CreationTimestamp
     private Date publishedDate;
+
+    @Column(nullable = true)
+    private Date startingDay;
+    @Column(nullable = true)
+    private Date endingDay;
 
     @ManyToOne
     @JoinColumn(name = "teacherId")
     private Teacher teacher;
 
+    @ManyToMany
+    @JoinTable(
+            name = "WishListCourses",
+            joinColumns = @JoinColumn(name = "studentId"),
+            inverseJoinColumns = @JoinColumn(name = "courseId")
+    )
+    private List<Student> wishers = new ArrayList<>();
+
+    @Enumerated(EnumType.STRING)
+    private SUBJECT_TITLE subject;
+
     public Course() {
+    }
+
+    public Course(String name, String description, Date startingDay, Date endingDay, String subject, Teacher teacher) {
+        this.name = name;
+        this.description = description;
+        this.startingDay = startingDay;
+        this.endingDay = endingDay;
+        this.subject = SUBJECT_TITLE.valueOf(subject);
+        this.teacher = teacher;
     }
 
     public Long getId() {
@@ -46,12 +74,12 @@ public class Course {
         this.name = name;
     }
 
-    public Integer getQuota() {
-        return quota;
+    public String getDescription() {
+        return description;
     }
 
-    public void setQuota(Integer quota) {
-        this.quota = quota;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public Integer getRegistrationCount() {
@@ -78,11 +106,44 @@ public class Course {
         this.publishedDate = publishedDate;
     }
 
+    public Date getStartingDay() {
+        return startingDay;
+    }
+
+    public void setStartingDay(Date startingDay) {
+        this.startingDay = startingDay;
+    }
+
+    public Date getEndingDay() {
+        return endingDay;
+    }
+
+    public void setEndingDay(Date endingDay) {
+        this.endingDay = endingDay;
+    }
+
     public Teacher getTeacher() {
         return teacher;
     }
 
     public void setTeacher(Teacher teacher) {
         this.teacher = teacher;
+    }
+
+    public List<Student> getWishers() {
+        return wishers;
+    }
+
+    public void setWishers(List<Student> wishers) {
+        this.wishers = wishers;
+    }
+
+    public SUBJECT_TITLE getSubject() {
+        return subject;
+    }
+
+    public void setSubject(String title) {
+
+        this.subject = SUBJECT_TITLE.valueOf(title);
     }
 }

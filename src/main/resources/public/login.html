@@ -39,6 +39,18 @@
         </div>
     </div>
 </div>
+<div class="toast-container position-fixed bottom-0 end-0 p-4">
+    <div id="messagingToast" class="toast align-items-center text-bg-primary border-0"
+         role="alert"
+         aria-live="assertive" aria-atomic="true">
+        <div class="d-flex">
+            <div class="toast-body">
+            </div>
+            <button type="button" class="btn-close btn-close-white me-2 m-auto"
+                    data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+    </div>
+</div>
 <script>
     document.addEventListener("DOMContentLoaded", function () {
 
@@ -83,7 +95,24 @@
             })
         })
 
+        const params = new URLSearchParams(window.location.search);
 
+        if (params.get("error") === "fail") {
+            showMessagingToast("Bad credentials :(");
+        } else if (params.get("error") === "anonymous") {
+            showMessagingToast("Need to login first :)");
+        } else if (params.get("error") === "denied") {
+            showMessagingToast("Can't take you there :(");
+        }
+
+        function showMessagingToast(message) {
+            let messagingToast = document.getElementById('messagingToast')
+            const toastSentBootstrap = bootstrap.Toast.getOrCreateInstance(messagingToast)
+
+            messagingToast.querySelector('.toast-body').textContent = message;
+
+            toastSentBootstrap.show()
+        }
     })
 </script>
 </body>

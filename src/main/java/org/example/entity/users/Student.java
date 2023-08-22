@@ -1,10 +1,12 @@
 package org.example.entity.users;
 
+import org.example.entity.socials.Society;
 import org.example.util.enums.RELATIONSHIP;
 import org.example.util.enums.TYPE;
 
 import javax.persistence.*;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class Student extends User {
@@ -15,7 +17,10 @@ public class Student extends User {
             joinColumns = @JoinColumn(name = "studentId")
     )
     @Column(name = "title")
-    private Set<String> interests;
+    private List<String> interests;
+
+    @ManyToMany(mappedBy = "members")
+    private List<Society> societies = new ArrayList<>();
 
     @Enumerated(EnumType.STRING)
     private RELATIONSHIP relationship;
@@ -27,12 +32,20 @@ public class Student extends User {
         super(username, password, email, type);
     }
 
-    public Set<String> getInterests() {
+    public List<String> getInterests() {
         return interests;
     }
 
-    public void setInterests(Set<String> interests) {
+    public void setInterests(List<String> interests) {
         this.interests = interests;
+    }
+
+    public List<Society> getSocieties() {
+        return societies;
+    }
+
+    public void setSocieties(List<Society> societies) {
+        this.societies = societies;
     }
 
     public RELATIONSHIP getRelationship() {

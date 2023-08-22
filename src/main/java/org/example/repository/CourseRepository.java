@@ -4,5 +4,5 @@ import org.example.entity.academics.Course;
 
 public interface CourseRepository {
 
-    void insertCourse(Course course);
+    boolean insertCourse(Course course);
 }

@@ -2,6 +2,7 @@ package org.example.repository.implementation;
 
 import org.example.entity.academics.Course;
 import org.example.repository.CourseRepository;
+import org.example.util.JpaOperationUtil;
 import org.jboss.logging.Logger;
 
 import javax.persistence.EntityManagerFactory;
@@ -16,7 +17,15 @@ public class CourseRepositoryImpl implements CourseRepository {
     }
 
     @Override
-    public void insertCourse(Course course) {
-
+    public boolean insertCourse(Course course) {
+        try {
+            JpaOperationUtil.consume(entityManagerFactory, entityManager -> {
+                entityManager.persist(course);
+            });
+            return true;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return false;
+        }
     }
 }

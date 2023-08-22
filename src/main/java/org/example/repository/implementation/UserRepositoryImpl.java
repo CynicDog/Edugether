@@ -1,5 +1,6 @@
 package org.example.repository.implementation;
 
+import org.example.entity.users.Teacher;
 import org.example.entity.users.User;
 import org.example.projection.UserProjection;
 import org.example.repository.UserRepository;
@@ -61,7 +62,6 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public User loadUserByUsername(String username) {
-
         return JpaOperationUtil.apply(entityManagerFactory, em -> {
             User found = em.createQuery("select u from User u where u.username = :username", User.class)
                     .setParameter("username", username)
@@ -70,9 +70,9 @@ public class UserRepositoryImpl implements UserRepository {
         });
     }
 
+    // TODO: refactor to boolean so handlers can handle exception
     @Override
     public void insertUser(User user) {
-
         JpaOperationUtil.consume(entityManagerFactory, em -> {
             em.persist(user);
         });
