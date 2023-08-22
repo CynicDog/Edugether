@@ -87,7 +87,14 @@ public class UserController implements Controller {
             return;
         }
 
-        routingContext.response().putHeader("Content-Type", "text/html").sendFile(PUBLIC + "my-page.html");
+        if (authentication.getType().toString().equals("TEACHER")) {
+            logger.info(authentication.getType().toString());
+            routingContext.response().putHeader("Content-Type", "text/html").sendFile(PUBLIC + "teacher.html");
+        } else if (authentication.getType().toString().equals("STUDENT")) {
+            logger.info(authentication.getType().toString());
+            routingContext.response().putHeader("Content-Type", "text/html").sendFile(PUBLIC + "student.html");
+        }
+
     }
 
     private void handleTeacherSignup(RoutingContext routingContext) {

@@ -44,7 +44,7 @@ public class CourseController implements Controller {
         router.route().handler(SessionHandler.create(LocalSessionStore.create(vertx)));
 
         {   // GET handlers
-            router.get("/course").handler(routingContext -> { routingContext.response().putHeader("Content-Type", "text/html").sendFile(PUBLIC + "course-entry.html"); });
+            router.get("/course").handler(routingContext -> { routingContext.response().putHeader("Content-Type", "text/html").sendFile(PUBLIC + "course.html"); });
             router.get("/course/subjects").handler(this::handleCourseSubjects);
             router.get("/course/newest").handler(this::handleCourseNewest);
         }
