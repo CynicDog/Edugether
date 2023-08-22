@@ -1,11 +1,14 @@
 package org.example.repository.implementation;
 
 import org.example.entity.academics.Course;
+import org.example.projection.CourseProjection;
 import org.example.repository.CourseRepository;
 import org.example.util.JpaOperationUtil;
 import org.jboss.logging.Logger;
 
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.TypedQuery;
+import java.util.List;
 
 public class CourseRepositoryImpl implements CourseRepository {
 
@@ -17,10 +20,33 @@ public class CourseRepositoryImpl implements CourseRepository {
     }
 
     @Override
+    public List<CourseProjection> getPaginatedCoursesByPublishedDateDescending(Integer page, Integer limit) {
+        return JpaOperationUtil.apply(entityManagerFactory, em -> {
+
+            int startIndex = page * limit;
+
+            TypedQuery<CourseProjection> query = em.createQuery(
+                    "select new org.example.projection.CourseProjection(" +
+                            "c.id, " +
+                            "c.name, " +
+                            "c.description, " +
+                            "c.startingDay, " +
+                            "c.endingDay, " +
+                            "c.subject, " +
+                            "teacher.username) from Course c", CourseProjection.class);
+
+            query.setFirstResult(startIndex);
+            query.setMaxResults(limit);
+
+            return query.getResultList();
+        });
+    }
+
+    @Override
     public boolean insertCourse(Course course) {
         try {
-            JpaOperationUtil.consume(entityManagerFactory, entityManager -> {
-                entityManager.persist(course);
+            JpaOperationUtil.consume(entityManagerFactory, em -> {
+                em.persist(course);
             });
             return true;
         } catch (Exception ex) {
@@ -28,4 +54,5 @@ public class CourseRepositoryImpl implements CourseRepository {
             return false;
         }
     }
+
 }

@@ -8,7 +8,7 @@ import java.util.Set;
 @Entity
 public class Teacher extends User{
 
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(
             name = "Qualification",
             joinColumns = @JoinColumn(name = "teacherId")

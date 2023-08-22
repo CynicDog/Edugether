@@ -87,6 +87,7 @@
                 if (response.status === 200) {
                     return response.json();
                 } else {
+                    // TODO: Login failure handling
                     alert(`${response.statusText}`)
                 }
             }).then(data => {

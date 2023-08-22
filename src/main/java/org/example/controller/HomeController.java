@@ -13,7 +13,6 @@ import org.example.projection.UserProjection;
 import org.example.service.UserService;
 import org.jboss.logging.Logger;
 
-import java.security.Principal;
 import java.util.List;
 
 import static org.example.util.constant.PageLocation.PUBLIC;
@@ -63,13 +62,13 @@ public class HomeController implements Controller {
     private void handleLogout(RoutingContext routingContext) {
 
         String username = routingContext.getBodyAsJson().getString("username");
-        Principal authenticatedPrincipal = routingContext.session().get("Authentication");
+        UserProjection authentication = routingContext.session().get("Authentication");
 
-        if (authenticatedPrincipal.getName().equals(username)) {
+        if (authentication.getUsername().equals(username)) {
             routingContext.session().remove("Authentication");
             routingContext.response().setStatusCode(200).end();
         } else {
-            routingContext.response().setStatusCode(400).setStatusMessage("Can't find the principal").end();
+            routingContext.response().setStatusCode(400).setStatusMessage("Can't find the user.").end();
         }
     }
 
@@ -80,10 +79,10 @@ public class HomeController implements Controller {
         User found = userService.authenticate(credentials);
 
         if (found != null) {
-            Principal authenticatedPrincipal = new UserProjection(found.getId(), found.getUsername());
-            routingContext.session().put("Authentication", authenticatedPrincipal);
+            UserProjection authentication = new UserProjection(found.getId(), found.getUsername(), found.getType());
+            routingContext.session().put("Authentication", authentication);
 
-            JsonObject userInfo = new JsonObject().put("username", authenticatedPrincipal.getName());
+            JsonObject userInfo = new JsonObject().put("username", authentication.getUsername());
 
             routingContext.response().setStatusCode(200).putHeader("Content-Type", "application/json").end(userInfo.encode());
         } else {

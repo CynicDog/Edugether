@@ -7,9 +7,7 @@ import org.example.util.enums.SUBJECT_TITLE;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Entity
 public class Course {
@@ -20,7 +18,7 @@ public class Course {
     @Column(nullable = false)
     private String name;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 2000)
     private String description;
     private Integer registrationCount = 0;
 
@@ -45,7 +43,7 @@ public class Course {
             joinColumns = @JoinColumn(name = "studentId"),
             inverseJoinColumns = @JoinColumn(name = "courseId")
     )
-    private List<Student> wishers = new ArrayList<>();
+    private Set<Student> wishers = new HashSet<>();
 
     @Enumerated(EnumType.STRING)
     private SUBJECT_TITLE subject;
@@ -130,11 +128,11 @@ public class Course {
         this.teacher = teacher;
     }
 
-    public List<Student> getWishers() {
+    public Set<Student> getWishers() {
         return wishers;
     }
 
-    public void setWishers(List<Student> wishers) {
+    public void setWishers(Set<Student> wishers) {
         this.wishers = wishers;
     }
 

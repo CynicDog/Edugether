@@ -5,39 +5,26 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="83ac0769-501d-47c5-aa4c-9efb288ea6db" name="Changes" comment="modified">
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/controller/SocietyController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/entity/socials/Society.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/entity/socials/SocietyEvent.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/repository/SocietyRepository.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/repository/implementation/SocietyRepositoryImpl.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/service/SocietyService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/util/enums/EVENT_STATUS.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/util/enums/SUBJECT_TITLE.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/public/course-entry.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/public/society-entry.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/test/java/org/example/CardinalityTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/projection/CourseProjection.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/EdugetherMainApp.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/EdugetherMainApp.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/example/controller/CourseController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/controller/CourseController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/controller/HomeController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/controller/HomeController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/example/controller/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/controller/UserController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/example/entity/academics/Course.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/entity/academics/Course.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/entity/society/Society.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/entity/society/SocietyEvent.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/entity/contents/Post.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/entity/contents/Post.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/example/entity/users/Student.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/entity/users/Student.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/entity/users/Teacher.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/entity/users/Teacher.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/example/entity/users/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/entity/users/User.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/projection/UserProjection.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/projection/UserProjection.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/example/repository/CourseRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/repository/CourseRepository.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/example/repository/UserRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/repository/UserRepository.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/example/repository/implementation/CourseRepositoryImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/repository/implementation/CourseRepositoryImpl.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/example/repository/implementation/UserRepositoryImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/repository/implementation/UserRepositoryImpl.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/example/service/CourseService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/service/CourseService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/service/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/service/UserService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/util/enums/COURSE_STATUS.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/util/enums/COURSE_STATUS.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/util/enums/REVIEW_SENTIMENT.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/util/enums/REVIEW_SENTIMENT.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/public/course-entry.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/public/course-entry.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/public/home.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/public/home.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/public/login.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/public/login.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/public/nav-anonymous.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/public/nav-anonymous.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/public/nav-authenticated.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/public/nav-authenticated.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/public/nav-blank.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/public/nav-blank.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/public/signup.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/public/signup-entry.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/public/society-entry.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/public/society-entry.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -197,7 +184,9 @@
       <workItem from="1692575945400" duration="4841000" />
       <workItem from="1692580830986" duration="11353000" />
       <workItem from="1692627361381" duration="6511000" />
-      <workItem from="1692671422501" duration="2719000" />
+      <workItem from="1692671422501" duration="17730000" />
+      <workItem from="1692690962289" duration="355000" />
+      <workItem from="1692691365747" duration="5602000" />
     </task>
     <task id="LOCAL-00001" summary="init (dependencies, entities)">
       <created>1692451459255</created>
@@ -262,7 +251,14 @@
       <option name="project" value="LOCAL" />
       <updated>1692540434999</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="modified">
+      <created>1692674356577</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1692674356577</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

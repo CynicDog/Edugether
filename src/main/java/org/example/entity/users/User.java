@@ -35,14 +35,6 @@ public class User {
     @Enumerated(EnumType.STRING)
     private ACTIVE active = ACTIVE.YES;
 
-    @ManyToMany
-    @JoinTable(
-            name = "LikedPosts",
-            joinColumns = @JoinColumn(name = "userId"),
-            inverseJoinColumns = @JoinColumn(name = "postId")
-    )
-    private List<Post> likedPosts = new ArrayList<>();
-
     public User() {
     }
 
@@ -103,13 +95,5 @@ public class User {
 
     public void setActive(ACTIVE active) {
         this.active = active;
-    }
-
-    public List<Post> getLikedPosts() {
-        return likedPosts;
-    }
-
-    public void setLikedPosts(List<Post> likedPosts) {
-        this.likedPosts = likedPosts;
     }
 }

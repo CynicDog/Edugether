@@ -138,7 +138,7 @@
                     tools for course management, collaboration, and interactive learning experiences.</p>
             </div>
             <div class="col-lg-6 px-0">
-                <h2>Our members</h2>
+                <h2>Meet our members</h2>
                 <div id="memberOutputArea" class="my-4">
                 </div>
             </div>
@@ -493,8 +493,8 @@
                 if (datum.type === "TEACHER") {
                     memberOutputArea.innerHTML += `
                         <span class="position-relative badge rounded-pill text-bg-light m-3 py-2 px-2">
-                            🖋️ ${datum.name}
-                            <span data-user-name="${datum.name}" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-secondary-subtle text-success remove-food-btn">
+                            🖋️ ${datum.username}
+                            <span data-user-name="${datum.username}" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-secondary-subtle text-success remove-food-btn">
                                 ${datum.email}
                             </span>
                         </span>
@@ -502,8 +502,8 @@
                 } else if (datum.type === "STUDENT") {
                     memberOutputArea.innerHTML += `
                         <span class="position-relative badge rounded-pill text-bg-light m-3 py-2 px-3">
-                            ✏️️ ${datum.name}
-                            <span data-user-name="${datum.name}" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-secondary-subtle text-success remove-food-btn">
+                            ✏️️ ${datum.username}
+                            <span data-user-name="${datum.username}" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-secondary-subtle text-success remove-food-btn">
                                 ${datum.email}
                             </span>
                         </span>

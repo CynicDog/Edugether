@@ -11,7 +11,7 @@ import java.util.List;
 @Entity
 public class Student extends User {
 
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(
             name = "Interest",
             joinColumns = @JoinColumn(name = "studentId")

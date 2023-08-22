@@ -20,6 +20,15 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
+    public Teacher loadTeacherByUsername(String username) {
+        return JpaOperationUtil.apply(entityManagerFactory, em -> {
+            return em.createQuery("select t from Teacher t where t.username = :username", Teacher.class)
+                    .setParameter("username", username)
+                    .getSingleResult();
+        });
+    }
+
+    @Override
     public List<UserProjection> getUsersRandomlyLimitBy(Integer limit) {
         return JpaOperationUtil.apply(entityManagerFactory, em -> {
             return em.createQuery("select new org.example.projection.UserProjection(u.id, u.username, u.email, u.type) from User u order by function('RAND')", UserProjection.class)
@@ -70,7 +79,6 @@ public class UserRepositoryImpl implements UserRepository {
         });
     }
 
-    // TODO: refactor to boolean so handlers can handle exception
     @Override
     public void insertUser(User user) {
         JpaOperationUtil.consume(entityManagerFactory, em -> {

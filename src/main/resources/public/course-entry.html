@@ -23,8 +23,9 @@
             </div>
         </div>
         <div class="row">
-            <div id="courseToastButton" class="col fw-light my-3"><span
-                    class="btn btn-light fw-lighter">📕 Add yours</span></div>
+            <div class="col fw-light my-3">
+                <span id="courseToastButton" class="btn btn-light fw-lighter">📕 Add yours</span>
+            </div>
         </div>
     </div>
 </div>
@@ -32,87 +33,33 @@
 <div class="container px-4 py-5" id="custom-cards">
     <div class="text-end">
         <div class="pb-2 border-bottom fw-lighter">
-            <span type="button" class="badge bg-primary-subtle text-primary-emphasis rounded-pill">Newest</span>
-            <span type="button" class="badge bg-info-subtle text-info-emphasis rounded-pill">Popular</span>
-            <span type="button" class="badge bg-success-subtle text-success-emphasis rounded-pill">Acclaimed</span>
-            <span type="button" class="badge bg-warning-subtle text-warning-emphasis rounded-pill">Mixed</span>
-            <span type="button" class="badge bg-danger-subtle text-danger-emphasis rounded-pill">Criticized</span>
+            <span id="newestCoursesButton" type="button"
+                  class="badge bg-primary-subtle text-primary-emphasis rounded-pill">Newest</span>
+            <span id="popularCoursesButton" type="button" class="badge bg-info-subtle text-info-emphasis rounded-pill">Popular</span>
+            <span id="acclaimedCoursesButton" type="button"
+                  class="badge bg-success-subtle text-success-emphasis rounded-pill">Acclaimed</span>
+            <span id="mixedCoursesButton" type="button"
+                  class="badge bg-warning-subtle text-warning-emphasis rounded-pill">Mixed</span>
+            <span id="criticizedCoursesButton" type="button"
+                  class="badge bg-danger-subtle text-danger-emphasis rounded-pill">Criticized</span>
         </div>
 
     </div>
-    <div class="row row-cols-1 row-cols-lg-3 align-items-stretch g-4 py-5">
-        <div class="col">
-            <div class="card card-cover h-100 overflow-hidden text-bg-dark rounded-4 shadow-lg"
-                 style="background-image: url('unsplash-photo-1.jpg');">
-                <div class="d-flex flex-column h-100 p-5 pb-3 text-white text-shadow-1">
-                    <h3 class="pt-5 mt-5 mb-4 display-6 lh-1 fw-bold">Short title, long jacket</h3>
-                    <ul class="d-flex list-unstyled mt-auto">
-                        <li class="ms-auto d-flex align-items-center me-3">
-                            <svg class="bi me-2" width="1em" height="1em">
-                                <use xlink:href="#geo-fill"/>
-                            </svg>
-                            <small>Earth</small>
-                        </li>
-                        <li class="d-flex align-items-center">
-                            <svg class="bi me-2" width="1em" height="1em">
-                                <use xlink:href="#calendar3"/>
-                            </svg>
-                            <small>3d</small>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-
-        <div class="col">
-            <div class="card card-cover h-100 overflow-hidden text-bg-dark rounded-4 shadow-lg"
-                 style="background-image: url('unsplash-photo-1.jpg');">
-                <div class="d-flex flex-column h-100 p-5 pb-3 text-white text-shadow-1">
-                    <h3 class="pt-5 mt-5 mb-4 display-6 lh-1 fw-bold">Short title, long jacket</h3>
-                    <ul class="d-flex list-unstyled mt-auto">
-                        <li class="ms-auto d-flex align-items-center me-3">
-                            <svg class="bi me-2" width="1em" height="1em">
-                                <use xlink:href="#geo-fill"/>
-                            </svg>
-                            <small>Earth</small>
-                        </li>
-                        <li class="d-flex align-items-center">
-                            <svg class="bi me-2" width="1em" height="1em">
-                                <use xlink:href="#calendar3"/>
-                            </svg>
-                            <small>3d</small>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-
-        <div class="col">
-            <div class="card card-cover h-100 overflow-hidden text-bg-dark rounded-4 shadow-lg"
-                 style="background-image: url('unsplash-photo-1.jpg');">
-                <div class="d-flex flex-column h-100 p-5 pb-3 text-white text-shadow-1">
-                    <h3 class="pt-5 mt-5 mb-4 display-6 lh-1 fw-bold">Short title, long jacket</h3>
-                    <ul class="d-flex list-unstyled mt-auto">
-                        <li class="ms-auto d-flex align-items-center me-3">
-                            <svg class="bi me-2" width="1em" height="1em">
-                                <use xlink:href="#geo-fill"/>
-                            </svg>
-                            <small>Earth</small>
-                        </li>
-                        <li class="d-flex align-items-center">
-                            <svg class="bi me-2" width="1em" height="1em">
-                                <use xlink:href="#calendar3"/>
-                            </svg>
-                            <small>3d</small>
-                        </li>
-                    </ul>
-                </div>
+    <div id="coursesOutputArea" class="row row-cols-1 row-cols-lg-3 align-items-stretch g-4 py-5">
+    </div>
+    <div class="text-center">
+        <div class="btn border border-0 disabled">
+            <div id="coursesLoadingSpinner"
+                 class="spinner-border spinner-border-sm text-primary m-1" role="status"
+                 style="display: none;">
+                <span class="visually-hidden">Loading...</span>
             </div>
         </div>
     </div>
 </div>
 <div class="toast-container position-fixed bottom-0 end-0 p-4">
-    <div id="messagingToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+    <div id="messagingToast" class="toast align-items-center text-bg-primary border-0" role="alert"
+         aria-live="assertive" aria-atomic="true">
         <div class="d-flex">
             <div class="toast-body">
             </div>
@@ -146,7 +93,7 @@
                             <div class="form-floating">
                                 <input type="text" class="form-control-plaintext" id="description" name="description"
                                        placeholder="">
-                                <label class="fw-lighter d-flex" for="description">description
+                                <label class="fw-lighter d-flex" for="description">description (about 400 words)
                                     <div class="ms-auto">
                                         <div class="validation description mx-3 text-danger"
                                              style="display: none;">
@@ -208,11 +155,105 @@
 <script>
     document.addEventListener("DOMContentLoaded", function () {
 
-        fetch(`/nav-blank`)
-            .then(response => response.text())
-            .then(data => {
-                document.getElementById('navbar-placeholder').innerHTML = data;
-            });
+        const username = localStorage.getItem("Authentication");
+
+        if (username !== null) {
+            fetch(`/nav-authenticated`)
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById('navbar-placeholder').innerHTML = data;
+                });
+        } else {
+            fetch(`/nav-anonymous`)
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById('navbar-placeholder').innerHTML = data;
+                })
+        }
+
+        const coursesLoadingSpinner = document.getElementById('coursesLoadingSpinner')
+
+        let currentFetchingOptions = null;
+        const coursesOutputArea = document.getElementById('coursesOutputArea');
+        let isNewestCoursesFetching = false;
+        let isNewestCoursesLast = false;
+
+        let pageOnNewestCourses = 0;
+
+        const getNewestCourses = page => {
+            return fetch(`/course/newest?page=${page}&limit=9`).then(response => response.json());
+        }
+
+        function fetchAndRenderNewestCourses(page) {
+
+            isNewestCoursesFetching = true;
+            coursesLoadingSpinner.style.display = 'block';
+
+            getNewestCourses(page).then(data => {
+                if (data.length < 9) {
+                    isNewestCoursesLast = true;
+                }
+                data.courses.forEach(course => {
+                    coursesOutputArea.innerHTML += `
+                        <div class="col">
+                            <div class="card card-cover h-100 overflow-hidden text-bg-dark rounded-4 shadow-lg">
+                                <div class="d-flex flex-column h-100 p-5 pb-3 text-white text-shadow-1">
+                                    <div>
+                                        <span class="badge bg-success-subtle text-success-emphasis rounded-pill">${course.subject}</span>
+                                    </div>
+                                    <div>
+                                        <h3 class="pt-5 mt-5 mb-4 display-6 lh-1 fw-bold"> ${course.name} </h3>
+                                        <ul class="d-flex list-unstyled mt-auto">
+                                            <li class="ms-auto d-flex align-items-center me-3">
+                                                <small> ${course.teacherUsername} </small>
+                                            </li>
+                                            <li class="d-flex align-items-center">
+                                                <small> ${formatDate(course.startingDay)} ~ ${formatDate(course.endingDay)} </small>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    `
+
+                    isNewestCoursesFetching = false;
+                })
+                coursesLoadingSpinner.style.display = 'none';
+            })
+        }
+
+        // initial rendering of the courses
+        fetchAndRenderNewestCourses(pageOnNewestCourses);
+        // register current fetching function in the variable
+        currentFetchingOptions = (page) => {
+            return fetchAndRenderNewestCourses(page)
+        };
+
+        // rending on click event
+        document.getElementById('newestCoursesButton').addEventListener('click', function () {
+
+            coursesOutputArea.innerHTML = '';
+
+            pageOnNewestCourses = 0
+            fetchAndRenderNewestCourses(pageOnNewestCourses)
+            currentFetchingOptions = (page) => {
+                return fetchAndRenderNewestCourses(page)
+            };
+        })
+
+        window.onscroll = function () {
+            if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
+
+                if (isNewestCoursesFetching || isNewestCoursesLast) {
+                    // do nothing
+                } else {
+                    pageOnNewestCourses += 1;
+                    currentFetchingOptions(pageOnNewestCourses);
+                }
+            }
+        }
 
         const nameInput = document.querySelector('input[name=name]');
         const descriptionInput = document.querySelector('input[name=description]')
@@ -220,11 +261,11 @@
         const startingDayInput = document.querySelector('input[name=startingDay]')
         const closingDayInput = document.querySelector('input[name=closingDay]')
 
-        const requiredStoreInputs = [
+        const requiredCourseInputs = [
             nameInput, descriptionInput
         ]
 
-        requiredStoreInputs.forEach(input => {
+        requiredCourseInputs.forEach(input => {
             input.addEventListener('blur', function () {
 
                 removeErrorMessage(this);
@@ -330,14 +371,22 @@
                 body: JSON.stringify(formData)
             }).then(response => {
 
-                if (response.status === 302) {
+                if (response.status === 401) {
                     // Authentication entry point
                     window.location.href = "/login?error=anonymous"
                 }
 
+                if (response.status === 403) {
+                    // Unauthorized
+                    window.location.href = "/login?error=denied"
+                }
+
                 if (response.ok) {
                     showMessagingToast(response.statusText);
-                    courseToastButton.close();
+                    new bootstrap.Toast(document.getElementById('courseAddToast')).hide();
+                } else if (!response.ok) {
+                    showMessagingToast(response.statusText);
+                    new bootstrap.Toast(document.getElementById('courseAddToast')).hide();
                 }
             })
         })
@@ -414,6 +463,12 @@
                 courseSubmitButton.classList.add('disabled');
             }
         }
+
+        function formatDate(timestamp) {
+
+            return new Date(timestamp).toLocaleDateString("en-US");
+        }
+
     })
 </script>
 </html>

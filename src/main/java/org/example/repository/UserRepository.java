@@ -10,9 +10,6 @@ public interface UserRepository {
 
     User loadUserByUsername(String username);
 
-    // TODO !!!!
-//    Teacher loadTeacherByUsername(String username);
-
     void insertUser(User user);
 
     User loadUserByEmail(String email);
@@ -22,4 +19,6 @@ public interface UserRepository {
     boolean isEmailUnique(String email);
 
     List<UserProjection> getUsersRandomlyLimitBy(Integer limit);
+
+    Teacher loadTeacherByUsername(String username);
 }

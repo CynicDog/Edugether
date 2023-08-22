@@ -3,12 +3,15 @@ package org.example.service;
 import io.vertx.core.json.JsonObject;
 import org.example.entity.academics.Course;
 import org.example.entity.users.Teacher;
+import org.example.projection.CourseProjection;
 import org.example.repository.CourseRepository;
 import org.example.repository.UserRepository;
 import org.jboss.logging.Logger;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
 
 public class CourseService {
     private final Logger logger = Logger.getLogger(CourseService.class);
@@ -24,7 +27,7 @@ public class CourseService {
 
     public boolean registerCourse(JsonObject courseCommand) {
 
-        Teacher teacher = (Teacher) userRepository.loadUserByUsername(courseCommand.getString("teacher"));
+        Teacher teacher = userRepository.loadTeacherByUsername(courseCommand.getString("teacher"));
 
         try {
             Course course = new Course(
@@ -41,5 +44,10 @@ public class CourseService {
             e.printStackTrace();
             throw new RuntimeException(e);
         }
+    }
+
+    public List<CourseProjection> getPaginatedCoursesByPublishedDateDescending(Integer page, Integer limit) {
+
+        return courseRepository.getPaginatedCoursesByPublishedDateDescending(page, limit);
     }
 }

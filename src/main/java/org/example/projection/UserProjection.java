@@ -2,9 +2,7 @@ package org.example.projection;
 
 import org.example.util.enums.TYPE;
 
-import java.security.Principal;
-
-public class UserProjection implements Principal {
+public class UserProjection {
 
     private Long id;
     private String username;
@@ -12,9 +10,10 @@ public class UserProjection implements Principal {
     private TYPE type;
 
 
-    public UserProjection(Long id, String username) {
+    public UserProjection(Long id, String username, TYPE type) {
         this.id = id;
         this.username = username;
+        this.type = type;
     }
 
     public UserProjection(Long id, String username, String email, TYPE type) {
@@ -28,8 +27,7 @@ public class UserProjection implements Principal {
         return id;
     }
 
-    @Override
-    public String getName() {
+    public String getUsername() {
         return username;
     }
 

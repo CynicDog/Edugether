@@ -8,11 +8,10 @@ import io.vertx.ext.web.handler.BodyHandler;
 import io.vertx.ext.web.handler.SessionHandler;
 import io.vertx.ext.web.handler.StaticHandler;
 import io.vertx.ext.web.sstore.LocalSessionStore;
+import org.example.projection.UserProjection;
 import org.example.service.UserService;
 import org.example.util.enums.TYPE;
 import org.jboss.logging.Logger;
-
-import java.security.Principal;
 
 import static org.example.util.constant.PageLocation.PUBLIC;
 
@@ -80,9 +79,9 @@ public class UserController implements Controller {
     // Authenticated
     private void handleMyPage(RoutingContext routingContext) {
 
-        Principal authenticatedPrincipal = routingContext.session().get("Authentication");
+        UserProjection authentication = routingContext.session().get("Authentication");
 
-        if (authenticatedPrincipal == null) {
+        if (authentication == null) {
             // authentication entry point
             routingContext.response().putHeader("Content-Type", "text/html").sendFile(PUBLIC + "login.html");
             return;
@@ -110,6 +109,4 @@ public class UserController implements Controller {
 
         routingContext.response().setStatusCode(200).end();
     }
-
-
 }
