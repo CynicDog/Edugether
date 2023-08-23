@@ -48,7 +48,7 @@
         </div>
         <div class="col-md-8">
             <div class="pb-4 mb-4 fst-italic border-bottom text-end">
-                <span id="newestCoursesButton" type="button"
+                <span id="coursesButton" type="button"
                       class="badge bg-primary-subtle text-primary-emphasis rounded-pill">Courses</span>
                 <span id="popularCoursesButton" type="button"
                       class="badge bg-info-subtle text-info-emphasis rounded-pill">button2</span>
@@ -61,46 +61,13 @@
             </div>
             <div>
                 <div id="contentOutputArea" class="row">
-                    <div class="col my-3">
-                        <div class="card card-cover h-100 overflow-hidden text-bg-dark rounded-4 shadow-lg">
-                            <div class="d-flex flex-column h-100 p-5 pb-3 text-white text-shadow-1">
-                                <div>
-                                    <span class="badge bg-success-subtle text-success-emphasis rounded-pill">${course.subject}</span>
-                                </div>
-                                <div>
-                                    <h3 class="pt-5 mt-5 mb-4 display-6 lh-1 fw-bold"> ${course.name} </h3>
-                                    <ul class="d-flex list-unstyled mt-auto">
-                                        <li class="ms-auto d-flex align-items-center me-3">
-                                            <small> by ${course.teacherUsername} </small>
-                                        </li>
-                                        <li class="d-flex align-items-center">
-                                            <small> ${formatDate(course.startingDay)} ~
-                                                ${formatDate(course.endingDay)} </small>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col my-3">
-                        <div class="card card-cover h-100 overflow-hidden text-bg-dark rounded-4 shadow-lg">
-                            <div class="d-flex flex-column h-100 p-5 pb-3 text-white text-shadow-1">
-                                <div>
-                                    <span class="badge bg-success-subtle text-success-emphasis rounded-pill">${course.subject}</span>
-                                </div>
-                                <div>
-                                    <h3 class="pt-5 mt-5 mb-4 display-6 lh-1 fw-bold"> ${course.name} </h3>
-                                    <ul class="d-flex list-unstyled mt-auto">
-                                        <li class="ms-auto d-flex align-items-center me-3">
-                                            <small> by ${course.teacherUsername} </small>
-                                        </li>
-                                        <li class="d-flex align-items-center">
-                                            <small> ${formatDate(course.startingDay)} ~
-                                                ${formatDate(course.endingDay)} </small>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
+                </div>
+                <div class="text-center">
+                    <div class="btn border border-0 disabled">
+                        <div id="contentLoadingSpinner"
+                             class="spinner-border spinner-border-sm text-primary m-1" role="status"
+                             style="display: none;">
+                            <span class="visually-hidden">Loading...</span>
                         </div>
                     </div>
                 </div>
@@ -174,6 +141,15 @@
     const qualificationSubmitButton = document.getElementById('qualificationSubmitButton')
     const qualificationToastButton = document.getElementById('qualificationToastButton')
 
+    let currentFetchingOptions = null
+
+    const contentOutputArea = document.getElementById('contentOutputArea')
+    let isCourseFetching = false;
+    let isCourseLast = false;
+    let pageOnCourses = 0;
+
+    const contentLoadingSpinner = document.getElementById('contentLoadingSpinner');
+
     fetch(`/teacher?username=${username}`)
         .then(response => {
 
@@ -246,9 +222,84 @@
         })
     })
 
-    fetch(`/teacher/courses`)
-        .then(response => response.json())
+    const getCourses = page => {
+        return fetch(`/teacher/course?page=${page}&limit=3`).then(response => response.json());
+    }
 
+    function fetchAndRenderCourses(page) {
+
+        isCourseFetching = true;
+        contentLoadingSpinner.style.display = 'block';
+
+        getCourses(page).then(data => {
+            if (data.length < 3) {
+                isCourseLast = true;
+            }
+            data.courses.forEach(course => {
+                contentOutputArea.innerHTML += `
+                    <div class="row">
+                        <div class="col my-3">
+                            <div class="card card-cover h-100 overflow-hidden text-bg-dark rounded-4 shadow-lg">
+                                <div class="d-flex flex-column h-100 p-5 pb-3 text-white text-shadow-1">
+                                    <div>
+                                        <div class="d-flex">
+                                            <div class="badge bg-primary-subtle border border-primary-subtle text-primary-emphasis rounded-pill me-auto my-2">${course.subject}</div>
+                                            <div class="badge bg-success-subtle border border-success-subtle text-success-emphasis rounded-pill my-2">${course.courseStatus}</div>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <h3 class="pt-3 display-6 lh-1 fw-bold"> ${course.name}</h3>
+                                        <div class="fw-lighter my-3">Wishers
+                                        // TODO: wishers
+                                        </div>
+                                        <ul class="d-flex list-unstyled mt-auto">
+                                            <li class="ms-auto d-flex align-items-center me-3">
+                                                <small> by ${course.teacher.username} </small>
+                                            </li>
+                                            <li class="d-flex align-items-center">
+                                                <small> ${formatDate(course.startingDay)} ~
+                                                    ${formatDate(course.endingDay)} </small>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    `
+                isCourseFetching = false;
+            })
+            contentLoadingSpinner.style.display = 'none';
+        })
+    }
+
+    fetchAndRenderCourses(pageOnCourses);
+    currentFetchingOptions = (page) => {
+        return fetchAndRenderCourses(page);
+    }
+
+    document.getElementById('coursesButton').addEventListener('click', function () {
+
+        contentOutputArea.innerHTML = '';
+
+        pageOnCourses = 0
+        fetchAndRenderCourses(pageOnCourses)
+        currentFetchingOptions = (page) => {
+            return fetchAndRenderCourses(page);
+        }
+    })
+
+    window.onscroll = function () {
+        if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
+
+            if (isCourseFetching || isCourseLast) {
+                // do nothing
+            } else {
+                pageOnCourses += 1;
+                currentFetchingOptions(pageOnCourses);
+            }
+        }
+    }
 
     function showMessagingToast(message) {
         const messagingToast = document.getElementById('messagingToast');

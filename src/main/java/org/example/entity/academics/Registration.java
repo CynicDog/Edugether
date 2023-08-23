@@ -71,4 +71,6 @@ public class Registration {
     public void setEnrolledDate(Date enrolledDate) {
         this.enrolledDate = enrolledDate;
     }
+
+
 }

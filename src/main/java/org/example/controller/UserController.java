@@ -8,25 +8,33 @@ import io.vertx.ext.web.handler.BodyHandler;
 import io.vertx.ext.web.handler.SessionHandler;
 import io.vertx.ext.web.handler.StaticHandler;
 import io.vertx.ext.web.sstore.LocalSessionStore;
+import org.example.entity.academics.Course;
 import org.example.entity.users.User;
+import org.example.projection.CourseProjection;
 import org.example.projection.UserProjection;
+import org.example.service.CourseService;
 import org.example.service.UserService;
 import org.example.util.enums.TYPE;
 import org.jboss.logging.Logger;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.concurrent.TimeUnit;
 
 import static org.example.util.constant.PageLocation.PUBLIC;
 
 public class UserController implements Controller {
 
-    private final String signingKey;
     private final Logger logger = Logger.getLogger(UserController.class);
     private final UserService userService;
+    private final CourseService courseService;
+
 
     public String[] publicUrls = {"/signup/**", "/login",};
 
-    public UserController(UserService userService, String signingKey) {
+    public UserController(UserService userService, CourseService courseService) {
         this.userService = userService;
-        this.signingKey = signingKey;
+        this.courseService = courseService;
     }
 
     @Override
@@ -50,12 +58,45 @@ public class UserController implements Controller {
             router.get("/my-page").handler(this::handleMyPage);
 
             router.get("/teacher").handler(this::handleTeacher);
+            router.get("/teacher/course").handler(this::handleTeacherCourse);
         }
         {   // POST handlers
             router.post("/signup/student").handler(BodyHandler.create()).handler(this::handleStudentSignup);
             router.post("/signup/teacher").handler(BodyHandler.create()).handler(this::handleTeacherSignup);
             router.post("/teacher/qualification").handler(BodyHandler.create()).handler(this::handleTeacherQualification);
         }
+    }
+
+    private void handleTeacherCourse(RoutingContext routingContext) {
+
+        // for pagination rendering
+        try {
+            TimeUnit.SECONDS.sleep(1);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        UserProjection authentication = routingContext.session().get("Authentication");
+
+        if (authentication == null) {
+            routingContext.response().setStatusCode(401).end();
+            return;
+        } else if (!authentication.getType().toString().equals("TEACHER")) {
+            routingContext.response().setStatusCode(403).end();
+            return;
+        }
+
+        Optional<Integer> page = Optional.of(Integer.parseInt(routingContext.request().getParam("page")));
+        Optional<Integer> limit = Optional.of(Integer.parseInt(routingContext.request().getParam("limit")));
+
+        List<Course> courses = courseService.getPaginatedCoursesByPublishedDateAndByUsernameDescending(
+                page.orElse(0),
+                limit.orElse(3),
+                authentication.getUsername());
+
+        JsonObject data = new JsonObject().put("courses", courses);
+
+        routingContext.response().setStatusCode(200).end(data.encode());
     }
 
     // Authenticated
@@ -115,7 +156,6 @@ public class UserController implements Controller {
         } else if (authentication.getType().toString().equals("STUDENT")) {
             routingContext.response().putHeader("Content-Type", "text/html").sendFile(PUBLIC + "student.html");
         }
-
     }
 
     private void handleCheckUsername(RoutingContext routingContext) {

@@ -10,4 +10,9 @@ public interface CourseRepository {
     boolean insertCourse(Course course);
 
     List<CourseProjection> getPaginatedCoursesByPublishedDateDescending(Integer page, Integer limit);
+
+    List<Course> getPaginatedCoursesByPublishedDateAndByUsernameDescending(Integer page, Integer limit, String username);
+
+    List<CourseProjection> getPaginatedCoursesByPublishedDateAscending(Integer page, Integer limit);
 }
+

@@ -47,11 +47,35 @@ public class CourseController implements Controller {
             router.get("/course").handler(routingContext -> { routingContext.response().putHeader("Content-Type", "text/html").sendFile(PUBLIC + "course.html"); });
             router.get("/course/subjects").handler(this::handleCourseSubjects);
             router.get("/course/newest").handler(this::handleCourseNewest);
+            router.get("/course/oldest").handler(this::handleCourseOldest);
         }
         {   // POST handlers
             router.post("/course/register").handler(BodyHandler.create()).handler(this::handleCourseRegister);
         }
     }
+
+    //    return fetch(`/course/oldest?page=${page}&limit=9`).then(response => response.json());
+
+    private void handleCourseOldest(RoutingContext routingContext) {
+        // for pagination rendering
+        try {
+            TimeUnit.SECONDS.sleep(1);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        Optional<Integer> page = Optional.of(Integer.parseInt(routingContext.request().getParam("page")));
+        Optional<Integer> limit = Optional.of(Integer.parseInt(routingContext.request().getParam("limit")));
+
+        List<CourseProjection> newestCourses = courseService.getPaginatedCoursesByPublishedDateAscending(
+                page.orElse(0),
+                limit.orElse(9));
+
+        JsonObject data = new JsonObject().put("courses", newestCourses);
+
+        routingContext.response().setStatusCode(200).end(data.encode());
+    }
+
 
     private void handleCourseNewest(RoutingContext routingContext) {
 

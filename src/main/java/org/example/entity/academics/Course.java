@@ -40,8 +40,8 @@ public class Course {
     @ManyToMany
     @JoinTable(
             name = "WishListCourses",
-            joinColumns = @JoinColumn(name = "studentId"),
-            inverseJoinColumns = @JoinColumn(name = "courseId")
+            joinColumns = @JoinColumn(name = "courseId"),
+            inverseJoinColumns = @JoinColumn(name = "studentId")
     )
     private Set<Student> wishers = new HashSet<>();
 
@@ -140,8 +140,7 @@ public class Course {
         return subject;
     }
 
-    public void setSubject(String title) {
-
-        this.subject = SUBJECT_TITLE.valueOf(title);
+    public void setSubject(SUBJECT_TITLE subject) {
+        this.subject = subject;
     }
 }

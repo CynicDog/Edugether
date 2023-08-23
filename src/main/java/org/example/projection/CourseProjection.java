@@ -1,8 +1,11 @@
 package org.example.projection;
 
+import org.example.entity.users.Student;
+import org.example.util.enums.COURSE_STATUS;
 import org.example.util.enums.SUBJECT_TITLE;
 
 import java.util.Date;
+import java.util.Set;
 
 public class CourseProjection {
 
@@ -23,7 +26,6 @@ public class CourseProjection {
         this.subject = subject;
         this.teacherUsername = teacherUsername;
     }
-
     public Long getId() {
         return id;
     }

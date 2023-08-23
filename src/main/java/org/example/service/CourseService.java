@@ -50,4 +50,14 @@ public class CourseService {
 
         return courseRepository.getPaginatedCoursesByPublishedDateDescending(page, limit);
     }
+
+    public List<Course> getPaginatedCoursesByPublishedDateAndByUsernameDescending(Integer page, Integer limit, String username) {
+
+        return courseRepository.getPaginatedCoursesByPublishedDateAndByUsernameDescending(page, limit, username);
+    }
+
+    public List<CourseProjection> getPaginatedCoursesByPublishedDateAscending(Integer page, Integer limit) {
+
+        return courseRepository.getPaginatedCoursesByPublishedDateAscending(page, limit);
+    }
 }

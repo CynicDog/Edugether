@@ -15,7 +15,7 @@
         <div class="row my-3">
             <div class="col my-3">
                 <div class="fw-lighter fs-2 my-3 bg-">Courses of ours</div>
-                <div class="fw-light fs-5 mb-5">
+                <div class="fw-light fs-5 mb-3">
                     <span class="bg-light">
                         "Let's invite students to discover a realm of knowledge and possibilities!"
                     </span>
@@ -23,7 +23,7 @@
             </div>
         </div>
         <div class="row">
-            <div class="col fw-light my-3">
+            <div class="col fw-light my-1">
                 <span id="courseToastButton" class="btn btn-light fw-lighter">📕 Add yours</span>
             </div>
         </div>
@@ -42,6 +42,8 @@
                   class="badge bg-warning-subtle text-warning-emphasis rounded-pill">Mixed</span>
             <span id="criticizedCoursesButton" type="button"
                   class="badge bg-danger-subtle text-danger-emphasis rounded-pill">Criticized</span>
+            <span id="oldestCoursesButton" type="button"
+                  class="badge bg-dark-subtle text-dark-emphasis rounded-pill">Oldest</span>
         </div>
 
     </div>
@@ -169,11 +171,15 @@
         const coursesLoadingSpinner = document.getElementById('coursesLoadingSpinner')
 
         let currentFetchingOptions = null;
-        const coursesOutputArea = document.getElementById('coursesOutputArea');
-        let isNewestCoursesFetching = false;
-        let isNewestCoursesLast = false;
 
-        let pageOnNewestCourses = 0;
+        const coursesOutputArea = document.getElementById('coursesOutputArea');
+
+        let isNewestCourseFetching = false;
+        let isNewestCoursesLast = false;
+        let PageOnCourses = 0;
+
+        let isOldestCourseFetching = false;
+        let isOldestCoursesLast = false;
 
         const getNewestCourses = page => {
             return fetch(`/course/newest?page=${page}&limit=9`).then(response => response.json());
@@ -181,7 +187,7 @@
 
         function fetchAndRenderNewestCourses(page) {
 
-            isNewestCoursesFetching = true;
+            isNewestCourseFetching = true;
             coursesLoadingSpinner.style.display = 'block';
 
             getNewestCourses(page).then(data => {
@@ -194,7 +200,7 @@
                             <div class="card card-cover h-100 overflow-hidden text-bg-dark rounded-4 shadow-lg">
                                 <div class="d-flex flex-column h-100 p-5 pb-3 text-white text-shadow-1">
                                     <div>
-                                        <span class="badge bg-success-subtle text-success-emphasis rounded-pill">${course.subject}</span>
+                                        <span class="badge bg-primary-subtle border border-primary-subtle text-primary-emphasis rounded-pill">${course.subject}</span>
                                     </div>
                                     <div>
                                         <h3 class="pt-5 mt-5 mb-4 display-6 lh-1 fw-bold"> ${course.name} </h3>
@@ -210,41 +216,98 @@
                                 </div>
                             </div>
                         </div>
-
                     `
-                    isNewestCoursesFetching = false;
+                    isNewestCourseFetching = false;
                 })
                 coursesLoadingSpinner.style.display = 'none';
             })
         }
 
         // initial rendering of the courses
-        fetchAndRenderNewestCourses(pageOnNewestCourses);
+        fetchAndRenderNewestCourses(PageOnCourses);
         // register current fetching function in the variable
         currentFetchingOptions = (page) => {
-            return fetchAndRenderNewestCourses(page)
+            return fetchAndRenderNewestCourses(page);
         };
 
         // rending on click event
         document.getElementById('newestCoursesButton').addEventListener('click', function () {
 
+            isNewestCourseFetching = false;
+            isOldestCourseFetching = false;
+
             coursesOutputArea.innerHTML = '';
 
-            pageOnNewestCourses = 0
-            fetchAndRenderNewestCourses(pageOnNewestCourses)
+            PageOnCourses = 0
+            fetchAndRenderNewestCourses(PageOnCourses)
             currentFetchingOptions = (page) => {
-                return fetchAndRenderNewestCourses(page)
-            };
+                return fetchAndRenderNewestCourses(page);
+            }
+        })
+
+        const getOldestCourses = page => {
+            return fetch(`/course/oldest?page=${page}&limit=9`).then(response => response.json());
+        }
+        function fetchAndRenderOldestCourses(page) {
+
+            isOldestCourseFetching = true;
+            coursesLoadingSpinner.style.display = 'block';
+
+            getOldestCourses(page).then(data => {
+                if (data.length < 9) {
+                    isOldestCoursesLast = true;
+                }
+                data.courses.forEach(course => {
+                    coursesOutputArea.innerHTML += `
+                        <div class="col">
+                            <div class="card card-cover h-100 overflow-hidden text-bg-dark rounded-4 shadow-lg">
+                                <div class="d-flex flex-column h-100 p-5 pb-3 text-white text-shadow-1">
+                                    <div>
+                                        <span class="badge bg-primary-subtle border border-primary-subtle text-primary-emphasis rounded-pill">${course.subject}</span>
+                                    </div>
+                                    <div>
+                                        <h3 class="pt-5 mt-5 mb-4 display-6 lh-1 fw-bold"> ${course.name} </h3>
+                                        <ul class="d-flex list-unstyled mt-auto">
+                                            <li class="ms-auto d-flex align-items-center me-3">
+                                                <small> by ${course.teacherUsername} </small>
+                                            </li>
+                                            <li class="d-flex align-items-center">
+                                                <small> ${formatDate(course.startingDay)} ~ ${formatDate(course.endingDay)} </small>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `
+                    isOldestCourseFetching = false;
+                })
+                coursesLoadingSpinner.style.display = 'none';
+            })
+        }
+
+        document.getElementById('oldestCoursesButton').addEventListener('click', function() {
+
+            isNewestCourseFetching = false;
+            isOldestCourseFetching = false;
+
+            coursesOutputArea.innerHTML = '';
+
+            PageOnCourses = 0
+            fetchAndRenderOldestCourses(PageOnCourses)
+            currentFetchingOptions = (page) => {
+                return fetchAndRenderOldestCourses(page);
+            }
         })
 
         window.onscroll = function () {
             if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
 
-                if (isNewestCoursesFetching || isNewestCoursesLast) {
+                if (isNewestCourseFetching || isOldestCourseFetching) {
                     // do nothing
                 } else {
-                    pageOnNewestCourses += 1;
-                    currentFetchingOptions(pageOnNewestCourses);
+                    PageOnCourses += 1;
+                    currentFetchingOptions(PageOnCourses);
                 }
             }
         }
@@ -387,6 +450,9 @@
                 subjectInput = null
                 startingDayInput.value = ''
                 closingDayInput.value = ''
+
+                removeErrorMessage();
+                removeSuccessMessage();
             })
         })
 

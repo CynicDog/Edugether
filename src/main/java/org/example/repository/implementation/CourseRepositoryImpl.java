@@ -20,6 +20,46 @@ public class CourseRepositoryImpl implements CourseRepository {
     }
 
     @Override
+    public List<Course> getPaginatedCoursesByPublishedDateAndByUsernameDescending(Integer page, Integer limit, String username) {
+        return JpaOperationUtil.apply(entityManagerFactory, em -> {
+
+            int startIndex = page * limit;
+            TypedQuery<Course> query = em.createQuery(
+                    "select distinct c from Course c left join fetch c.wishers where c.teacher.username = :username order by c.publishedDate desc", Course.class);
+
+            query.setParameter("username", username);
+            query.setFirstResult(startIndex);
+            query.setMaxResults(limit);
+
+            return query.getResultList();
+        });
+    }
+
+    @Override
+    public List<CourseProjection> getPaginatedCoursesByPublishedDateAscending(Integer page, Integer limit) {
+        return JpaOperationUtil.apply(entityManagerFactory, em -> {
+
+            int startIndex = page * limit;
+
+            TypedQuery<CourseProjection> query = em.createQuery(
+                    "select new org.example.projection.CourseProjection(" +
+                            "c.id, " +
+                            "c.name, " +
+                            "c.description, " +
+                            "c.startingDay, " +
+                            "c.endingDay, " +
+                            "c.subject, " +
+                            "teacher.username) from Course c " +
+                            "order by c.publishedDate asc", CourseProjection.class);
+
+            query.setFirstResult(startIndex);
+            query.setMaxResults(limit);
+
+            return query.getResultList();
+        });
+    }
+
+    @Override
     public List<CourseProjection> getPaginatedCoursesByPublishedDateDescending(Integer page, Integer limit) {
         return JpaOperationUtil.apply(entityManagerFactory, em -> {
 
@@ -33,7 +73,8 @@ public class CourseRepositoryImpl implements CourseRepository {
                             "c.startingDay, " +
                             "c.endingDay, " +
                             "c.subject, " +
-                            "teacher.username) from Course c", CourseProjection.class);
+                            "teacher.username) from Course c " +
+                            "order by c.publishedDate desc", CourseProjection.class);
 
             query.setFirstResult(startIndex);
             query.setMaxResults(limit);

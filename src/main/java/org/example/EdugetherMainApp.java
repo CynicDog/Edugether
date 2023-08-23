@@ -33,25 +33,23 @@ public class EdugetherMainApp extends AbstractVerticle {
         HttpServer server = vertx.createHttpServer();
         Router router = Router.router(vertx);
 
-        // Components on `User` domain
         UserRepository userRepository = new UserRepositoryImpl(emf);
+        CourseRepository courseRepository = new CourseRepositoryImpl(emf);
+        SocietyRepository societyRepository = new SocietyRepositoryImpl(emf);
+
         UserService userService = new UserService(userRepository);
-        UserController userController = new UserController(userService, signingKey);
+        CourseService courseService = new CourseService(courseRepository, userRepository);
+        SocietyService societyService = new SocietyService(societyRepository);
+
+        UserController userController = new UserController(userService, courseService);
         userController.registerRoutes(vertx, router);
 
-        // Components on homepage rendering and security operations
         HomeController homeController = new HomeController(userService);
         homeController.registerRoutes(vertx, router);
 
-        // Components on `Course` domain
-        CourseRepository courseRepository = new CourseRepositoryImpl(emf);
-        CourseService courseService = new CourseService(courseRepository, userRepository);
         CourseController courseController = new CourseController(userService, courseService, signingKey);
         courseController.registerRoutes(vertx, router);
 
-        // Components on `Society, SocietyEvent` domain
-        SocietyRepository societyRepository = new SocietyRepositoryImpl(emf);
-        SocietyService societyService = new SocietyService(societyRepository);
         SocietyController societyController = new SocietyController(userService, societyService, signingKey);
         societyController.registerRoutes(vertx, router);
 
