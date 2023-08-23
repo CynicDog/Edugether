@@ -1,5 +1,6 @@
 package org.example.entity.users;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.example.entity.contents.Post;
 import org.example.util.enums.ACTIVE;
 import org.example.util.enums.TYPE;
@@ -20,6 +21,7 @@ public class User {
     private String username;
 
     @Column(nullable = false)
+    @JsonIgnore
     private String password;
 
     @Email

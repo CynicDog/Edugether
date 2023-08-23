@@ -11,7 +11,6 @@ import org.example.util.enums.TYPE;
 import org.jboss.logging.Logger;
 
 import java.util.List;
-import java.util.Optional;
 
 public class UserService {
 
@@ -75,5 +74,14 @@ public class UserService {
     public Teacher getUserByUsername(String name) {
 
         return (Teacher) userRepository.loadUserByUsername(name);
+    }
+
+    public void registerQualification(String username, String qualification) {
+
+        Teacher teacher = userRepository.loadTeacherByUsername(username);
+
+        teacher.addQualification(qualification);
+
+        userRepository.updateUser((User) teacher);
     }
 }

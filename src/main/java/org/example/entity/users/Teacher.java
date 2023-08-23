@@ -1,8 +1,11 @@
 package org.example.entity.users;
 
+import org.example.entity.academics.Course;
 import org.example.util.enums.TYPE;
 
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -39,5 +42,14 @@ public class Teacher extends User{
 
     public void setSalary(Integer salary) {
         this.salary = salary;
+    }
+
+    public void addQualification(String qualification) {
+
+        if (this.qualifications == null) {
+            this.qualifications = new HashSet<>();
+        }
+
+        this.qualifications.add(qualification);
     }
 }

@@ -18,17 +18,17 @@
                     <h4 class="fw-lighter py-2">🧑🏻‍💻 About Me</h4>
                     <p class="mb-0 fw-light">
                         People call me
-                        <span class="badge bg-secondary-subtle border border-secondary-subtle text-secondary-emphasis rounded-pill">
-                            {username}
+                        <span id="usernameOutputArea"
+                              class="badge bg-success-subtle border border-success-subtle text-success-emphasis rounded-pill">
                         </span>
                         here, and you can reach me at
-                        <span class="badge bg-secondary-subtle border border-secondary-subtle text-secondary-emphasis rounded-pill">
-                            {doe@demo.com}
+                        <span id="emailOutputArea"
+                              class="badge bg-success-subtle border border-success-subtle text-success-emphasis rounded-pill">
                         </span>.
                         I've been part of this community since
-                        <span class="badge bg-secondary-subtle border border-secondary-subtle text-secondary-emphasis rounded-pill">
-                            {joined date}
-                        </span>
+                        <span id="joinedDateOutputArea"
+                              class="badge bg-success-subtle border border-success-subtle text-success-emphasis rounded-pill">
+                        </span>. Let's journey together!
                     </p>
                 </div>
                 <div class="shadow-sm p-4 mb-3 bg-body-tertiary rounded">
@@ -36,20 +36,12 @@
                         <i id="qualificationToastButton" type="button" class="bi bi-plus mx-3"
                            style="color:#838383"></i>
                     </h4>
-
-                    <span class="badge bg-secondary-subtle border border-secondary-subtle text-secondary-emphasis rounded-pill">
-                            {username}
-                    </span>
-                    <span class="badge bg-secondary-subtle border border-secondary-subtle text-secondary-emphasis rounded-pill">
-                            {username}
-                    </span>
-                    <span class="badge bg-secondary-subtle border border-secondary-subtle text-secondary-emphasis rounded-pill">
-                            {username}
-                    </span>
+                    <div id="qualificationsOutputArea">
+                    </div>
                 </div>
 
                 <div class="shadow-sm p-4 mb-3 bg-body-tertiary rounded">
-                    <h4 class="fst-italic">Join me!</h4>
+                    <h4 class="fw-lighter py-2">Join me!</h4>
                     <p class="mb-0">upcoming society events</p>
                 </div>
             </div>
@@ -68,7 +60,50 @@
                       class="badge bg-danger-subtle text-danger-emphasis rounded-pill">button5</span>
             </div>
             <div>
-                Some content area ..
+                <div id="contentOutputArea" class="row">
+                    <div class="col my-3">
+                        <div class="card card-cover h-100 overflow-hidden text-bg-dark rounded-4 shadow-lg">
+                            <div class="d-flex flex-column h-100 p-5 pb-3 text-white text-shadow-1">
+                                <div>
+                                    <span class="badge bg-success-subtle text-success-emphasis rounded-pill">${course.subject}</span>
+                                </div>
+                                <div>
+                                    <h3 class="pt-5 mt-5 mb-4 display-6 lh-1 fw-bold"> ${course.name} </h3>
+                                    <ul class="d-flex list-unstyled mt-auto">
+                                        <li class="ms-auto d-flex align-items-center me-3">
+                                            <small> by ${course.teacherUsername} </small>
+                                        </li>
+                                        <li class="d-flex align-items-center">
+                                            <small> ${formatDate(course.startingDay)} ~
+                                                ${formatDate(course.endingDay)} </small>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col my-3">
+                        <div class="card card-cover h-100 overflow-hidden text-bg-dark rounded-4 shadow-lg">
+                            <div class="d-flex flex-column h-100 p-5 pb-3 text-white text-shadow-1">
+                                <div>
+                                    <span class="badge bg-success-subtle text-success-emphasis rounded-pill">${course.subject}</span>
+                                </div>
+                                <div>
+                                    <h3 class="pt-5 mt-5 mb-4 display-6 lh-1 fw-bold"> ${course.name} </h3>
+                                    <ul class="d-flex list-unstyled mt-auto">
+                                        <li class="ms-auto d-flex align-items-center me-3">
+                                            <small> by ${course.teacherUsername} </small>
+                                        </li>
+                                        <li class="d-flex align-items-center">
+                                            <small> ${formatDate(course.startingDay)} ~
+                                                ${formatDate(course.endingDay)} </small>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -90,7 +125,7 @@
             <div class="row">
                 <div class="col">
                     <div class="d-flex justify-content-between align-items-center mb-4">
-                        <div class="fw-lighter fs-4">📚 qualification</div>
+                        <div class="fw-lighter fs-4">📌 Qualification</div>
                         <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
                     </div>
                     <div class="p-3">
@@ -129,19 +164,38 @@
             });
     })
 
+    const params = new URLSearchParams(window.location.search);
+    let username = params.get('username')
+
     const nameInput = document.querySelector('input[name=name]');
-
-    const requiredQualificationInputs = [
-        nameInput
-    ]
-
     const qualificationInputsValidationStatus = {
         name: false
     }
 
     const qualificationSubmitButton = document.getElementById('qualificationSubmitButton')
-
     const qualificationToastButton = document.getElementById('qualificationToastButton')
+
+    fetch(`/teacher?username=${username}`)
+        .then(response => {
+
+            if (response.ok) {
+                return response.json()
+            }
+        })
+        .then(data => {
+            document.getElementById('usernameOutputArea').textContent = data.user.username;
+            document.getElementById('emailOutputArea').textContent = data.user.email;
+            document.getElementById('joinedDateOutputArea').textContent = formatDate(data.user.joinedDate);
+
+            data.user.qualifications.forEach(qualification => {
+                document.getElementById('qualificationsOutputArea').innerHTML += `
+                    <span class="badge bg-secondary-subtle border border-secondary-subtle text-secondary-emphasis rounded-pill" style="font-size: 0.7rem;">
+                            ${qualification}
+                    </span>
+                `
+            })
+        });
+
     qualificationToastButton.addEventListener('click', function () {
         let qualificationAddToast = document.getElementById('qualificationAddToast')
         const qualificationAddToastBootstrap = bootstrap.Toast.getOrCreateInstance(qualificationAddToast)
@@ -149,23 +203,22 @@
         qualificationAddToastBootstrap.show()
     })
 
-    requiredQualificationInputs.forEach(input => {
-        input.addEventListener('blur', function () {
+    nameInput.addEventListener('blur', function () {
 
-            removeErrorMessage(this);
-            removeSuccessMessage(this);
+        removeErrorMessage(this);
+        removeSuccessMessage(this);
 
-            let currentInputName = this.name;
+        let currentInputName = this.name;
 
-            if (this.value.trim() === '') {
-                displayErrorMessage(this, "Required.");
-                qualificationInputsValidationStatus[currentInputName] = false;
-            } else {
-                displaySuccessMessage(this);
-                qualificationInputsValidationStatus[currentInputName] = true;
-            }
-            flushSubmitButton()
-        })
+        if (this.value.trim() === '') {
+            displayErrorMessage(this, "Required.");
+            qualificationInputsValidationStatus[currentInputName] = false;
+        } else {
+            displaySuccessMessage(this);
+            qualificationInputsValidationStatus[currentInputName] = true;
+        }
+        flushSubmitButton()
+
     })
 
     qualificationSubmitButton.addEventListener('click', function () {
@@ -182,16 +235,6 @@
             body: JSON.stringify(formData)
         }).then(response => {
 
-            if (response.status === 401) {
-                // Authentication entry point
-                window.location.href = "/login?error=anonymous"
-            }
-
-            if (response.status === 403) {
-                // Unauthorized
-                window.location.href = "/login?error=denied"
-            }
-
             if (response.ok) {
                 showMessagingToast(response.statusText);
                 new bootstrap.Toast(document.getElementById('qualificationAddToast')).hide();
@@ -199,8 +242,14 @@
                 showMessagingToast(response.statusText);
                 new bootstrap.Toast(document.getElementById('qualificationAddToast')).hide();
             }
+
+            nameInput.value = ''
         })
     })
+
+    fetch(`/teacher/courses`)
+        .then(response => response.json())
+
 
     function showMessagingToast(message) {
         const messagingToast = document.getElementById('messagingToast');
@@ -264,7 +313,8 @@
         }
     }
 
-    const params = new URLSearchParams(window.location.search);
-    console.log(params.get('usernmae'))
+    function formatDate(timestamp) {
+        return new Date(timestamp).toLocaleDateString("en-US");
+    }
 </script>
 </html>

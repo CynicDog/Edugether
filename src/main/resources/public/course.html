@@ -135,16 +135,12 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="text-end">
-                                 class="btn btn-light btn-sm mt-5 mb-3 mx-2 disabled fw-lighter">
+                        <div class="text-end ">
+                            <div id="courseSubmitButton" class="btn btn-light btn-sm mt-5 mb-3 mx-2 disabled fw-lighter">
                                 submit
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="d-flex justify-content-end align-items-end">
-                    <i type="button" id="courseAddRequestIcon" class="bi bi-pencil-square fs-6 m-1"
-                       style="color: #838383; display: none"></i>
                 </div>
             </div>
         </div>
@@ -216,7 +212,6 @@
                         </div>
 
                     `
-
                     isNewestCoursesFetching = false;
                 })
                 coursesLoadingSpinner.style.display = 'none';
@@ -374,7 +369,6 @@
                     // Authentication entry point
                     window.location.href = "/login?error=anonymous"
                 }
-
                 if (response.status === 403) {
                     // Unauthorized
                     window.location.href = "/login?error=denied"
@@ -387,6 +381,12 @@
                     showMessagingToast(response.statusText);
                     new bootstrap.Toast(document.getElementById('courseAddToast')).hide();
                 }
+
+                nameInput.value = ''
+                descriptionInput.value = ''
+                subjectInput = null
+                startingDayInput.value = ''
+                closingDayInput.value = ''
             })
         })
 
@@ -464,7 +464,6 @@
         }
 
         function formatDate(timestamp) {
-
             return new Date(timestamp).toLocaleDateString("en-US");
         }
 

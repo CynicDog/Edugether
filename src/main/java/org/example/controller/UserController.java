@@ -8,6 +8,7 @@ import io.vertx.ext.web.handler.BodyHandler;
 import io.vertx.ext.web.handler.SessionHandler;
 import io.vertx.ext.web.handler.StaticHandler;
 import io.vertx.ext.web.sstore.LocalSessionStore;
+import org.example.entity.users.User;
 import org.example.projection.UserProjection;
 import org.example.service.UserService;
 import org.example.util.enums.TYPE;
@@ -44,13 +45,79 @@ public class UserController implements Controller {
             router.get("/signup/teacher").handler(routingContext -> {
                 routingContext.response().putHeader("Content-Type", "text/html").sendFile(PUBLIC + "signup-teacher.html");
             });
-            router.get("/my-page").handler(this::handleMyPage);
             router.get("/user/check-username").handler(this::handleCheckUsername);
             router.get("/user/check-email").handler(this::handleCheckEmail);
+            router.get("/my-page").handler(this::handleMyPage);
+
+            router.get("/teacher").handler(this::handleTeacher);
         }
         {   // POST handlers
             router.post("/signup/student").handler(BodyHandler.create()).handler(this::handleStudentSignup);
             router.post("/signup/teacher").handler(BodyHandler.create()).handler(this::handleTeacherSignup);
+            router.post("/teacher/qualification").handler(BodyHandler.create()).handler(this::handleTeacherQualification);
+        }
+    }
+
+    // Authenticated
+    private void handleTeacherQualification(RoutingContext routingContext) {
+
+        UserProjection authentication = routingContext.session().get("Authentication");
+
+        if (authentication == null) {
+            routingContext.response().setStatusCode(401).end();
+            return;
+        } else if (!authentication.getType().toString().equals("TEACHER")) {
+            routingContext.response().setStatusCode(403).end();
+            return;
+        }
+
+        JsonObject qualificationCommand = routingContext.getBodyAsJson();
+        String qualification = qualificationCommand.getString("name");
+
+        userService.registerQualification(authentication.getUsername(), qualification);
+
+        routingContext.response().setStatusCode(200).setStatusMessage("Successfully registered your qualification :) Reload to see!").end();
+    }
+
+    // Authenticated
+    private void handleTeacher(RoutingContext routingContext) {
+
+        UserProjection authentication = routingContext.session().get("Authentication");
+
+        if (authentication == null) {
+            routingContext.response().setStatusCode(401).end();
+            return;
+        } else if (!authentication.getType().toString().equals("TEACHER")) {
+            routingContext.response().setStatusCode(403).end();
+            return;
+        }
+
+        String username = routingContext.request().getParam("username");
+        User user = userService.getUserByUsername(username);
+
+        JsonObject userCommand = new JsonObject();
+        userCommand.put("user", user);
+
+        routingContext.response().setStatusCode(200).end(userCommand.encode());
+    }
+
+    // Authenticated
+    private void handleMyPage(RoutingContext routingContext) {
+
+        UserProjection authentication = routingContext.session().get("Authentication");
+
+        if (authentication == null) {
+            routingContext.response().setStatusCode(401).end();
+            return;
+        } else if (!authentication.getType().toString().equals("TEACHER")) {
+            routingContext.response().setStatusCode(403).end();
+            return;
+        }
+
+        if (authentication.getType().toString().equals("TEACHER")) {
+            routingContext.response().putHeader("Content-Type", "text/html").sendFile(PUBLIC + "teacher.html");
+        } else if (authentication.getType().toString().equals("STUDENT")) {
+            routingContext.response().putHeader("Content-Type", "text/html").sendFile(PUBLIC + "student.html");
         }
 
     }
@@ -74,27 +141,6 @@ public class UserController implements Controller {
         } else {
             routingContext.response().setStatusCode(400).end();
         }
-    }
-
-    // Authenticated
-    private void handleMyPage(RoutingContext routingContext) {
-
-        UserProjection authentication = routingContext.session().get("Authentication");
-
-        if (authentication == null) {
-            // authentication entry point
-            routingContext.response().putHeader("Content-Type", "text/html").sendFile(PUBLIC + "login.html");
-            return;
-        }
-
-        if (authentication.getType().toString().equals("TEACHER")) {
-            logger.info(authentication.getType().toString());
-            routingContext.response().putHeader("Content-Type", "text/html").sendFile(PUBLIC + "teacher.html");
-        } else if (authentication.getType().toString().equals("STUDENT")) {
-            logger.info(authentication.getType().toString());
-            routingContext.response().putHeader("Content-Type", "text/html").sendFile(PUBLIC + "student.html");
-        }
-
     }
 
     private void handleTeacherSignup(RoutingContext routingContext) {

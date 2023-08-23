@@ -53,7 +53,6 @@ public class CourseController implements Controller {
         }
     }
 
-    // Authenticated
     private void handleCourseNewest(RoutingContext routingContext) {
 
         // for pagination rendering

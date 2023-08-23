@@ -21,4 +21,6 @@ public interface UserRepository {
     List<UserProjection> getUsersRandomlyLimitBy(Integer limit);
 
     Teacher loadTeacherByUsername(String username);
+
+    void updateUser(User user);
 }

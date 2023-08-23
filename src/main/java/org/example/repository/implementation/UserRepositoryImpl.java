@@ -20,6 +20,13 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
+    public void updateUser(User user) {
+        JpaOperationUtil.consume(entityManagerFactory, em -> {
+            em.merge(user);
+        });
+    }
+
+    @Override
     public Teacher loadTeacherByUsername(String username) {
         return JpaOperationUtil.apply(entityManagerFactory, em -> {
             return em.createQuery("select t from Teacher t where t.username = :username", Teacher.class)
