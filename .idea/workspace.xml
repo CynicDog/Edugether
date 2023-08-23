@@ -6,18 +6,14 @@
   <component name="ChangeListManager">
     <list default="true" id="83ac0769-501d-47c5-aa4c-9efb288ea6db" name="Changes" comment="modified">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/EdugetherMainApp.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/EdugetherMainApp.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/example/controller/CourseController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/controller/CourseController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/controller/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/controller/UserController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/entity/academics/Course.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/entity/academics/Course.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/example/entity/academics/Registration.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/entity/academics/Registration.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/entity/users/Teacher.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/entity/users/Teacher.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/projection/CourseProjection.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/projection/CourseProjection.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/example/repository/CourseRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/repository/CourseRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/repository/UserRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/repository/UserRepository.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/example/repository/implementation/CourseRepositoryImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/repository/implementation/CourseRepositoryImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/repository/implementation/UserRepositoryImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/repository/implementation/UserRepositoryImpl.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/example/service/CourseService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/service/CourseService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/public/course.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/public/course.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/public/teacher.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/public/teacher.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -181,7 +177,7 @@
       <workItem from="1692690962289" duration="355000" />
       <workItem from="1692691365747" duration="9198000" />
       <workItem from="1692702837001" duration="7828000" />
-      <workItem from="1692748780282" duration="23151000" />
+      <workItem from="1692748780282" duration="27857000" />
     </task>
     <task id="LOCAL-00001" summary="init (dependencies, entities)">
       <created>1692451459255</created>
@@ -281,7 +277,14 @@
       <option name="project" value="LOCAL" />
       <updated>1692760156176</updated>
     </task>
-    <option name="localTasksCounter" value="15" />
+    <task id="LOCAL-00015" summary="modified">
+      <created>1692775975267</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1692775975268</updated>
+    </task>
+    <option name="localTasksCounter" value="16" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

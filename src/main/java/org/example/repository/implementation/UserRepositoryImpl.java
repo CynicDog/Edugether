@@ -1,5 +1,6 @@
 package org.example.repository.implementation;
 
+import org.example.entity.users.Student;
 import org.example.entity.users.Teacher;
 import org.example.entity.users.User;
 import org.example.projection.UserProjection;
@@ -23,6 +24,15 @@ public class UserRepositoryImpl implements UserRepository {
     public void updateUser(User user) {
         JpaOperationUtil.consume(entityManagerFactory, em -> {
             em.merge(user);
+        });
+    }
+
+    @Override
+    public Student loadStudentByUsername(String username) {
+        return JpaOperationUtil.apply(entityManagerFactory, em -> {
+            return em.createQuery("select s from Student s where s.username = :username", Student.class)
+                    .setParameter("username", username)
+                    .getSingleResult();
         });
     }
 

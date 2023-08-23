@@ -1,6 +1,7 @@
 package org.example.repository.implementation;
 
 import org.example.entity.academics.Course;
+import org.example.entity.academics.Registration;
 import org.example.projection.CourseProjection;
 import org.example.repository.CourseRepository;
 import org.example.util.JpaOperationUtil;
@@ -8,6 +9,7 @@ import org.jboss.logging.Logger;
 
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.TypedQuery;
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.List;
 
 public class CourseRepositoryImpl implements CourseRepository {
@@ -17,6 +19,20 @@ public class CourseRepositoryImpl implements CourseRepository {
 
     public CourseRepositoryImpl(EntityManagerFactory entityManagerFactory) {
         this.entityManagerFactory = entityManagerFactory;
+    }
+
+    @Override
+    public boolean insertRegistration(Registration registration) {
+
+        try {
+            JpaOperationUtil.consume(entityManagerFactory, em -> {
+                em.persist(registration);
+            });
+            return true;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return false;
+        }
     }
 
     @Override
@@ -96,4 +112,10 @@ public class CourseRepositoryImpl implements CourseRepository {
         }
     }
 
+    @Override
+    public Course getCourseById(Long courseId) {
+        return JpaOperationUtil.apply(entityManagerFactory, em -> {
+            return  em.find(Course.class, courseId);
+        });
+    }
 }

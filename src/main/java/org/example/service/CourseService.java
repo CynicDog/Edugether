@@ -2,6 +2,8 @@ package org.example.service;
 
 import io.vertx.core.json.JsonObject;
 import org.example.entity.academics.Course;
+import org.example.entity.academics.Registration;
+import org.example.entity.users.Student;
 import org.example.entity.users.Teacher;
 import org.example.projection.CourseProjection;
 import org.example.repository.CourseRepository;
@@ -10,7 +12,6 @@ import org.jboss.logging.Logger;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.List;
 
 public class CourseService {
@@ -59,5 +60,18 @@ public class CourseService {
     public List<CourseProjection> getPaginatedCoursesByPublishedDateAscending(Integer page, Integer limit) {
 
         return courseRepository.getPaginatedCoursesByPublishedDateAscending(page, limit);
+    }
+
+    public boolean enrollOnCourse(String username, Long courseId) {
+
+        Student student = userRepository.loadStudentByUsername(username);
+        Course course = courseRepository.getCourseById(courseId);
+
+        Registration registration = new Registration(student, course);
+
+        if (courseRepository.insertRegistration(registration)) {
+            return true;
+        }
+        return false;
     }
 }

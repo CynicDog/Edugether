@@ -23,7 +23,7 @@ public class Registration {
     private Course course;
 
     @Enumerated(EnumType.STRING)
-    private REGISTRATION_STATUS registrationStatus;
+    private REGISTRATION_STATUS registrationStatus = REGISTRATION_STATUS.ENROLLED;
 
     @CreationTimestamp
     private Date enrolledDate;

@@ -51,10 +51,36 @@ public class CourseController implements Controller {
         }
         {   // POST handlers
             router.post("/course/register").handler(BodyHandler.create()).handler(this::handleCourseRegister);
+            router.post("/course/enroll").handler(BodyHandler.create()).handler(this::handleCourseEnroll);
+//            fetch(`course/enroll?courseId=${courseId}`, {
         }
     }
 
-    //    return fetch(`/course/oldest?page=${page}&limit=9`).then(response => response.json());
+    // Authenticated
+    private void handleCourseEnroll(RoutingContext routingContext) {
+
+        UserProjection authentication = routingContext.session().get("Authentication");
+
+        if (authentication == null) {
+            logger.info("[ Authentication entry point ]");
+            routingContext.response().setStatusCode(401).end();
+            return;
+        } else if (!authentication.getType().toString().equals("STUDENT")) {
+            logger.info("[ Unauthorized ]");
+            routingContext.response().setStatusCode(403).end();
+            return;
+        }
+
+        Long courseId = Long.parseLong(routingContext.request().getParam("courseId"));
+
+        if (courseService.enrollOnCourse(authentication.getUsername(), courseId)) {
+
+            routingContext.response().setStatusCode(200).setStatusMessage("Successfully enrolled on the course!").end();
+        } else {
+            routingContext.response().setStatusCode(500).setStatusMessage("Something happened during insertion. You might have already enrolled on the course.").end();
+        }
+
+    }
 
     private void handleCourseOldest(RoutingContext routingContext) {
         // for pagination rendering
@@ -119,7 +145,7 @@ public class CourseController implements Controller {
         if (courseService.registerCourse(courseCommand)) {
             routingContext.response().setStatusCode(200).setStatusMessage("Successfully registered!").end();
         } else {
-            routingContext.response().setStatusCode(400).setStatusMessage("Something went wrong. You might want to check your inputs again.").end();
+            routingContext.response().setStatusCode(500).setStatusMessage("Something went wrong. You might want to check your inputs again.").end();
         }
     }
 

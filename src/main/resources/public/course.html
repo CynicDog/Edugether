@@ -138,7 +138,8 @@
                             </div>
                         </div>
                         <div class="text-end ">
-                            <div id="courseSubmitButton" class="btn btn-light btn-sm mt-5 mb-3 mx-2 disabled fw-lighter">
+                            <div id="courseSubmitButton"
+                                 class="btn btn-light btn-sm mt-5 mb-3 mx-2 disabled fw-lighter">
                                 submit
                             </div>
                         </div>
@@ -199,8 +200,10 @@
                         <div class="col">
                             <div class="card card-cover h-100 overflow-hidden text-bg-dark rounded-4 shadow-lg">
                                 <div class="d-flex flex-column h-100 p-5 pb-3 text-white text-shadow-1">
-                                    <div>
-                                        <span class="badge bg-primary-subtle border border-primary-subtle text-primary-emphasis rounded-pill">${course.subject}</span>
+                                    <div class="d-flex">
+                                        <span class="badge bg-primary-subtle border border-primary-subtle text-primary-emphasis rounded-pill me-auto my-2">${course.subject}</span>
+                                        <div class="btn btn-dark btn-sm my-1 enrollCourseButton" data-course-id="${course.id}" style="font-size: .8rem">✎ enroll</div>
+                                        <div class="btn btn-dark btn-sm my-1 wishCourseButton" data-course-id="${course.id}" style="font-size: .8rem">♥ wish</div>
                                     </div>
                                     <div>
                                         <h3 class="pt-5 mt-5 mb-4 display-6 lh-1 fw-bold"> ${course.name} </h3>
@@ -248,6 +251,7 @@
         const getOldestCourses = page => {
             return fetch(`/course/oldest?page=${page}&limit=9`).then(response => response.json());
         }
+
         function fetchAndRenderOldestCourses(page) {
 
             isOldestCourseFetching = true;
@@ -286,7 +290,7 @@
             })
         }
 
-        document.getElementById('oldestCoursesButton').addEventListener('click', function() {
+        document.getElementById('oldestCoursesButton').addEventListener('click', function () {
 
             isNewestCourseFetching = false;
             isOldestCourseFetching = false;
@@ -427,7 +431,6 @@
                 },
                 body: JSON.stringify(formData)
             }).then(response => {
-
                 if (response.status === 401) {
                     // Authentication entry point
                     window.location.href = "/login?error=anonymous"
@@ -455,6 +458,34 @@
                 removeSuccessMessage();
             })
         })
+
+        document.addEventListener('click', function (event) {
+            if (event.target.classList.contains('enrollCourseButton')) {
+                const button = event.target;
+                const courseId = button.getAttribute('data-course-id');
+
+                fetch(`course/enroll?courseId=${courseId}`, {
+                    method: "POST"
+                }).then(response => {
+                    if (response.status === 401) {
+                        // Authentication entry point
+                        window.location.href = "/login?error=anonymous"
+                    }
+                    if (response.status === 403) {
+                        // Unauthorized
+                        window.location.href = "/login?error=denied"
+                    }
+
+                    if (response.ok) {
+                        showMessagingToast(response.statusText);
+                        new bootstrap.Toast(document.getElementById('courseAddToast')).hide();
+                    } else if (!response.ok) {
+                        showMessagingToast(response.statusText);
+                        new bootstrap.Toast(document.getElementById('courseAddToast')).hide();
+                    }
+                });
+            }
+        });
 
         function showMessagingToast(message) {
             const messagingToast = document.getElementById('messagingToast');
