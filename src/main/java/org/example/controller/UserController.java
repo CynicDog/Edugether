@@ -92,8 +92,7 @@ public class UserController implements Controller {
             return;
         }
 
-        String username = routingContext.request().getParam("username");
-        User user = userService.getUserByUsername(username);
+        User user = userService.getUserByUsername(authentication.getUsername());
 
         JsonObject userCommand = new JsonObject();
         userCommand.put("user", user);
@@ -108,9 +107,6 @@ public class UserController implements Controller {
 
         if (authentication == null) {
             routingContext.response().setStatusCode(401).end();
-            return;
-        } else if (!authentication.getType().toString().equals("TEACHER")) {
-            routingContext.response().setStatusCode(403).end();
             return;
         }
 

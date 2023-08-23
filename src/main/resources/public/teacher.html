@@ -164,8 +164,7 @@
             });
     })
 
-    const params = new URLSearchParams(window.location.search);
-    let username = params.get('username')
+    const username = localStorage.getItem('Authentication')
 
     const nameInput = document.querySelector('input[name=name]');
     const qualificationInputsValidationStatus = {
