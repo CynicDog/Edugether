@@ -52,6 +52,4 @@ public class Teacher extends User{
 
         this.qualifications.add(qualification);
     }
-
-
 }

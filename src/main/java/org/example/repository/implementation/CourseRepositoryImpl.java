@@ -2,6 +2,7 @@ package org.example.repository.implementation;
 
 import org.example.entity.academics.Course;
 import org.example.entity.academics.Registration;
+import org.example.entity.users.Student;
 import org.example.projection.CourseProjection;
 import org.example.repository.CourseRepository;
 import org.example.util.JpaOperationUtil;
@@ -48,13 +49,14 @@ public class CourseRepositoryImpl implements CourseRepository {
     }
 
     @Override
-    public List<Course> getPaginatedCoursesByPublishedDateAndByUsernameDescending(Integer page, Integer limit, String username) {
+    public List<Course> getPaginatedCoursesByPublishedDateAndByUsernameDescending(String username, Integer page, Integer limit) {
         return JpaOperationUtil.apply(entityManagerFactory, em -> {
 
             int startIndex = page * limit;
             TypedQuery<Course> query = em.createQuery("select distinct c from Course c left join fetch c.wishers where c.teacher.username = :username order by c.publishedDate desc", Course.class);
 
             query.setParameter("username", username);
+
             query.setFirstResult(startIndex);
             query.setMaxResults(limit);
 
@@ -68,7 +70,14 @@ public class CourseRepositoryImpl implements CourseRepository {
 
             int startIndex = page * limit;
 
-            TypedQuery<CourseProjection> query = em.createQuery("select new org.example.projection.CourseProjection(" + "c.id, " + "c.name, " + "c.description, " + "c.startingDay, " + "c.endingDay, " + "c.subject, " + "teacher.username) from Course c " + "order by c.publishedDate asc", CourseProjection.class);
+            TypedQuery<CourseProjection> query = em.createQuery("select new org.example.projection.CourseProjection(" +
+                    "c.id, " +
+                    "c.name, " +
+                    "c.description, " +
+                    "c.startingDay, " +
+                    "c.endingDay, " +
+                    "c.subject, " +
+                    "teacher.username) from Course c " + "order by c.publishedDate asc", CourseProjection.class);
 
             query.setFirstResult(startIndex);
             query.setMaxResults(limit);
@@ -108,6 +117,16 @@ public class CourseRepositoryImpl implements CourseRepository {
     public Course getCourseById(Long courseId) {
         return JpaOperationUtil.apply(entityManagerFactory, em -> {
             return em.find(Course.class, courseId);
+        });
+    }
+
+    @Override
+    public List<Student> getStudentsByRegistration_CourseId(Long courseId) {
+        return JpaOperationUtil.apply(entityManagerFactory, em -> {
+
+            return em.createQuery("select r.student from Registration r where r.course.id = :courseId", Student.class)
+                    .setParameter("courseId", courseId)
+                    .getResultList();
         });
     }
 }

@@ -37,7 +37,7 @@ public class Course {
     @JoinColumn(name = "teacherId")
     private Teacher teacher;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "WishListCourses",
             joinColumns = @JoinColumn(name = "courseId"),

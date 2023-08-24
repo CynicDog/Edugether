@@ -9,94 +9,77 @@
 </head>
 <body>
 <div id="navbar-placeholder"></div>
-<div class="container">
+<div class="container px-5">
     <div class="row mt-4">
-        <div class="col-3 p-4">
+        <div class="col-md-3 py-4">
             <div class="position-sticky" style="top: 2rem;">
-                <div class="my-3">
-                    <div class="my-1 fw-lighter fs-4">
+                <div class="my-4 py-4">
+                    <div class="my-4 fw-lighter fs-4">
                         About Teacher
                     </div>
-                    <div class="my-2 fw-light fs-6">
-                        I'm your guide
-                        <span class="badge bg-success-subtle border border-success-subtle text-success-emphasis rounded-pill">
-                            ${teacher name}
+                    <div class="my-4 fw-light fs-6">
+                        Teacher
+                        <span type="button" id="teacherNameArea"
+                              class="badge bg-success-subtle border border-success-subtle text-success-emphasis rounded-pill">
                         </span>
-                        , your guide through this educational adventure. Reach out anytime at
-                        <span class="badge bg-success-subtle border border-success-subtle text-success-emphasis rounded-pill">
-                            ${teacher email}
-                        </span>. Let's learn together!"
+                        has been around since
+                        <span id="teacherJoinedDateArea"
+                              class="badge bg-success-subtle border border-success-subtle text-success-emphasis rounded-pill">
+                        </span>
+                        . Whether you're a beginner or a seasoned
+                        <span id="courseSubjectArea"
+                              class="badge bg-primary-subtle border border-primary-subtle text-primary-emphasis rounded-pill">
+                        </span> enthusiast, the teacher is here to help you. You can contact to the teacher via
+                        <span id="teacherEmailArea"
+                              class="badge bg-success-subtle border border-success-subtle text-success-emphasis rounded-pill">
+                        </span>. Let's learn together!
                     </div>
                 </div>
                 <div class="my-3">
                     <div class="my-1 fw-lighter fs-4">
-                        Course participants
+                        Course participants (<span id="participantsNumberArea" class="fs-5"></span>)
                     </div>
                     <div class="my-2 fw-light fs-6">
-                        <span class="badge bg-secondary-subtle border border-secondary-subtle text-secondary-emphasis rounded-pill">
-                            ${student name}
-                        </span>
-                        <span class="badge bg-secondary-subtle border border-secondary-subtle text-secondary-emphasis rounded-pill">
-                            ${student name}
-                        </span>
-                        <span class="badge bg-secondary-subtle border border-secondary-subtle text-secondary-emphasis rounded-pill">
-                            ${student name}
-                        </span>
+                        <div id="participantsArea">
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="col-9 p-4">
+        <div class="col-md-9 p-4">
             <div class="row">
                 <div class="text-end">
                     <h3 class="fw-lighter">About Course</h3>
                 </div>
                 <div class="my-5">
-                    <h2 class="fw-light"> ${Course Title} </h2>
+                    <div id="courseNameArea" class="fw-light fs-2 my-4">
+                    </div>
+                    <div id="courseScheduleArea" class="text-end mx-2">
+                    </div>
                 </div>
-                <div>
-                    "On the other hand, we denounce with righteous indignation and dislike men who are so beguiled and
-                    demoralized by the charms of pleasure of the moment, so blinded by desire, that they cannot foresee
-                    the
-                    pain and trouble that are bound to ensue; and equal blame belongs to those who fail in their duty
-                    through weakness of will, which is the same as saying through shrinking from toil and pain. These
-                    cases
-                    are perfectly simple and easy to distinguish. In a free hour, when our power of choice is
-                    untrammelled
-                    and when nothing prevents our being able to do what we like best, every pleasure is to be welcomed
-                    and
-                    every pain avoided. But in certain circumstances and owing to the claims of duty or the obligations
-                    of
-                    business it will frequently occur that pleasures have to be repudiated and annoyances accepted. The
-                    wise
-                    man therefore always holds in these matters to this principle of selection: he rejects pleasures to
-                    secure other greater pleasures, or else he endures pains to avoid worse pains."
-                    "On the other hand, we denounce with righteous indignation and dislike men who are so beguiled and
-                    demoralized by the charms of pleasure of the moment, so blinded by desire, that they cannot foresee
-                    the
-                    pain and trouble that are bound to ensue; and equal blame belongs to those who fail in their duty
-                    through weakness of will, which is the same as saying through shrinking from toil and pain. These
-                    cases
-                    are perfectly simple and easy to distinguish. In a free hour, when our power of choice is
-                    untrammelled
-                    and when nothing prevents our being able to do what we like best, every pleasure is to be welcomed
-                    and
-                    every pain avoided. But in certain circumstances and owing to the claims of duty or the obligations
-                    of
-                    business it will frequently occur that pleasures have to be repudiated and annoyances accepted. The
-                    wise
-                    man therefore always holds in these matters to this principle of selection: he rejects pleasures to
-                    secure other greater pleasures, or else he endures pains to avoid worse pains."
-
+                <div id="courseDescriptionArea" class="fw-light">
                 </div>
             </div>
             <div class="row">
                 <div class="col my-5">
                     <div class="d-flex">
-                        <div class="me-auto fw-lighter fs-4">Reviews <span class="fs-6">(${reviews.count})</span></div>
+                        <div class="me-auto fw-lighter fs-4">Reviews
+                            (<span id="reviewsCountArea" class="fs-5"></span>)
+                        </div>
                         <div id="reviewToastButton" class="btn btn-sm btn-light fw-light">✏️ Add yours</div>
                     </div>
                     <hr>
+                    <div id="reviewsArea">
+                    </div>
+                    <div class="text-center">
+                        <div class="btn border border-0 disabled">
+                            <div id="reviewsLoadingSpinner"
+                                 class="spinner-border spinner-border-sm text-primary m-1" role="status"
+                                 style="display: none;">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -135,7 +118,8 @@
                         <div class="mt-4">
                             <div class="p-2">
                                 <label class="fw-lighter d-flex" for="content" style="font-size: 1.3rem">Content</label>
-                                <textarea type="text" class="form-control-plaintext" id="content" name="content" rows="5"
+                                <textarea type="text" class="form-control-plaintext" id="content" name="content"
+                                          rows="5"
                                           placeholder="leave reviews here :)"></textarea>
                             </div>
                         </div>
@@ -291,6 +275,110 @@
             sentimentInput = null;
         })
     })
+
+    const getCourseDetails = courseId => {
+        return fetch(`/course/details?id=${courseId}`).then(response => response.json());
+    }
+
+    function fetchAndRenderCourse(courseId) {
+
+        getCourseDetails(courseId).then(data => {
+
+            document.getElementById('courseNameArea').textContent = data.course.name;
+            document.getElementById('courseScheduleArea').innerHTML = `
+                <span>${formatDate(data.course.startingDay)} ~ ${formatDate(data.course.endingDay)}</span>
+            `;
+            document.getElementById('courseDescriptionArea').textContent = data.course.description;
+            document.getElementById('teacherJoinedDateArea').textContent = formatDate(data.course.teacher.joinedDate);
+            document.getElementById('teacherNameArea').textContent = data.course.teacher.username;
+            document.getElementById('teacherEmailArea').textContent = data.course.teacher.email;
+            document.getElementById('courseSubjectArea').textContent = data.course.subject;
+
+            document.getElementById('participantsNumberArea').textContent = data.participants.length
+            data.participants.forEach(participant => {
+                document.getElementById('participantsArea').innerHTML += `
+                    <span type="button" class="badge bg-light-subtle border border-light-subtle text-light-emphasis rounded-pill">
+                        ${participant.username}
+                    </span>
+                `
+            })
+        })
+    }
+    fetchAndRenderCourse(courseId);
+
+    let isReviewFetching = false;
+    let isReviewLast = false;
+    let reviewsLoadingSpinner = document.getElementById('reviewsLoadingSpinner');
+
+    const getReviews = page => {
+        return fetch(`/course/reviews?courseId=${courseId}&page=${page}&limit=4`).then(response => response.json());
+    }
+
+    function fetchAndRenderReviews(page) {
+
+        isReviewFetching = true;
+        reviewsLoadingSpinner.style.display = 'block';
+
+        getReviews(page).then(data => {
+            if (data.reviews.length < 4) {
+                isReviewLast = true;
+            }
+            document.getElementById('reviewsCountArea').textContent = data.reviews[0].reviewNumber;
+            data.reviews.forEach(review => {
+                document.getElementById('reviewsArea').innerHTML += `
+                    <div class="bg-light rounded-3 p-3 my-2 shadow-sm">
+                            <div class="row d-flex">
+                                <div class="col-lg-7">
+                                    <span class="badge bg-success-subtle border border-success-subtle text-success-emphasis rounded-pill mx-1">
+                                        ${review.user.username}
+                                    </span>
+                                    <span class="badge bg-light-subtle border border-light-subtle text-light-emphasis rounded-pill mx-1">
+                                        ${review.reviewSentiment}
+                                    </span>
+                                </div>
+                                <div class="col-lg-5">
+                                    <div class="text-end">
+                                    <span class="badge bg-light-subtle border border-light-subtle text-light-emphasis rounded-pill">
+                                        ${formatDate(review.createDate)}
+                                    </span>
+                                    <span
+                                    <span type="button"
+                                          class="badge bg-dark-subtle border border-dark-subtle text-dark-emphasis rounded-pill">
+                                        follow
+                                    </span>
+                                        <span type="button"
+                                              class="badge bg-dark-subtle border border-dark-subtle text-dark-emphasis rounded-pill">
+                                        contact
+                                    </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="fw-light my-3">
+                                ${review.content}
+                            </div>
+                        </div>
+                `
+            })
+            reviewsLoadingSpinner.style.display = 'none';
+            isReviewFetching = false;
+        })
+    }
+
+    let pageOnReviews = 0;
+    fetchAndRenderReviews(pageOnReviews);
+
+    window.onscroll = function () {
+        if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
+            console.log("hi")
+
+            if (isReviewFetching || isReviewLast) {
+                // do nothing
+            } else {
+                pageOnReviews += 1;
+                fetchAndRenderReviews(pageOnReviews);
+            }
+        }
+    }
 
     function showMessagingToast(message) {
         const messagingToast = document.getElementById('messagingToast');

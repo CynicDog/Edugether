@@ -248,7 +248,7 @@
                                         </div>
                                     </div>
                                     <div>
-                                        <h3 class="pt-3 display-6 lh-1 fw-bold"> ${course.name}</h3>
+                                        <h3 type="button" class="pt-3 display-6 lh-1 fw-bold courseDetailsEntry" data-course-id="${course.id}"> ${course.name}</h3>
                                         <div class="fw-lighter my-3">Wishers
                                         // TODO: wishers
                                         </div>
@@ -300,6 +300,16 @@
             }
         }
     }
+
+    document.addEventListener('click', function(event) {
+            if (event.target.classList.contains('courseDetailsEntry')) {
+                const button = event.target;
+                const courseId = button.getAttribute('data-course-id');
+
+                window.location.href = `course/details-page?courseId=${courseId}`
+            }
+        }
+    )
 
     function showMessagingToast(message) {
         const messagingToast = document.getElementById('messagingToast');

@@ -19,9 +19,6 @@ public class Student extends User {
     @Column(name = "title")
     private List<String> interests;
 
-    @ManyToMany(mappedBy = "members")
-    private List<Society> societies = new ArrayList<>();
-
     @Enumerated(EnumType.STRING)
     private RELATIONSHIP relationship;
 
@@ -38,14 +35,6 @@ public class Student extends User {
 
     public void setInterests(List<String> interests) {
         this.interests = interests;
-    }
-
-    public List<Society> getSocieties() {
-        return societies;
-    }
-
-    public void setSocieties(List<Society> societies) {
-        this.societies = societies;
     }
 
     public RELATIONSHIP getRelationship() {

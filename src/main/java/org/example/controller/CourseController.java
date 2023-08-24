@@ -8,7 +8,11 @@ import io.vertx.ext.web.handler.BodyHandler;
 import io.vertx.ext.web.handler.SessionHandler;
 import io.vertx.ext.web.handler.StaticHandler;
 import io.vertx.ext.web.sstore.LocalSessionStore;
+import org.example.entity.academics.Course;
+import org.example.entity.contents.Review;
+import org.example.entity.users.Student;
 import org.example.projection.CourseProjection;
+import org.example.projection.ReviewProjection;
 import org.example.projection.UserProjection;
 import org.example.service.CourseService;
 import org.example.service.UserService;
@@ -16,8 +20,6 @@ import org.example.util.enums.REVIEW_SENTIMENT;
 import org.example.util.enums.SUBJECT_TITLE;
 import org.jboss.logging.Logger;
 
-import javax.persistence.PersistenceException;
-import java.sql.Time;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -49,17 +51,54 @@ public class CourseController implements Controller {
             router.get("/course/subjects").handler(this::handleCourseSubjects);
             router.get("/course/newest").handler(this::handleCourseNewest);
             router.get("/course/oldest").handler(this::handleCourseOldest);
-            router.get("/course/details").handler(routingContext -> {
+            router.get("/course/details-page").handler(routingContext -> {
                 routingContext.response().putHeader("Content-Type", "text/html").sendFile(PUBLIC + "course-details.html");
             });
-
+            
             router.get("/review/sentiments").handler(this::handleReviewSentiments);
+            router.get("/course/details").handler(this::handleCourseDetails);
+            router.get("/course/reviews").handler(this::handleCourseReviews);
         }
         {   // POST handlers
             router.post("/course/register").handler(BodyHandler.create()).handler(this::handleCourseRegister);
             router.post("/course/enroll").handler(BodyHandler.create()).handler(this::handleCourseEnroll);
             router.post("/review/register").handler(BodyHandler.create()).handler(this::handleReviewRegister);
         }
+    }
+
+    // course/reviews?courseId=20&page=0&limit=4
+    private void handleCourseReviews(RoutingContext routingContext) {
+
+        // for pagination rendering
+        try {
+            TimeUnit.SECONDS.sleep(1);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        Long courseId = Long.parseLong(routingContext.request().getParam("courseId"));
+        Optional<Integer> page = Optional.of(Integer.parseInt(routingContext.request().getParam("page")));
+        Optional<Integer> limit = Optional.of(Integer.parseInt(routingContext.request().getParam("limit")));
+
+        List<ReviewProjection> reviews = courseService.getPaginatedReviewsByCourseIdAndCreateDateDescending(courseId, page.orElse(0), limit.orElse(4));
+
+        JsonObject data = new JsonObject().put("reviews", reviews);
+
+        routingContext.response().setStatusCode(200).end(data.encode());
+    }
+
+    private void handleCourseDetails(RoutingContext routingContext) {
+
+        Long courseId = Long.parseLong(routingContext.request().getParam("id"));
+        Course course = courseService.getCourseById(courseId);
+
+        JsonObject data = new JsonObject();
+        data.put("course", course);
+
+        List<Student> participants = courseService.getStudentsByRegistration_CourseId(courseId);
+        data.put("participants", participants);
+
+        routingContext.response().setStatusCode(200).end(data.encode());
     }
 
     // Authenticated
@@ -82,11 +121,11 @@ public class CourseController implements Controller {
 
         try {
             courseService.registerReview(reviewCommand);
-            routingContext.response().setStatusCode(200).setStatusMessage("Successfully registered!").end();
+            routingContext.response().setStatusCode(200).setStatusMessage("Successfully registered! Reload to see yours.").end();
         } catch (IllegalStateException e) {
             routingContext.response().setStatusCode(500).setStatusMessage(e.getMessage()).end();
         } catch (Exception e) {
-            routingContext.response().setStatusCode(500).setStatusMessage("Something went wrong :( You might want to check your inputs again.").end();
+            routingContext.response().setStatusCode(500).setStatusMessage("Something went wrong.. You might want to check your inputs again.").end();
         }
     }
 
@@ -120,7 +159,7 @@ public class CourseController implements Controller {
             courseService.enrollOnCourse(authentication.getUsername(), courseId);
             routingContext.response().setStatusCode(200).setStatusMessage("Successfully enrolled on the course!").end();
         } catch (Exception e) {
-            routingContext.response().setStatusCode(500).setStatusMessage("Something went wrong :( You might have already enrolled on the course.").end();
+            routingContext.response().setStatusCode(500).setStatusMessage("Something went wrong.. You might have already enrolled on the course.").end();
         }
     }
 

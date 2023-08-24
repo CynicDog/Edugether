@@ -7,9 +7,9 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import java.util.Date;
-import java.util.List;
 
 @Entity
+@Table(uniqueConstraints = @UniqueConstraint(columnNames = { "userId", "courseId" }))
 public class Review {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,14 +22,6 @@ public class Review {
     @ManyToOne
     @JoinColumn(name = "courseId")
     private Course course;
-
-    @ElementCollection
-    @CollectionTable(
-            name = "ReviewComment",
-            joinColumns = @JoinColumn(name = "userId")
-    )
-    @Column(name = "content")
-    private List<String> comments;
 
     @Enumerated(EnumType.STRING)
     private REVIEW_SENTIMENT reviewSentiment;
@@ -69,14 +61,6 @@ public class Review {
 
     public void setCourse(Course course) {
         this.course = course;
-    }
-
-    public List<String> getComments() {
-        return comments;
-    }
-
-    public void setComments(List<String> comments) {
-        this.comments = comments;
     }
 
     public REVIEW_SENTIMENT getReviewSentiment() {

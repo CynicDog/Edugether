@@ -7,6 +7,7 @@ import org.example.entity.contents.Review;
 import org.example.entity.users.Student;
 import org.example.entity.users.Teacher;
 import org.example.projection.CourseProjection;
+import org.example.projection.ReviewProjection;
 import org.example.repository.CourseRepository;
 import org.example.repository.ReviewRepository;
 import org.example.repository.UserRepository;
@@ -57,9 +58,9 @@ public class CourseService {
         return courseRepository.getPaginatedCoursesByPublishedDateDescending(page, limit);
     }
 
-    public List<Course> getPaginatedCoursesByPublishedDateAndByUsernameDescending(Integer page, Integer limit, String username) {
+    public List<Course> getPaginatedCoursesByPublishedDateAndByUsernameDescending(String username, Integer page, Integer limit) {
 
-        return courseRepository.getPaginatedCoursesByPublishedDateAndByUsernameDescending(page, limit, username);
+        return courseRepository.getPaginatedCoursesByPublishedDateAndByUsernameDescending(username, page, limit);
     }
 
     public List<CourseProjection> getPaginatedCoursesByPublishedDateAscending(Integer page, Integer limit) {
@@ -105,5 +106,20 @@ public class CourseService {
             // is not registered
             throw new IllegalStateException("Not yet registered for the course.");
         }
+    }
+
+    public Course getCourseById(Long courseId) {
+
+        return courseRepository.getCourseById(courseId);
+    }
+
+    public List<Student> getStudentsByRegistration_CourseId(Long courseId) {
+
+        return courseRepository.getStudentsByRegistration_CourseId(courseId);
+    }
+
+    public List<ReviewProjection> getPaginatedReviewsByCourseIdAndCreateDateDescending(Long courseId, Integer page, Integer limit) {
+
+        return reviewRepository.getPaginatedReviewsByCourseIdAndCreateDateDescending(courseId, page, limit);
     }
 }

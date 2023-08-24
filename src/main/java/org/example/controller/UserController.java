@@ -90,9 +90,10 @@ public class UserController implements Controller {
         Optional<Integer> limit = Optional.of(Integer.parseInt(routingContext.request().getParam("limit")));
 
         List<Course> courses = courseService.getPaginatedCoursesByPublishedDateAndByUsernameDescending(
+                authentication.getUsername(),
                 page.orElse(0),
-                limit.orElse(3),
-                authentication.getUsername());
+                limit.orElse(3)
+        );
 
         JsonObject data = new JsonObject().put("courses", courses);
 
