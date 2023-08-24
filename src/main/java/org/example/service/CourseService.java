@@ -13,6 +13,7 @@ import org.example.repository.UserRepository;
 import org.example.util.enums.REVIEW_SENTIMENT;
 import org.jboss.logging.Logger;
 
+import javax.persistence.PersistenceException;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
@@ -83,17 +84,26 @@ public class CourseService {
 
     public void registerReview(JsonObject reviewCommand) {
 
-        Student student = userRepository.loadStudentByUsername(reviewCommand.getString("student"));
-        Course course = courseRepository.getCourseById(Long.valueOf(reviewCommand.getInteger("courseId")));
-        REVIEW_SENTIMENT sentiment = REVIEW_SENTIMENT.valueOf(reviewCommand.getString("sentiment").toUpperCase());
-        String content = reviewCommand.getString("content");
+        Long studentId = Long.parseLong(reviewCommand.getString("studentId"));
+        Long courseId = Long.parseLong(reviewCommand.getString("courseId"));
 
-        Review review = new Review(student, course, sentiment, content);
+        if (courseRepository.isRegistered(studentId, courseId)) {
+            // is registered
+            Student student = userRepository.getStudentById(studentId);
+            Course course = courseRepository.getCourseById(courseId);
+            REVIEW_SENTIMENT sentiment = REVIEW_SENTIMENT.valueOf(reviewCommand.getString("sentiment").toUpperCase());
+            String content = reviewCommand.getString("content");
 
-        try {
-            reviewRepository.insertReview(review);
-        } catch (Exception e) {
-            throw e;
+            Review review = new Review(student, course, sentiment, content);
+
+            try {
+                reviewRepository.insertReview(review);
+            } catch (Exception e) { // PersistenceException (DataTooLongException, SQLDataException, etc.)
+                throw e;
+            }
+        } else {
+            // is not registered
+            throw new IllegalStateException("Not yet registered for the course.");
         }
     }
 }

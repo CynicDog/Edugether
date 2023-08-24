@@ -246,7 +246,6 @@
                         })
                     }
                 }
-                console.log(sentimentInput)
                 flushSubmitButton()
             })
         })
@@ -281,16 +280,27 @@
 
             if (response.ok) {
                 showMessagingToast(response.statusText);
-                new bootstrap.Toast(document.getElementById('courseAddToast')).hide();
+                new bootstrap.Toast(document.getElementById('reviewAddToast')).hide();
             } else if (!response.ok) {
+                console.log(response.statusText)
                 showMessagingToast(response.statusText);
-                new bootstrap.Toast(document.getElementById('courseAddToast')).hide();
+                new bootstrap.Toast(document.getElementById('reviewAddToast')).hide();
             }
 
             contentInput.value = ''
             sentimentInput = null;
         })
     })
+
+    function showMessagingToast(message) {
+        const messagingToast = document.getElementById('messagingToast');
+        const toastBody = messagingToast.querySelector('.toast-body');
+
+        toastBody.textContent = message;
+
+        const successfulToastBootstrap = bootstrap.Toast.getOrCreateInstance(messagingToast);
+        successfulToastBootstrap.show();
+    }
 
     function disableButton(button) {
         button.style.pointerEvents = "none";

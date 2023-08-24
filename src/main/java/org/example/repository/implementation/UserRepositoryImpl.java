@@ -21,6 +21,15 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
+    public Student getStudentById(Long studentId) {
+        return JpaOperationUtil.apply(entityManagerFactory, em -> {
+            return em.createQuery("select s from Student s where s.id = :studentId", Student.class)
+                    .setParameter("studentId", studentId)
+                    .getSingleResult();
+        });
+    }
+
+    @Override
     public void updateUser(User user) {
         JpaOperationUtil.consume(entityManagerFactory, em -> {
             em.merge(user);

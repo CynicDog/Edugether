@@ -18,5 +18,5 @@ public interface UserRepository {
     boolean isEmailUnique(String email);
     List<UserProjection> getUsersRandomlyLimitBy(Integer limit);
     void updateUser(User user);
-
+    Student getStudentById(Long studentId);
 }

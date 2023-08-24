@@ -21,6 +21,21 @@ public class CourseRepositoryImpl implements CourseRepository {
     }
 
     @Override
+    public boolean isRegistered(Long studentId, Long courseId) {
+        return JpaOperationUtil.apply(entityManagerFactory, em -> {
+
+            TypedQuery<Long> query = em.createQuery(
+                    "select count(r) from Registration r where r.student.id = :studentId and r.course.id = :courseId",
+                    Long.class);
+
+            query.setParameter("studentId", studentId);
+            query.setParameter("courseId", courseId);
+
+            return query.getSingleResult() > 0;
+        });
+    }
+
+    @Override
     public void insertRegistration(Registration registration) {
         try {
             JpaOperationUtil.consume(entityManagerFactory, em -> {
@@ -37,8 +52,7 @@ public class CourseRepositoryImpl implements CourseRepository {
         return JpaOperationUtil.apply(entityManagerFactory, em -> {
 
             int startIndex = page * limit;
-            TypedQuery<Course> query = em.createQuery(
-                    "select distinct c from Course c left join fetch c.wishers where c.teacher.username = :username order by c.publishedDate desc", Course.class);
+            TypedQuery<Course> query = em.createQuery("select distinct c from Course c left join fetch c.wishers where c.teacher.username = :username order by c.publishedDate desc", Course.class);
 
             query.setParameter("username", username);
             query.setFirstResult(startIndex);
@@ -54,16 +68,7 @@ public class CourseRepositoryImpl implements CourseRepository {
 
             int startIndex = page * limit;
 
-            TypedQuery<CourseProjection> query = em.createQuery(
-                    "select new org.example.projection.CourseProjection(" +
-                            "c.id, " +
-                            "c.name, " +
-                            "c.description, " +
-                            "c.startingDay, " +
-                            "c.endingDay, " +
-                            "c.subject, " +
-                            "teacher.username) from Course c " +
-                            "order by c.publishedDate asc", CourseProjection.class);
+            TypedQuery<CourseProjection> query = em.createQuery("select new org.example.projection.CourseProjection(" + "c.id, " + "c.name, " + "c.description, " + "c.startingDay, " + "c.endingDay, " + "c.subject, " + "teacher.username) from Course c " + "order by c.publishedDate asc", CourseProjection.class);
 
             query.setFirstResult(startIndex);
             query.setMaxResults(limit);
@@ -78,16 +83,7 @@ public class CourseRepositoryImpl implements CourseRepository {
 
             int startIndex = page * limit;
 
-            TypedQuery<CourseProjection> query = em.createQuery(
-                    "select new org.example.projection.CourseProjection(" +
-                            "c.id, " +
-                            "c.name, " +
-                            "c.description, " +
-                            "c.startingDay, " +
-                            "c.endingDay, " +
-                            "c.subject, " +
-                            "teacher.username) from Course c " +
-                            "order by c.publishedDate desc", CourseProjection.class);
+            TypedQuery<CourseProjection> query = em.createQuery("select new org.example.projection.CourseProjection(" + "c.id, " + "c.name, " + "c.description, " + "c.startingDay, " + "c.endingDay, " + "c.subject, " + "teacher.username) from Course c " + "order by c.publishedDate desc", CourseProjection.class);
 
             query.setFirstResult(startIndex);
             query.setMaxResults(limit);
@@ -111,7 +107,7 @@ public class CourseRepositoryImpl implements CourseRepository {
     @Override
     public Course getCourseById(Long courseId) {
         return JpaOperationUtil.apply(entityManagerFactory, em -> {
-            return  em.find(Course.class, courseId);
+            return em.find(Course.class, courseId);
         });
     }
 }

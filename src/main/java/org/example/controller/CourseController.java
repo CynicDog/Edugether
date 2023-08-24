@@ -16,6 +16,7 @@ import org.example.util.enums.REVIEW_SENTIMENT;
 import org.example.util.enums.SUBJECT_TITLE;
 import org.jboss.logging.Logger;
 
+import javax.persistence.PersistenceException;
 import java.sql.Time;
 import java.util.Arrays;
 import java.util.List;
@@ -64,16 +65,12 @@ public class CourseController implements Controller {
     // Authenticated
     private void handleReviewRegister(RoutingContext routingContext) {
 
-
-
         UserProjection authentication = routingContext.session().get("Authentication");
 
         if (authentication == null) {
             logger.info("[ Authentication entry point ]");
             routingContext.response().setStatusCode(401).end();
             return;
-
-            // TODO: additional authentication operation to check if the student has enrolled before.
         } else if (!authentication.getType().toString().equals("STUDENT")) {
             logger.info("[ Unauthorized ]");
             routingContext.response().setStatusCode(403).end();
@@ -81,11 +78,13 @@ public class CourseController implements Controller {
         }
 
         JsonObject reviewCommand = routingContext.getBodyAsJson();
-        reviewCommand.put("student", authentication.getUsername());
+        reviewCommand.put("studentId", authentication.getId());
 
         try {
             courseService.registerReview(reviewCommand);
             routingContext.response().setStatusCode(200).setStatusMessage("Successfully registered!").end();
+        } catch (IllegalStateException e) {
+            routingContext.response().setStatusCode(500).setStatusMessage(e.getMessage()).end();
         } catch (Exception e) {
             routingContext.response().setStatusCode(500).setStatusMessage("Something went wrong :( You might want to check your inputs again.").end();
         }

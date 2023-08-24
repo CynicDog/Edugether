@@ -13,5 +13,6 @@ public interface CourseRepository {
     List<Course> getPaginatedCoursesByPublishedDateAndByUsernameDescending(Integer page, Integer limit, String username);
     List<CourseProjection> getPaginatedCoursesByPublishedDateAscending(Integer page, Integer limit);
     void insertRegistration(Registration registration);
+    boolean isRegistered(Long studentId, Long courseId);
 }
 
