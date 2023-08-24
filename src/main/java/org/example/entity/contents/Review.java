@@ -3,8 +3,10 @@ package org.example.entity.contents;
 import org.example.entity.academics.Course;
 import org.example.entity.users.User;
 import org.example.util.enums.REVIEW_SENTIMENT;
+import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -32,13 +34,21 @@ public class Review {
     @Enumerated(EnumType.STRING)
     private REVIEW_SENTIMENT reviewSentiment;
 
-    @Column(nullable = false)
-    private String title;
-    @Column(nullable = false)
+    @CreationTimestamp
+    private Date createDate;
+
+    @Column(nullable = false, length = 2000)
     private String content;
     private Integer likedCount = 0;
 
     public Review() {
+    }
+
+    public Review(User user, Course course, REVIEW_SENTIMENT reviewSentiment, String content) {
+        this.user = user;
+        this.course = course;
+        this.reviewSentiment = reviewSentiment;
+        this.content = content;
     }
 
     public Long getId() {
@@ -77,14 +87,6 @@ public class Review {
         this.reviewSentiment = reviewSentiment;
     }
 
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
     public String getContent() {
         return content;
     }
@@ -99,5 +101,17 @@ public class Review {
 
     public void setLikedCount(Integer likedCount) {
         this.likedCount = likedCount;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Date getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(Date createDate) {
+        this.createDate = createDate;
     }
 }

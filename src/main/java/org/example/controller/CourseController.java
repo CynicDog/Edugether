@@ -12,6 +12,7 @@ import org.example.projection.CourseProjection;
 import org.example.projection.UserProjection;
 import org.example.service.CourseService;
 import org.example.service.UserService;
+import org.example.util.enums.REVIEW_SENTIMENT;
 import org.example.util.enums.SUBJECT_TITLE;
 import org.jboss.logging.Logger;
 
@@ -25,16 +26,13 @@ import java.util.stream.Collectors;
 import static org.example.util.constant.PageLocation.PUBLIC;
 
 public class CourseController implements Controller {
-
-    private final String signingKey;
     private final Logger logger = Logger.getLogger(UserController.class);
     private final UserService userService;
     private final CourseService courseService;
 
-    public CourseController(UserService userService, CourseService courseService, String signingKey) {
+    public CourseController(UserService userService, CourseService courseService) {
         this.userService = userService;
         this.courseService = courseService;
-        this.signingKey = signingKey;
     }
 
     @Override
@@ -44,16 +42,62 @@ public class CourseController implements Controller {
         router.route().handler(SessionHandler.create(LocalSessionStore.create(vertx)));
 
         {   // GET handlers
-            router.get("/course").handler(routingContext -> { routingContext.response().putHeader("Content-Type", "text/html").sendFile(PUBLIC + "course.html"); });
+            router.get("/course").handler(routingContext -> {
+                routingContext.response().putHeader("Content-Type", "text/html").sendFile(PUBLIC + "course.html");
+            });
             router.get("/course/subjects").handler(this::handleCourseSubjects);
             router.get("/course/newest").handler(this::handleCourseNewest);
             router.get("/course/oldest").handler(this::handleCourseOldest);
+            router.get("/course/details").handler(routingContext -> {
+                routingContext.response().putHeader("Content-Type", "text/html").sendFile(PUBLIC + "course-details.html");
+            });
+
+            router.get("/review/sentiments").handler(this::handleReviewSentiments);
         }
         {   // POST handlers
             router.post("/course/register").handler(BodyHandler.create()).handler(this::handleCourseRegister);
             router.post("/course/enroll").handler(BodyHandler.create()).handler(this::handleCourseEnroll);
-//            fetch(`course/enroll?courseId=${courseId}`, {
+            router.post("/review/register").handler(BodyHandler.create()).handler(this::handleReviewRegister);
         }
+    }
+
+    // Authenticated
+    private void handleReviewRegister(RoutingContext routingContext) {
+
+
+
+        UserProjection authentication = routingContext.session().get("Authentication");
+
+        if (authentication == null) {
+            logger.info("[ Authentication entry point ]");
+            routingContext.response().setStatusCode(401).end();
+            return;
+
+            // TODO: additional authentication operation to check if the student has enrolled before.
+        } else if (!authentication.getType().toString().equals("STUDENT")) {
+            logger.info("[ Unauthorized ]");
+            routingContext.response().setStatusCode(403).end();
+            return;
+        }
+
+        JsonObject reviewCommand = routingContext.getBodyAsJson();
+        reviewCommand.put("student", authentication.getUsername());
+
+        try {
+            courseService.registerReview(reviewCommand);
+            routingContext.response().setStatusCode(200).setStatusMessage("Successfully registered!").end();
+        } catch (Exception e) {
+            routingContext.response().setStatusCode(500).setStatusMessage("Something went wrong :( You might want to check your inputs again.").end();
+        }
+    }
+
+    private void handleReviewSentiments(RoutingContext routingContext) {
+
+        List<String> subjectNames = Arrays.stream(REVIEW_SENTIMENT.values()).map(Enum::name).map(String::toLowerCase).collect(Collectors.toList());
+
+        JsonObject data = new JsonObject().put("sentimentNames", subjectNames);
+
+        routingContext.response().setStatusCode(200).end(data.encode());
     }
 
     // Authenticated
@@ -73,13 +117,12 @@ public class CourseController implements Controller {
 
         Long courseId = Long.parseLong(routingContext.request().getParam("courseId"));
 
-        if (courseService.enrollOnCourse(authentication.getUsername(), courseId)) {
-
+        try {
+            courseService.enrollOnCourse(authentication.getUsername(), courseId);
             routingContext.response().setStatusCode(200).setStatusMessage("Successfully enrolled on the course!").end();
-        } else {
-            routingContext.response().setStatusCode(500).setStatusMessage("Something happened during insertion. You might have already enrolled on the course.").end();
+        } catch (Exception e) {
+            routingContext.response().setStatusCode(500).setStatusMessage("Something went wrong :( You might have already enrolled on the course.").end();
         }
-
     }
 
     private void handleCourseOldest(RoutingContext routingContext) {
@@ -93,9 +136,7 @@ public class CourseController implements Controller {
         Optional<Integer> page = Optional.of(Integer.parseInt(routingContext.request().getParam("page")));
         Optional<Integer> limit = Optional.of(Integer.parseInt(routingContext.request().getParam("limit")));
 
-        List<CourseProjection> newestCourses = courseService.getPaginatedCoursesByPublishedDateAscending(
-                page.orElse(0),
-                limit.orElse(9));
+        List<CourseProjection> newestCourses = courseService.getPaginatedCoursesByPublishedDateAscending(page.orElse(0), limit.orElse(9));
 
         JsonObject data = new JsonObject().put("courses", newestCourses);
 
@@ -115,9 +156,7 @@ public class CourseController implements Controller {
         Optional<Integer> page = Optional.of(Integer.parseInt(routingContext.request().getParam("page")));
         Optional<Integer> limit = Optional.of(Integer.parseInt(routingContext.request().getParam("limit")));
 
-        List<CourseProjection> newestCourses = courseService.getPaginatedCoursesByPublishedDateDescending(
-                page.orElse(0),
-                limit.orElse(9));
+        List<CourseProjection> newestCourses = courseService.getPaginatedCoursesByPublishedDateDescending(page.orElse(0), limit.orElse(9));
 
         JsonObject data = new JsonObject().put("courses", newestCourses);
 
@@ -125,7 +164,7 @@ public class CourseController implements Controller {
     }
 
     // Authenticated
-    private void handleCourseRegister(RoutingContext routingContext)  {
+    private void handleCourseRegister(RoutingContext routingContext) {
 
         UserProjection authentication = routingContext.session().get("Authentication");
 
@@ -142,20 +181,17 @@ public class CourseController implements Controller {
         JsonObject courseCommand = routingContext.getBodyAsJson();
         courseCommand.put("teacher", authentication.getUsername());
 
-        if (courseService.registerCourse(courseCommand)) {
+        try {
+            courseService.registerCourse(courseCommand);
             routingContext.response().setStatusCode(200).setStatusMessage("Successfully registered!").end();
-        } else {
-            routingContext.response().setStatusCode(500).setStatusMessage("Something went wrong. You might want to check your inputs again.").end();
+        } catch (Exception e) {
+            routingContext.response().setStatusCode(500).setStatusMessage("Something went wrong :( You might want to check your inputs again.").end();
         }
     }
 
     private void handleCourseSubjects(RoutingContext routingContext) {
 
-        List<String> subjectNames =
-                Arrays.stream(SUBJECT_TITLE.values())
-                        .map(Enum::name)
-                        .map(String::toLowerCase)
-                        .collect(Collectors.toList());
+        List<String> subjectNames = Arrays.stream(SUBJECT_TITLE.values()).map(Enum::name).map(String::toLowerCase).collect(Collectors.toList());
 
         JsonObject data = new JsonObject().put("subjectNames", subjectNames);
 

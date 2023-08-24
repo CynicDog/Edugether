@@ -10,9 +10,11 @@ import org.example.controller.HomeController;
 import org.example.controller.SocietyController;
 import org.example.controller.UserController;
 import org.example.repository.CourseRepository;
+import org.example.repository.ReviewRepository;
 import org.example.repository.SocietyRepository;
 import org.example.repository.UserRepository;
 import org.example.repository.implementation.CourseRepositoryImpl;
+import org.example.repository.implementation.ReviewRepositoryImpl;
 import org.example.repository.implementation.SocietyRepositoryImpl;
 import org.example.repository.implementation.UserRepositoryImpl;
 import org.example.service.CourseService;
@@ -23,8 +25,6 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 
 public class EdugetherMainApp extends AbstractVerticle {
-
-    private final String signingKey = "None has ever caught him yet, for Tom, he is the Master";
     private final EntityManagerFactory emf = Persistence.createEntityManagerFactory("edugether");
 
     @Override
@@ -36,9 +36,10 @@ public class EdugetherMainApp extends AbstractVerticle {
         UserRepository userRepository = new UserRepositoryImpl(emf);
         CourseRepository courseRepository = new CourseRepositoryImpl(emf);
         SocietyRepository societyRepository = new SocietyRepositoryImpl(emf);
+        ReviewRepository reviewRepository = new ReviewRepositoryImpl(emf);
 
         UserService userService = new UserService(userRepository);
-        CourseService courseService = new CourseService(courseRepository, userRepository);
+        CourseService courseService = new CourseService(courseRepository, userRepository, reviewRepository);
         SocietyService societyService = new SocietyService(societyRepository);
 
         UserController userController = new UserController(userService, courseService);
@@ -47,10 +48,10 @@ public class EdugetherMainApp extends AbstractVerticle {
         HomeController homeController = new HomeController(userService);
         homeController.registerRoutes(vertx, router);
 
-        CourseController courseController = new CourseController(userService, courseService, signingKey);
+        CourseController courseController = new CourseController(userService, courseService);
         courseController.registerRoutes(vertx, router);
 
-        SocietyController societyController = new SocietyController(userService, societyService, signingKey);
+        SocietyController societyController = new SocietyController(userService, societyService);
         societyController.registerRoutes(vertx, router);
 
         server.requestHandler(router).listen(8080, result -> {

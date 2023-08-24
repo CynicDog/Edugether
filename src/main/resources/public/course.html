@@ -200,16 +200,31 @@
                         <div class="col">
                             <div class="card card-cover h-100 overflow-hidden text-bg-dark rounded-4 shadow-lg">
                                 <div class="d-flex flex-column h-100 p-5 pb-3 text-white text-shadow-1">
-                                    <div class="d-flex">
-                                        <span class="badge bg-primary-subtle border border-primary-subtle text-primary-emphasis rounded-pill me-auto my-2">${course.subject}</span>
-                                        <div class="btn btn-dark btn-sm my-1 enrollCourseButton" data-course-id="${course.id}" style="font-size: .8rem">✎ enroll</div>
-                                        <div class="btn btn-dark btn-sm my-1 wishCourseButton" data-course-id="${course.id}" style="font-size: .8rem">♥ wish</div>
+                                    <div class="row">
+                                        <div class="col-8">
+                                            <div class="badge bg-primary-subtle border border-primary-subtle text-primary-emphasis rounded-pill me-auto my-2">
+                                                ${course.subject}
+                                            </div>
+                                        </div>
+                                        <div class="col-2">
+                                            <div class="btn btn-dark btn-sm my-1 enrollCourseButton" data-course-id="${course.id}" style="font-size: .8rem">enroll</div>
+                                        </div>
+                                        <div class="col-2">
+                                            <div class="btn btn-dark btn-sm my-1 wishCourseButton" data-course-id="${course.id}" style="font-size: .8rem">wish</div>
+                                        </div>
                                     </div>
                                     <div>
-                                        <h3 class="pt-5 mt-5 mb-4 display-6 lh-1 fw-bold"> ${course.name} </h3>
+                                        <h3 type="button" class="pt-4 my-4 display-6 lh-1 fw-bold courseDetailsEntry" data-course-id="${course.id}"> ${course.name} </h3>
+                                        <div class="overflow-scroll fw-lighter my-2" style="max-height: 150px">
+                                            ${course.description}
+                                        </div>
                                         <ul class="d-flex list-unstyled mt-auto">
                                             <li class="ms-auto d-flex align-items-center me-3">
-                                                <small> by ${course.teacherUsername} </small>
+                                                <small> by
+                                                    <span class="badge bg-secondary-subtle border border-secondary-subtle text-secondary-emphasis rounded-pill">
+                                                        ${course.teacherUsername}
+                                                    </span>
+                                                </small>
                                             </li>
                                             <li class="d-flex align-items-center">
                                                 <small> ${formatDate(course.startingDay)} ~ ${formatDate(course.endingDay)} </small>
@@ -266,11 +281,24 @@
                         <div class="col">
                             <div class="card card-cover h-100 overflow-hidden text-bg-dark rounded-4 shadow-lg">
                                 <div class="d-flex flex-column h-100 p-5 pb-3 text-white text-shadow-1">
-                                    <div>
-                                        <span class="badge bg-primary-subtle border border-primary-subtle text-primary-emphasis rounded-pill">${course.subject}</span>
+                                    <div class="row">
+                                        <div class="col-8">
+                                            <div class="badge bg-primary-subtle border border-primary-subtle text-primary-emphasis rounded-pill me-auto my-2">
+                                                ${course.subject}
+                                            </div>
+                                        </div>
+                                        <div class="col-2">
+                                            <div class="btn btn-dark btn-sm my-1 enrollCourseButton" data-course-id="${course.id}" style="font-size: .8rem">enroll</div>
+                                        </div>
+                                        <div class="col-2">
+                                            <div class="btn btn-dark btn-sm my-1 wishCourseButton" data-course-id="${course.id}" style="font-size: .8rem">wish</div>
+                                        </div>
                                     </div>
                                     <div>
-                                        <h3 class="pt-5 mt-5 mb-4 display-6 lh-1 fw-bold"> ${course.name} </h3>
+                                        <h3 class="pt-4 my-4 display-6 lh-1 fw-bold"> ${course.name} </h3>
+                                        <div class="overflow-scroll fw-lighter my-2" style="max-height: 150px">
+                                            ${course.description}
+                                        </div>
                                         <ul class="d-flex list-unstyled mt-auto">
                                             <li class="ms-auto d-flex align-items-center me-3">
                                                 <small> by ${course.teacherUsername} </small>
@@ -487,6 +515,16 @@
             }
         });
 
+        document.addEventListener('click', function(event) {
+            if (event.target.classList.contains('courseDetailsEntry')) {
+                const button = event.target;
+                const courseId = button.getAttribute('data-course-id');
+
+                window.location.href = `course/details?courseId=${courseId}`
+                }
+            }
+        )
+
         function showMessagingToast(message) {
             const messagingToast = document.getElementById('messagingToast');
             const toastBody = messagingToast.querySelector('.toast-body');
@@ -563,7 +601,6 @@
         function formatDate(timestamp) {
             return new Date(timestamp).toLocaleDateString("en-US");
         }
-
     })
 </script>
 </html>

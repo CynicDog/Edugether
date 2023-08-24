@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Application</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</head>
+<body>
+<div id="navbar-placeholder"></div>
+<div class="container">
+    <div class="row mt-4">
+        <div class="col-3 p-4">
+            <div class="position-sticky" style="top: 2rem;">
+                <div class="my-3">
+                    <div class="my-1 fw-lighter fs-4">
+                        About Teacher
+                    </div>
+                    <div class="my-2 fw-light fs-6">
+                        I'm your guide
+                        <span class="badge bg-success-subtle border border-success-subtle text-success-emphasis rounded-pill">
+                            ${teacher name}
+                        </span>
+                        , your guide through this educational adventure. Reach out anytime at
+                        <span class="badge bg-success-subtle border border-success-subtle text-success-emphasis rounded-pill">
+                            ${teacher email}
+                        </span>. Let's learn together!"
+                    </div>
+                </div>
+                <div class="my-3">
+                    <div class="my-1 fw-lighter fs-4">
+                        Course participants
+                    </div>
+                    <div class="my-2 fw-light fs-6">
+                        <span class="badge bg-secondary-subtle border border-secondary-subtle text-secondary-emphasis rounded-pill">
+                            ${student name}
+                        </span>
+                        <span class="badge bg-secondary-subtle border border-secondary-subtle text-secondary-emphasis rounded-pill">
+                            ${student name}
+                        </span>
+                        <span class="badge bg-secondary-subtle border border-secondary-subtle text-secondary-emphasis rounded-pill">
+                            ${student name}
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-9 p-4">
+            <div class="row">
+                <div class="text-end">
+                    <h3 class="fw-lighter">About Course</h3>
+                </div>
+                <div class="my-5">
+                    <h2 class="fw-light"> ${Course Title} </h2>
+                </div>
+                <div>
+                    "On the other hand, we denounce with righteous indignation and dislike men who are so beguiled and
+                    demoralized by the charms of pleasure of the moment, so blinded by desire, that they cannot foresee
+                    the
+                    pain and trouble that are bound to ensue; and equal blame belongs to those who fail in their duty
+                    through weakness of will, which is the same as saying through shrinking from toil and pain. These
+                    cases
+                    are perfectly simple and easy to distinguish. In a free hour, when our power of choice is
+                    untrammelled
+                    and when nothing prevents our being able to do what we like best, every pleasure is to be welcomed
+                    and
+                    every pain avoided. But in certain circumstances and owing to the claims of duty or the obligations
+                    of
+                    business it will frequently occur that pleasures have to be repudiated and annoyances accepted. The
+                    wise
+                    man therefore always holds in these matters to this principle of selection: he rejects pleasures to
+                    secure other greater pleasures, or else he endures pains to avoid worse pains."
+                    "On the other hand, we denounce with righteous indignation and dislike men who are so beguiled and
+                    demoralized by the charms of pleasure of the moment, so blinded by desire, that they cannot foresee
+                    the
+                    pain and trouble that are bound to ensue; and equal blame belongs to those who fail in their duty
+                    through weakness of will, which is the same as saying through shrinking from toil and pain. These
+                    cases
+                    are perfectly simple and easy to distinguish. In a free hour, when our power of choice is
+                    untrammelled
+                    and when nothing prevents our being able to do what we like best, every pleasure is to be welcomed
+                    and
+                    every pain avoided. But in certain circumstances and owing to the claims of duty or the obligations
+                    of
+                    business it will frequently occur that pleasures have to be repudiated and annoyances accepted. The
+                    wise
+                    man therefore always holds in these matters to this principle of selection: he rejects pleasures to
+                    secure other greater pleasures, or else he endures pains to avoid worse pains."
+
+                </div>
+            </div>
+            <div class="row">
+                <div class="col my-5">
+                    <div class="d-flex">
+                        <div class="me-auto fw-lighter fs-4">Reviews <span class="fs-6">(${reviews.count})</span></div>
+                        <div id="reviewToastButton" class="btn btn-sm btn-light fw-light">✏️ Add yours</div>
+                    </div>
+                    <hr>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="toast-container position-fixed bottom-0 end-0 p-4">
+    <div id="messagingToast" class="toast align-items-center text-bg-primary border-0" role="alert"
+         aria-live="assertive" aria-atomic="true">
+        <div class="d-flex">
+            <div class="toast-body">
+            </div>
+            <button type="button" class="btn-close btn-close-white me-2 m-auto"
+                    data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+    </div>
+    <div id="reviewAddToast" class="toast toast-add-review" role="alert" aria-live="assertive" aria-atomic="true"
+         data-bs-autohide="false">
+        <div class="toast-body bg-light-subtle rounded-3 p-4">
+            <div class="row">
+                <div class="col">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <div class="fw-lighter fs-4">🧑🏻‍💻 Review</div>
+                        <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                    </div>
+                    <div class="p-3">
+                        <div class="my-2">
+                            <div class="form-floating">
+                                <input type="text" class="form-control-plaintext" name="sentiment"
+                                       id="sentiment" placeholder="" disabled/>
+                                <label class="fw-lighter d-flex" for="sentiment">Sentiments</label>
+                            </div>
+                            <div id="sentiments" class="fs-6 mx-3 my-1">
+                            </div>
+                        </div>
+                        <div class="mt-4">
+                            <div class="p-2">
+                                <label class="fw-lighter d-flex" for="content" style="font-size: 1.3rem">Content</label>
+                                <textarea type="text" class="form-control-plaintext" id="content" name="content" rows="5"
+                                          placeholder="leave reviews here :)"></textarea>
+                            </div>
+                        </div>
+                        <div class="text-end ">
+                            <div id="reviewSubmitButton"
+                                 class="btn btn-light btn-sm my-1 mx-2 disabled fw-lighter">
+                                submit
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+<script>
+    const username = localStorage.getItem("Authentication");
+
+    if (username !== null) {
+        fetch(`/nav-authenticated`)
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('navbar-placeholder').innerHTML = data;
+            });
+    } else {
+        fetch(`/nav-anonymous`)
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('navbar-placeholder').innerHTML = data;
+            })
+    }
+
+    const params = new URLSearchParams(window.location.search);
+    const courseId = params.get("courseId")
+
+    const contentInput = document.querySelector('textarea[name=content]')
+
+    let sentimentInput = null;
+    const sentimentsDiv = document.getElementById('sentiments')
+
+    const reviewInputsValidationStatus = {
+        sentiment: false,
+        content: false
+    }
+
+    contentInput.addEventListener('blur', function () {
+        if (this.value.trim() === '') {
+            reviewInputsValidationStatus.content = false;
+        } else {
+            reviewInputsValidationStatus.content = true;
+        }
+        flushSubmitButton();
+    })
+
+    const reviewToastButton = document.getElementById('reviewToastButton')
+    reviewToastButton.addEventListener('click', function () {
+        let reviewAddToast = document.getElementById('reviewAddToast')
+        const reviewAddToastBootstrap = bootstrap.Toast.getOrCreateInstance(reviewAddToast)
+
+        fetch(`/review/sentiments`, {
+            method: "GET"
+        }).then(response => {
+            if (response.ok) {
+                sentimentsDiv.innerHTML = '';
+                return response.json()
+            }
+        }).then(data => {
+            data.sentimentNames.forEach(datum => {
+                sentimentsDiv.innerHTML += `
+                <div type="button" class="badge rounded-pill text-bg-light sentimentButton">${datum}</div>
+                `
+            })
+
+            const sentimentButtons = document.querySelectorAll('.sentimentButton')
+            sentimentsDiv.addEventListener('click', function (event) {
+
+                // clearance previous inputs
+                if (sentimentInput != null) {
+                    sentimentInput = null;
+                    reviewInputsValidationStatus.sentiment = false;
+                }
+
+                if (event.target.classList.contains('sentimentButton')) {
+
+                    // clearance previous inputs
+                    sentimentButtons.forEach(button => {
+                        if (button.classList.contains('text-bg-light')) {
+                            enableButton(button);
+                        }
+                    });
+
+                    const selectedSentimentButton = event.target;
+                    const selectedSentimentName = selectedSentimentButton.textContent.trim()
+
+                    selectedSentimentButton.classList.toggle('text-bg-primary');
+                    selectedSentimentButton.classList.toggle('text-bg-light');
+
+                    if (selectedSentimentButton.classList.contains('text-bg-primary')) {
+                        sentimentInput = selectedSentimentName
+                        reviewInputsValidationStatus.sentiment = true;
+
+                        sentimentButtons.forEach(button => {
+                            if (button.classList.contains('text-bg-light')) {
+                                disableButton(button)
+                            }
+                        })
+                    }
+                }
+                console.log(sentimentInput)
+                flushSubmitButton()
+            })
+        })
+        reviewAddToastBootstrap.show();
+    })
+
+    const reviewSubmitButton = document.getElementById('reviewSubmitButton');
+    reviewSubmitButton.addEventListener('click', function () {
+
+        const formData = {
+            content: contentInput.value.trim(),
+            sentiment: sentimentInput,
+            courseId: courseId
+        }
+
+        fetch(`/review/register`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(formData)
+        }).then(response => {
+
+            if (response.status === 401) {
+                // Authentication entry point
+                window.location.href = "/login?error=anonymous"
+            }
+            if (response.status === 403) {
+                // Unauthorized
+                window.location.href = "/login?error=denied"
+            }
+
+            if (response.ok) {
+                showMessagingToast(response.statusText);
+                new bootstrap.Toast(document.getElementById('courseAddToast')).hide();
+            } else if (!response.ok) {
+                showMessagingToast(response.statusText);
+                new bootstrap.Toast(document.getElementById('courseAddToast')).hide();
+            }
+
+            contentInput.value = ''
+            sentimentInput = null;
+        })
+    })
+
+    function disableButton(button) {
+        button.style.pointerEvents = "none";
+        button.classList.add('text-bg-disabled', 'text-secondary');
+        button.classList.remove('text-bg-primary');
+    }
+
+    function enableButton(button) {
+        button.removeAttribute('style')
+        button.classList.remove('text-bg-disabled', 'text-secondary')
+        button.classList.add('text-bg-light')
+    }
+
+    function flushSubmitButton() {
+
+        const allValid = Object.values(reviewInputsValidationStatus).every(status => status === true)
+
+        if (allValid) {
+            reviewSubmitButton.classList.remove('disabled');
+        } else {
+            reviewSubmitButton.classList.add('disabled');
+        }
+    }
+
+    function formatDate(timestamp) {
+        return new Date(timestamp).toLocaleDateString("en-US");
+    }
+
+</script>
+</html>

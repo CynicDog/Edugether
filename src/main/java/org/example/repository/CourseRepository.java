@@ -8,11 +8,10 @@ import java.util.List;
 
 public interface CourseRepository {
     Course getCourseById(Long courseId);
-    boolean insertCourse(Course course);
+    void insertCourse(Course course);
     List<CourseProjection> getPaginatedCoursesByPublishedDateDescending(Integer page, Integer limit);
     List<Course> getPaginatedCoursesByPublishedDateAndByUsernameDescending(Integer page, Integer limit, String username);
     List<CourseProjection> getPaginatedCoursesByPublishedDateAscending(Integer page, Integer limit);
-
-    boolean insertRegistration(Registration registration);
+    void insertRegistration(Registration registration);
 }
 

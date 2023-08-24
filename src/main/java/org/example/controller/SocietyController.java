@@ -12,16 +12,13 @@ import org.jboss.logging.Logger;
 import static org.example.util.constant.PageLocation.PUBLIC;
 
 public class SocietyController implements Controller {
-
-    private final String signingKey;
     private final Logger logger = Logger.getLogger(UserController.class);
     private final UserService userService;
     private final SocietyService societyService;
 
-    public SocietyController(UserService userService, SocietyService societyService, String signingKey) {
+    public SocietyController(UserService userService, SocietyService societyService) {
         this.userService = userService;
         this.societyService = societyService;
-        this.signingKey = signingKey;
     }
 
     @Override

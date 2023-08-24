@@ -9,7 +9,6 @@ import org.jboss.logging.Logger;
 
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.TypedQuery;
-import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.List;
 
 public class CourseRepositoryImpl implements CourseRepository {
@@ -22,16 +21,14 @@ public class CourseRepositoryImpl implements CourseRepository {
     }
 
     @Override
-    public boolean insertRegistration(Registration registration) {
-
+    public void insertRegistration(Registration registration) {
         try {
             JpaOperationUtil.consume(entityManagerFactory, em -> {
                 em.persist(registration);
             });
-            return true;
         } catch (Exception ex) {
-            ex.printStackTrace();
-            return false;
+            logger.info("[ CourseRepositoryImpl.insertRegistration(Registration registration) ]: " + ex.getMessage());
+            throw ex;
         }
     }
 
@@ -100,15 +97,14 @@ public class CourseRepositoryImpl implements CourseRepository {
     }
 
     @Override
-    public boolean insertCourse(Course course) {
+    public void insertCourse(Course course) {
         try {
             JpaOperationUtil.consume(entityManagerFactory, em -> {
                 em.persist(course);
             });
-            return true;
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            return false;
+        } catch (Exception e) {
+            logger.info("[ CourseRepositoryImpl.insertCourse(Course course) ]: " + e.getMessage());
+            throw e;
         }
     }
 
