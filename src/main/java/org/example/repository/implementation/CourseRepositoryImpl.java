@@ -2,6 +2,7 @@ package org.example.repository.implementation;
 
 import org.example.entity.academics.Course;
 import org.example.entity.academics.Registration;
+import org.example.entity.academics.Review;
 import org.example.entity.users.Student;
 import org.example.projection.CourseProjection;
 import org.example.repository.CourseRepository;
@@ -25,9 +26,7 @@ public class CourseRepositoryImpl implements CourseRepository {
     public boolean isRegistered(Long studentId, Long courseId) {
         return JpaOperationUtil.apply(entityManagerFactory, em -> {
 
-            TypedQuery<Long> query = em.createQuery(
-                    "select count(r) from Registration r where r.student.id = :studentId and r.course.id = :courseId",
-                    Long.class);
+            TypedQuery<Long> query = em.createQuery("select count(r) from Registration r where r.student.id = :studentId and r.course.id = :courseId", Long.class);
 
             query.setParameter("studentId", studentId);
             query.setParameter("courseId", courseId);
@@ -70,14 +69,7 @@ public class CourseRepositoryImpl implements CourseRepository {
 
             int startIndex = page * limit;
 
-            TypedQuery<CourseProjection> query = em.createQuery("select new org.example.projection.CourseProjection(" +
-                    "c.id, " +
-                    "c.name, " +
-                    "c.description, " +
-                    "c.startingDay, " +
-                    "c.endingDay, " +
-                    "c.subject, " +
-                    "teacher.username) from Course c " + "order by c.publishedDate asc", CourseProjection.class);
+            TypedQuery<CourseProjection> query = em.createQuery("select new org.example.projection.CourseProjection(" + "c.id, " + "c.name, " + "c.description, " + "c.startingDay, " + "c.endingDay, " + "c.subject, " + "teacher.username) from Course c " + "order by c.publishedDate asc", CourseProjection.class);
 
             query.setFirstResult(startIndex);
             query.setMaxResults(limit);
@@ -124,9 +116,18 @@ public class CourseRepositoryImpl implements CourseRepository {
     public List<Student> getStudentsByRegistration_CourseId(Long courseId) {
         return JpaOperationUtil.apply(entityManagerFactory, em -> {
 
-            return em.createQuery("select r.student from Registration r where r.course.id = :courseId", Student.class)
-                    .setParameter("courseId", courseId)
-                    .getResultList();
+            return em.createQuery("select r.student from Registration r where r.course.id = :courseId", Student.class).setParameter("courseId", courseId).getResultList();
         });
+    }
+
+    @Override
+    public void updateReview(Review review) {
+        try {
+            JpaOperationUtil.consume(entityManagerFactory, em -> {
+                em.merge(review);
+            });
+        } catch (Exception e) {
+            throw e;
+        }
     }
 }

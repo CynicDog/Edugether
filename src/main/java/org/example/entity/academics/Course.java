@@ -41,7 +41,8 @@ public class Course {
     @JoinTable(
             name = "WishListCourses",
             joinColumns = @JoinColumn(name = "courseId"),
-            inverseJoinColumns = @JoinColumn(name = "studentId")
+            inverseJoinColumns = @JoinColumn(name = "studentId"),
+            uniqueConstraints = @UniqueConstraint(columnNames = { "courseId", "studentId" })
     )
     private Set<Student> wishers = new HashSet<>();
 

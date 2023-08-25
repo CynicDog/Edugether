@@ -12,10 +12,10 @@ public class ReviewProjection {
     private REVIEW_SENTIMENT reviewSentiment;
     private Date createDate;
     private String content;
-    private Integer likedCount;
+    private long likedCount;
     private long reviewNumber;
 
-    public ReviewProjection(Long id, User user, REVIEW_SENTIMENT reviewSentiment, Date createDate, String content, Integer likedCount, long reviewNumber) {
+    public ReviewProjection(Long id, User user, REVIEW_SENTIMENT reviewSentiment, Date createDate, String content, long likedCount, long reviewNumber) {
         this.id = id;
         this.user = user;
         this.reviewSentiment = reviewSentiment;
@@ -45,7 +45,7 @@ public class ReviewProjection {
         return content;
     }
 
-    public Integer getLikedCount() {
+    public long getLikedCount() {
         return likedCount;
     }
 

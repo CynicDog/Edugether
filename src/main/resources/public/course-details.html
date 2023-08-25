@@ -54,7 +54,7 @@
                 <div class="my-5">
                     <div id="courseNameArea" class="fw-light fs-2 my-4">
                     </div>
-                    <div id="courseScheduleArea" class="text-end mx-2">
+                    <div id="courseScheduleArea" class="text-end mx-2 fw-light">
                     </div>
                 </div>
                 <div id="courseDescriptionArea" class="fw-light">
@@ -326,35 +326,38 @@
             document.getElementById('reviewsCountArea').textContent = data.reviews[0].reviewNumber;
             data.reviews.forEach(review => {
                 document.getElementById('reviewsArea').innerHTML += `
-                    <div class="bg-light rounded-3 p-3 my-2 shadow-sm">
+                    <div class="bg-light rounded-3 p-3 my-3 shadow-sm">
                             <div class="row d-flex">
                                 <div class="col-lg-7">
                                     <span class="badge bg-success-subtle border border-success-subtle text-success-emphasis rounded-pill mx-1">
                                         ${review.user.username}
                                     </span>
                                     <span class="badge bg-light-subtle border border-light-subtle text-light-emphasis rounded-pill mx-1">
-                                        ${review.reviewSentiment}
+                                        ${review.reviewSentiment} ${getSentimentEmoji(review.reviewSentiment)}
                                     </span>
                                 </div>
                                 <div class="col-lg-5">
                                     <div class="text-end">
-                                    <span class="badge bg-light-subtle border border-light-subtle text-light-emphasis rounded-pill">
-                                        ${formatDate(review.createDate)}
+                                    <span type="button"
+                                          class="badge bg-dark-subtle border border-dark-subtle text-dark-emphasis rounded-pill reviewLikeButton"
+                                          data-review-id="${review.id}"
+                                          >
+                                        like(<span class="fw-medium">${review.likedCount}</span>)
                                     </span>
-                                    <span
                                     <span type="button"
                                           class="badge bg-dark-subtle border border-dark-subtle text-dark-emphasis rounded-pill">
                                         follow
                                     </span>
-                                        <span type="button"
-                                              class="badge bg-dark-subtle border border-dark-subtle text-dark-emphasis rounded-pill">
-                                        contact
-                                    </span>
                                     </div>
                                 </div>
                             </div>
-                            <div class="fw-light my-3">
+                            <div class="fw-light my-1">
                                 ${review.content}
+                            </div>
+                            <div class="text-end">
+                                <span class="badge bg-light-subtle border border-light-subtle text-light-emphasis rounded-pill">
+                                    ${formatDate(review.createDate)}
+                                </span>
                             </div>
                         </div>
                 `
@@ -369,7 +372,6 @@
 
     window.onscroll = function () {
         if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
-            console.log("hi")
 
             if (isReviewFetching || isReviewLast) {
                 // do nothing
@@ -379,6 +381,35 @@
             }
         }
     }
+
+    document.addEventListener('click', function(event) {
+        if (event.target.classList.contains('reviewLikeButton')) {
+            const button = event.target;
+            const reviewId = button.getAttribute('data-review-id')
+
+            fetch(`/review/like?reviewId=${reviewId}`, {
+                method: "POST"
+            }).then(response => {
+                if (response.status === 401) {
+                    // Authentication entry point
+                    window.location.href = "/login?error=anonymous"
+                }
+                if (response.status === 403) {
+                    // Unauthorized
+                    window.location.href = "/login?error=denied"
+                }
+
+                if (response.ok) {
+                    showMessagingToast(response.statusText);
+                    return response.text();
+                } else if (!response.ok) {
+                    showMessagingToast(response.statusText);
+                }
+            }).then(count => {
+                button.querySelector('span').textContent = count;
+            })
+        }
+    })
 
     function showMessagingToast(message) {
         const messagingToast = document.getElementById('messagingToast');
@@ -417,5 +448,34 @@
         return new Date(timestamp).toLocaleDateString("en-US");
     }
 
+    function getSentimentEmoji(sentiment) {
+        switch (sentiment) {
+            case 'NEUTRAL':
+                return '😐';
+            case 'LOVED':
+                return '❤️';
+            case 'IMPRESSED':
+                return '😃';
+            case 'MIXED':
+                return '🤔';
+            case 'INSPIRED':
+                return '🌟';
+            case 'OVERWHELMED':
+                return '😲';
+            case 'DISLIKED':
+                return '😞';
+            case 'CONFUSED':
+                return '😕';
+            default:
+                return ''; // Use a question mark for unknown sentiments
+        }
+    }
+
+    // if got back from authentication entry point, reload the page.
+    window.onpageshow = function(event) {
+        if (event.persisted) {
+            location.reload();
+        }
+    };
 </script>
 </html>

@@ -1,6 +1,6 @@
 package org.example.repository.implementation;
 
-import org.example.entity.contents.Review;
+import org.example.entity.academics.Review;
 import org.example.projection.ReviewProjection;
 import org.example.repository.ReviewRepository;
 import org.example.util.JpaOperationUtil;
@@ -8,6 +8,7 @@ import org.jboss.logging.Logger;
 
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.TypedQuery;
+import java.math.BigInteger;
 import java.util.List;
 
 public class ReviewRepositoryImpl implements ReviewRepository {
@@ -20,6 +21,22 @@ public class ReviewRepositoryImpl implements ReviewRepository {
     }
 
     @Override
+    public BigInteger getReviewLikedCount(Long reviewId, Long userId) {
+        return (BigInteger) JpaOperationUtil.apply(entityManagerFactory, em -> {
+
+            try {
+                return em.createNativeQuery("select count(*) from LikedReviews where reviewId = :reviewId and userId = :userId")
+                        .setParameter("reviewId", reviewId)
+                        .setParameter("userId", userId)
+                        .getSingleResult();
+            } catch (Exception e) {
+                logger.info("[ ReviewRepositoryImpl.getReviewLikedCount(Long reviewId, Long userId) ]: " + e.getMessage());
+                throw e;
+            }
+        });
+    }
+
+    @Override
     public List<ReviewProjection> getPaginatedReviewsByCourseIdAndCreateDateDescending(Long courseId,
                                                                                        Integer page,
                                                                                        Integer limit) {
@@ -28,11 +45,11 @@ public class ReviewRepositoryImpl implements ReviewRepository {
             int startIndex = page * limit;
             TypedQuery<ReviewProjection> query = em.createQuery("select new org.example.projection.ReviewProjection(" +
                     "r.id, " +
-                    "r.user, " +
+                    "r.writer, " +
                     "r.reviewSentiment, " +
                     "r.createDate, " +
                     "r.content, " +
-                    "r.likedCount, " +
+                    "(select count(1) from r.likers), " +
                     "(select count(r2) from Review r2 where r2.course.id = :courseId) " +
                     ") from Review r where r.course.id = :courseId order by r.createDate desc", ReviewProjection.class);
 
@@ -55,5 +72,12 @@ public class ReviewRepositoryImpl implements ReviewRepository {
             logger.info("[ ReviewRepositoryImpl.insertReview(Review review) ]: " + e.getMessage());
             throw e;
         }
+    }
+
+    @Override
+    public Review getReviewById(Long reviewId) {
+        return JpaOperationUtil.apply(entityManagerFactory, em -> {
+            return em.find(Review.class, reviewId);
+        });
     }
 }

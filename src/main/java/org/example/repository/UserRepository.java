@@ -19,4 +19,5 @@ public interface UserRepository {
     List<UserProjection> getUsersRandomlyLimitBy(Integer limit);
     void updateUser(User user);
     Student getStudentById(Long studentId);
+    User getUserById(Long userId);
 }

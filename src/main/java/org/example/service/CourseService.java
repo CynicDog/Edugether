@@ -3,9 +3,10 @@ package org.example.service;
 import io.vertx.core.json.JsonObject;
 import org.example.entity.academics.Course;
 import org.example.entity.academics.Registration;
-import org.example.entity.contents.Review;
+import org.example.entity.academics.Review;
 import org.example.entity.users.Student;
 import org.example.entity.users.Teacher;
+import org.example.entity.users.User;
 import org.example.projection.CourseProjection;
 import org.example.projection.ReviewProjection;
 import org.example.repository.CourseRepository;
@@ -14,7 +15,7 @@ import org.example.repository.UserRepository;
 import org.example.util.enums.REVIEW_SENTIMENT;
 import org.jboss.logging.Logger;
 
-import javax.persistence.PersistenceException;
+import java.math.BigInteger;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
@@ -121,5 +122,26 @@ public class CourseService {
     public List<ReviewProjection> getPaginatedReviewsByCourseIdAndCreateDateDescending(Long courseId, Integer page, Integer limit) {
 
         return reviewRepository.getPaginatedReviewsByCourseIdAndCreateDateDescending(courseId, page, limit);
+    }
+
+    public BigInteger registerLike(Long reviewId, Long userId) {
+
+        User user = userRepository.getUserById(userId);
+
+        Review review = reviewRepository.getReviewById(reviewId);
+        review.addLikers(user);
+
+        try {
+            courseRepository.updateReview(review);
+        } catch (Exception e) {
+            throw e;
+        }
+
+        try {
+            BigInteger likedCount = reviewRepository.getReviewLikedCount(reviewId, userId);
+            return likedCount;
+        } catch (Exception e) {
+            throw e;
+        }
     }
 }

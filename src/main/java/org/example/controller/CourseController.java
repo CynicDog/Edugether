@@ -9,7 +9,6 @@ import io.vertx.ext.web.handler.SessionHandler;
 import io.vertx.ext.web.handler.StaticHandler;
 import io.vertx.ext.web.sstore.LocalSessionStore;
 import org.example.entity.academics.Course;
-import org.example.entity.contents.Review;
 import org.example.entity.users.Student;
 import org.example.projection.CourseProjection;
 import org.example.projection.ReviewProjection;
@@ -20,6 +19,7 @@ import org.example.util.enums.REVIEW_SENTIMENT;
 import org.example.util.enums.SUBJECT_TITLE;
 import org.jboss.logging.Logger;
 
+import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -63,10 +63,30 @@ public class CourseController implements Controller {
             router.post("/course/register").handler(BodyHandler.create()).handler(this::handleCourseRegister);
             router.post("/course/enroll").handler(BodyHandler.create()).handler(this::handleCourseEnroll);
             router.post("/review/register").handler(BodyHandler.create()).handler(this::handleReviewRegister);
+            router.post("/review/like").handler(this::handleReviewLike);
         }
     }
 
-    // course/reviews?courseId=20&page=0&limit=4
+    private void handleReviewLike(RoutingContext routingContext) {
+
+        UserProjection authentication = routingContext.session().get("Authentication");
+
+        if (authentication == null) {
+            logger.info("[ Authentication entry point ]");
+            routingContext.response().setStatusCode(401).end();
+            return;
+        }
+
+        Long reviewId = Long.parseLong(routingContext.request().getParam("reviewId"));
+
+        try {
+            BigInteger likedCount = courseService.registerLike(reviewId, authentication.getId());
+            routingContext.response().setStatusCode(200).setStatusMessage("You liked the review, awesome!").end(String.valueOf(likedCount));
+        } catch (Exception e) {
+            routingContext.response().setStatusCode(500).setStatusMessage("Something went wrong.. You might want to check your inputs again.").end();
+        }
+    }
+
     private void handleCourseReviews(RoutingContext routingContext) {
 
         // for pagination rendering

@@ -87,12 +87,12 @@
                 if (response.status === 200) {
                     return response.json();
                 } else {
-                    // TODO: Login failure handling
-                    alert(`${response.statusText}`)
+                    // bad credentials
+                    showMessagingToast(response.statusText)
                 }
             }).then(data => {
                 localStorage.setItem("Authentication", data.username);
-                window.location.href = "/home"
+                window.history.back();
             })
         })
 

@@ -2,6 +2,7 @@ package org.example.repository;
 
 import org.example.entity.academics.Course;
 import org.example.entity.academics.Registration;
+import org.example.entity.academics.Review;
 import org.example.entity.users.Student;
 import org.example.projection.CourseProjection;
 
@@ -16,5 +17,6 @@ public interface CourseRepository {
     void insertRegistration(Registration registration);
     boolean isRegistered(Long studentId, Long courseId);
     List<Student> getStudentsByRegistration_CourseId(Long courseId);
+    void updateReview(Review review);
 }
 

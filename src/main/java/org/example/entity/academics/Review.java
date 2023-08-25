@@ -1,12 +1,13 @@
-package org.example.entity.contents;
+package org.example.entity.academics;
 
-import org.example.entity.academics.Course;
 import org.example.entity.users.User;
 import org.example.util.enums.REVIEW_SENTIMENT;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(uniqueConstraints = @UniqueConstraint(columnNames = { "userId", "courseId" }))
@@ -17,7 +18,7 @@ public class Review {
 
     @ManyToOne
     @JoinColumn(name = "userId")
-    private User user;
+    private User writer;
 
     @ManyToOne
     @JoinColumn(name = "courseId")
@@ -31,13 +32,21 @@ public class Review {
 
     @Column(nullable = false, length = 2000)
     private String content;
-    private Integer likedCount = 0;
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "LikedReviews",
+            joinColumns = @JoinColumn(name = "reviewId"),
+            inverseJoinColumns = @JoinColumn(name = "userId"),
+            uniqueConstraints = @UniqueConstraint(columnNames = { "reviewId", "userId" })
+    )
+    private Set<User> likers;
 
     public Review() {
     }
 
-    public Review(User user, Course course, REVIEW_SENTIMENT reviewSentiment, String content) {
-        this.user = user;
+    public Review(User writer, Course course, REVIEW_SENTIMENT reviewSentiment, String content) {
+        this.writer = writer;
         this.course = course;
         this.reviewSentiment = reviewSentiment;
         this.content = content;
@@ -47,12 +56,12 @@ public class Review {
         return id;
     }
 
-    public User getUser() {
-        return user;
+    public User getWriter() {
+        return writer;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setWriter(User user) {
+        this.writer = user;
     }
 
     public Course getCourse() {
@@ -79,14 +88,6 @@ public class Review {
         this.content = content;
     }
 
-    public Integer getLikedCount() {
-        return likedCount;
-    }
-
-    public void setLikedCount(Integer likedCount) {
-        this.likedCount = likedCount;
-    }
-
     public void setId(Long id) {
         this.id = id;
     }
@@ -97,5 +98,20 @@ public class Review {
 
     public void setCreateDate(Date createDate) {
         this.createDate = createDate;
+    }
+
+    public Set<User> getLikers() {
+        return likers;
+    }
+
+    public void setLikers(Set<User> likers) {
+        this.likers = likers;
+    }
+
+    public void addLikers(User user) {
+        if (this.likers == null) {
+            this.likers = new HashSet<>();
+        }
+        this.likers.add(user);
     }
 }

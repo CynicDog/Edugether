@@ -111,4 +111,11 @@ public class UserRepositoryImpl implements UserRepository {
             em.persist(user);
         });
     }
+
+    @Override
+    public User getUserById(Long userId) {
+        return JpaOperationUtil.apply(entityManagerFactory, em -> {
+            return em.find(User.class, userId);
+        });
+    }
 }
