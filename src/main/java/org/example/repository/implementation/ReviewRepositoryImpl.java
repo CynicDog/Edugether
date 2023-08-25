@@ -36,7 +36,6 @@ public class ReviewRepositoryImpl implements ReviewRepository {
     }
 
 
-
     @Override
     public List<ReviewProjection> getPaginatedReviewsByCourseIdAndCreateDateDescending(Long courseId,
                                                                                        Integer page,
