@@ -5,9 +5,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="83ac0769-501d-47c5-aa4c-9efb288ea6db" name="Changes" comment="modified">
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/1101b1af-169c-40f0-92b9-33d0d526db18.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/1101b1af-169c-40f0-92b9-33d0d526db18.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/public/student-mypage.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/public/teacher-mypage.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/controller/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/controller/UserController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/projection/ReviewProjection.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/projection/ReviewProjection.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/repository/implementation/ReviewRepositoryImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/repository/implementation/ReviewRepositoryImpl.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/public/course-details.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/public/course-details.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/public/student.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/public/student-details.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/public/teacher.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/public/teacher-details.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -181,7 +187,8 @@
       <workItem from="1692869459208" duration="16784000" />
       <workItem from="1692892132098" duration="1507000" />
       <workItem from="1692928175944" duration="14919000" />
-      <workItem from="1692955678991" duration="438000" />
+      <workItem from="1692955678991" duration="5975000" />
+      <workItem from="1692965402968" duration="2640000" />
     </task>
     <task id="LOCAL-00001" summary="init (dependencies, entities)">
       <created>1692451459255</created>
@@ -344,7 +351,14 @@
       <option name="project" value="LOCAL" />
       <updated>1692945937465</updated>
     </task>
-    <option name="localTasksCounter" value="24" />
+    <task id="LOCAL-00024" summary="modified">
+      <created>1692956380310</created>
+      <option name="number" value="00024" />
+      <option name="presentableId" value="LOCAL-00024" />
+      <option name="project" value="LOCAL" />
+      <updated>1692956380310</updated>
+    </task>
+    <option name="localTasksCounter" value="25" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

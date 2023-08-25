@@ -59,6 +59,9 @@
                 </div>
                 <div id="courseDescriptionArea" class="fw-light">
                 </div>
+                <div class="my-3">
+                    <div id="enrollCourseButton" class="btn btn-light btn-sm my-1" style="font-size: .8rem">🧑🏻‍💻 Enroll</div>
+                </div>
             </div>
             <div class="row">
                 <div class="col my-5">
@@ -176,6 +179,29 @@
         flushSubmitButton();
     })
 
+    document.getElementById('enrollCourseButton').addEventListener('click', function() {
+        fetch(`/course/enroll?courseId=${courseId}`, {
+            method: "POST"
+        }).then(response => {
+            if (response.status === 401) {
+                // Authentication entry point
+                window.location.href = "/login?error=anonymous"
+            }
+            if (response.status === 403) {
+                // Unauthorized
+                window.location.href = "/login?error=denied"
+            }
+
+            if (response.ok) {
+                showMessagingToast(response.statusText);
+                new bootstrap.Toast(document.getElementById('courseAddToast')).hide();
+            } else if (!response.ok) {
+                showMessagingToast(response.statusText);
+                new bootstrap.Toast(document.getElementById('courseAddToast')).hide();
+            }
+        });
+    })
+
     const reviewToastButton = document.getElementById('reviewToastButton')
     reviewToastButton.addEventListener('click', function () {
         let reviewAddToast = document.getElementById('reviewAddToast')
@@ -280,6 +306,7 @@
         return fetch(`/course/details?id=${courseId}`).then(response => response.json());
     }
 
+    const teacherNameArea = document.getElementById('teacherNameArea');
     function fetchAndRenderCourse(courseId) {
 
         getCourseDetails(courseId).then(data => {
@@ -290,7 +317,13 @@
             `;
             document.getElementById('courseDescriptionArea').textContent = data.course.description;
             document.getElementById('teacherJoinedDateArea').textContent = formatDate(data.course.teacher.joinedDate);
-            document.getElementById('teacherNameArea').textContent = data.course.teacher.username;
+
+            let teacherUsername = data.course.teacher.username
+            teacherNameArea.textContent = teacherUsername
+            teacherNameArea.addEventListener('click', function() {
+                window.location.href = `/user-details?username=${teacherUsername}`
+            })
+
             document.getElementById('teacherEmailArea').textContent = data.course.teacher.email;
             document.getElementById('courseSubjectArea').textContent = data.course.subject;
 
@@ -327,12 +360,15 @@
             if (data.reviews.length > 0) {
                 document.getElementById('reviewsCountArea').textContent = data.reviews[0].reviewNumber;
                 data.reviews.forEach(review => {
+
+                    const likedByTeacherDiv = review.likedByTeacher === 1 ? '<span id="likedByTeacher" class="badge bg-light-subtle border border-light-subtle text-light-emphasis rounded-pill">❤️ by teacher</span>' : '';
+
                     document.getElementById('reviewsArea').innerHTML += `
                     <div class="bg-light rounded-3 p-3 my-3 shadow-sm">
                             <div class="row d-flex">
                                 <div class="col-lg-7">
                                     <span class="badge bg-success-subtle border border-success-subtle text-success-emphasis rounded-pill mx-1">
-                                        ${review.user.username}
+                                        ${review.writer.username}
                                     </span>
                                     <span class="badge bg-light-subtle border border-light-subtle text-light-emphasis rounded-pill mx-1">
                                         ${review.reviewSentiment} ${getSentimentEmoji(review.reviewSentiment)}
@@ -340,7 +376,7 @@
                                 </div>
                                 <div class="col-lg-5">
                                     <div class="text-end">
-                                        <span id="likedByTeacher" class="badge bg-light-subtle border border-light-subtle text-light-emphasis rounded-pill" style="display:none;">❤️ by teacher</span>
+                                        ${likedByTeacherDiv}
                                         <span type="button"
                                               class="badge bg-dark-subtle border border-dark-subtle text-dark-emphasis rounded-pill reviewLikeButton"
                                               data-review-id="${review.id}"

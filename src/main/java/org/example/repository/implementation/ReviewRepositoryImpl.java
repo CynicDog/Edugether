@@ -36,6 +36,7 @@ public class ReviewRepositoryImpl implements ReviewRepository {
     }
 
 
+
     @Override
     public List<ReviewProjection> getPaginatedReviewsByCourseIdAndCreateDateDescending(Long courseId,
                                                                                        Integer page,
@@ -46,6 +47,7 @@ public class ReviewRepositoryImpl implements ReviewRepository {
             TypedQuery<ReviewProjection> query = em.createQuery("select new org.example.projection.ReviewProjection(" +
                     "r.id, " +
                     "r.writer, " +
+                    "r.course.teacher.id, " +
                     "r.reviewSentiment, " +
                     "r.createDate, " +
                     "r.content, " +
@@ -54,11 +56,18 @@ public class ReviewRepositoryImpl implements ReviewRepository {
                     ") from Review r where r.course.id = :courseId order by r.createDate desc", ReviewProjection.class);
 
             query.setParameter("courseId", courseId);
-
             query.setFirstResult(startIndex);
             query.setMaxResults(limit);
+            List<ReviewProjection> founds = query.getResultList();
 
-            return query.getResultList();
+            founds.forEach(found -> {
+                found.setLikedByTeacher((BigInteger) em.createNativeQuery(
+                        "select count(*) from LikedReviews where reviewId = :reviewId and userId = :courseTeacherId")
+                        .setParameter("reviewId", found.getId())
+                        .setParameter("courseTeacherId", found.getCourseTeacherId())
+                        .getSingleResult());
+            });
+            return founds;
         });
     }
 

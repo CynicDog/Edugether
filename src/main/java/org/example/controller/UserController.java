@@ -48,10 +48,10 @@ public class UserController implements Controller {
                 routingContext.response().putHeader("Content-Type", "text/html").sendFile(PUBLIC + "signup-entry.html");
             });
             router.get("/signup/student").handler(routingContext -> {
-                routingContext.response().putHeader("Content-Type", "text/html").sendFile(PUBLIC + "signup-student.html");
+                routingContext.response().putHeader("Content-Type", "text/html").sendFile(PUBLIC + "signup-student-mypage.html");
             });
             router.get("/signup/teacher").handler(routingContext -> {
-                routingContext.response().putHeader("Content-Type", "text/html").sendFile(PUBLIC + "signup-teacher.html");
+                routingContext.response().putHeader("Content-Type", "text/html").sendFile(PUBLIC + "signup-teacher-mypage.html");
             });
             router.get("/user/check-username").handler(this::handleCheckUsername);
             router.get("/user/check-email").handler(this::handleCheckEmail);
@@ -59,12 +59,27 @@ public class UserController implements Controller {
 
             router.get("/teacher").handler(this::handleTeacher);
             router.get("/teacher/course").handler(this::handleTeacherCourse);
+
+            router.get("/user-details").handler(this::handleTeacherDetails);
         }
         {   // POST handlers
             router.post("/signup/student").handler(BodyHandler.create()).handler(this::handleStudentSignup);
             router.post("/signup/teacher").handler(BodyHandler.create()).handler(this::handleTeacherSignup);
             router.post("/teacher/qualification").handler(BodyHandler.create()).handler(this::handleTeacherQualification);
         }
+    }
+
+    private void handleTeacherDetails(RoutingContext routingContext) {
+        String username = routingContext.request().getParam("username");
+
+        User user = userService.getUserByUsername(username);
+        if (user.getType().name().equals("TEACHER")) {
+            routingContext.response().putHeader("Content-Type", "text/html").sendFile(PUBLIC + "teacher-details.html");
+        } else if (user.getType().name().equals("STUDENT")) {
+            routingContext.response().putHeader("Content-Type", "text/html").sendFile(PUBLIC + "student-details.html");
+        }
+
+
     }
 
     private void handleTeacherCourse(RoutingContext routingContext) {
@@ -153,9 +168,9 @@ public class UserController implements Controller {
         }
 
         if (authentication.getType().toString().equals("TEACHER")) {
-            routingContext.response().putHeader("Content-Type", "text/html").sendFile(PUBLIC + "teacher.html");
+            routingContext.response().putHeader("Content-Type", "text/html").sendFile(PUBLIC + "teacher-mypage.html");
         } else if (authentication.getType().toString().equals("STUDENT")) {
-            routingContext.response().putHeader("Content-Type", "text/html").sendFile(PUBLIC + "student.html");
+            routingContext.response().putHeader("Content-Type", "text/html").sendFile(PUBLIC + "student-mypage.html");
         }
     }
 
