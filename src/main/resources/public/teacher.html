@@ -91,7 +91,7 @@
     <div id="qualificationAddToast" class="toast toast-add-qualification" role="alert" aria-live="assertive"
          aria-atomic="true"
          data-bs-autohide="false">
-        <div class="toast-body">
+        <div class="toast-body bg-light-subtle rounded-3 p-4">
             <div class="row">
                 <div class="col">
                     <div class="d-flex justify-content-between align-items-center mb-4">
@@ -101,10 +101,10 @@
                     <div class="p-3">
                         <div class="my-2">
                             <div class="form-floating">
-                                <input type="text" class="form-control-plaintext" id="name" name="name" placeholder="">
-                                <label class="fw-lighter d-flex" for="name">name
+                                <input type="text" class="form-control-plaintext" id="qualificationTitle" name="qualificationTitle" placeholder="">
+                                <label class="fw-lighter d-flex" for="qualificationTitle">Title
                                     <div class="ms-auto">
-                                        <div class="validation name mx-3 text-danger"
+                                        <div class="validation qualificationTitle mx-3 text-danger"
                                              style="display: none;">
                                         </div>
                                     </div>
@@ -124,14 +124,14 @@
     </div>
     <div id="courseAddToast" class="toast toast-add-course" role="alert" aria-live="assertive" aria-atomic="true"
          data-bs-autohide="false">
-        <div class="toast-body">
+        <div class="toast-body bg-light-subtle rounded-3 p-4">
             <div class="row">
                 <div class="col">
                     <div class="d-flex justify-content-between align-items-center mb-4">
                         <div class="fw-lighter fs-4">📚 Course</div>
                         <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
                     </div>
-                    <div class="p-3">
+                    <div class="p-1">
                         <div class="my-2">
                             <div class="form-floating">
                                 <input type="text" class="form-control-plaintext" id="name" name="name" placeholder="">
@@ -173,7 +173,7 @@
                             <div id="subjects" class="fs-6 mx-3 my-1">
                             </div>
                         </div>
-                        <div class="">
+                        <div>
                             <div class="fw-lighter d-flex mt-4">Schedule</div>
                             <div class="fs-6 mx-3 my-2" id="days">
                                 <div class="my-3">
@@ -215,9 +215,9 @@
 
     const username = localStorage.getItem('Authentication')
 
-    const nameInput = document.querySelector('input[name=name]');
+    const qualificationTitleInput = document.querySelector('input[name=qualificationTitle]');
     const qualificationInputsValidationStatus = {
-        name: false
+        qualificationTitle: false
     }
 
     const qualificationSubmitButton = document.getElementById('qualificationSubmitButton')
@@ -262,6 +262,8 @@
     const requiredCourseInputs = [
         nameInput, descriptionInput
     ]
+
+    const courseSubmitButton = document.getElementById('courseSubmitButton')
 
     requiredCourseInputs.forEach(input => {
         input.addEventListener('blur', function () {
@@ -335,7 +337,7 @@
                         });
                     }
                 }
-                flushSubmitButton()
+                flushCourseSubmitButton()
             });
         })
         courseAddToastBootstrap.show()
@@ -348,8 +350,6 @@
         description: false,
         subject: false,
     }
-
-    const courseSubmitButton = document.getElementById('courseSubmitButton')
 
     courseSubmitButton.addEventListener('click', function () {
 
@@ -391,8 +391,10 @@
             startingDayInput.value = ''
             closingDayInput.value = ''
 
-            removeErrorMessage();
-            removeSuccessMessage();
+            removeErrorMessage(nameInput);
+            removeErrorMessage(descriptionInput);
+            removeSuccessMessage(nameInput);
+            removeSuccessMessage(descriptionInput);
         })
     })
 
@@ -403,7 +405,7 @@
         qualificationAddToastBootstrap.show()
     })
 
-    nameInput.addEventListener('blur', function () {
+    qualificationTitleInput.addEventListener('blur', function () {
 
         removeErrorMessage(this);
         removeSuccessMessage(this);
@@ -417,14 +419,13 @@
             displaySuccessMessage(this);
             qualificationInputsValidationStatus[currentInputName] = true;
         }
-        flushSubmitButton()
-
+        flushQualificationSubmitButton()
     })
 
     qualificationSubmitButton.addEventListener('click', function () {
 
         const formData = {
-            name: nameInput.value.trim()
+            name: qualificationTitleInput.value.trim()
         }
 
         fetch('/teacher/qualification', {
@@ -586,15 +587,35 @@
         }
     }
 
-    function flushSubmitButton() {
-        console.log(qualificationInputsValidationStatus)
+    function disableButton(button) {
+        button.style.pointerEvents = "none";
+        button.classList.add('text-bg-disabled', 'text-secondary');
+        button.classList.remove('text-bg-primary');
+    }
 
+    function enableButton(button) {
+        button.removeAttribute('style')
+        button.classList.remove('text-bg-disabled', 'text-secondary')
+        button.classList.add('text-bg-light')
+    }
+
+    function flushQualificationSubmitButton() {
         const allValid = Object.values(qualificationInputsValidationStatus).every(status => status === true)
 
         if (allValid) {
             qualificationSubmitButton.classList.remove('disabled');
         } else {
             qualificationSubmitButton.classList.add('disabled');
+        }
+    }
+
+    function flushCourseSubmitButton() {
+        const allValid = Object.values(courseInputsValidationStatus).every(status => status === true)
+
+        if (allValid) {
+            courseSubmitButton.classList.remove('disabled');
+        } else {
+            courseSubmitButton.classList.add('disabled');
         }
     }
 
