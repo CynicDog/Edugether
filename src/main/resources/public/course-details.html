@@ -304,6 +304,7 @@
             })
         })
     }
+
     fetchAndRenderCourse(courseId);
 
     let isReviewFetching = false;
@@ -323,9 +324,10 @@
             if (data.reviews.length < 4) {
                 isReviewLast = true;
             }
-            document.getElementById('reviewsCountArea').textContent = data.reviews[0].reviewNumber;
-            data.reviews.forEach(review => {
-                document.getElementById('reviewsArea').innerHTML += `
+            if (data.reviews.length > 0) {
+                document.getElementById('reviewsCountArea').textContent = data.reviews[0].reviewNumber;
+                data.reviews.forEach(review => {
+                    document.getElementById('reviewsArea').innerHTML += `
                     <div class="bg-light rounded-3 p-3 my-3 shadow-sm">
                             <div class="row d-flex">
                                 <div class="col-lg-7">
@@ -338,16 +340,17 @@
                                 </div>
                                 <div class="col-lg-5">
                                     <div class="text-end">
-                                    <span type="button"
-                                          class="badge bg-dark-subtle border border-dark-subtle text-dark-emphasis rounded-pill reviewLikeButton"
-                                          data-review-id="${review.id}"
-                                          >
-                                        like(<span class="fw-medium">${review.likedCount}</span>)
-                                    </span>
-                                    <span type="button"
-                                          class="badge bg-dark-subtle border border-dark-subtle text-dark-emphasis rounded-pill">
-                                        follow
-                                    </span>
+                                        <span>TODO: #{liked by teacher}</span>
+                                        <span type="button"
+                                              class="badge bg-dark-subtle border border-dark-subtle text-dark-emphasis rounded-pill reviewLikeButton"
+                                              data-review-id="${review.id}"
+                                              >
+                                            like(<span class="fw-medium">${review.likedCount}</span>)
+                                        </span>
+                                        <span type="button"
+                                              class="badge bg-dark-subtle border border-dark-subtle text-dark-emphasis rounded-pill">
+                                            follow
+                                        </span>
                                     </div>
                                 </div>
                             </div>
@@ -361,7 +364,8 @@
                             </div>
                         </div>
                 `
-            })
+                })
+            }
             reviewsLoadingSpinner.style.display = 'none';
             isReviewFetching = false;
         })
@@ -382,7 +386,7 @@
         }
     }
 
-    document.addEventListener('click', function(event) {
+    document.addEventListener('click', function (event) {
         if (event.target.classList.contains('reviewLikeButton')) {
             const button = event.target;
             const reviewId = button.getAttribute('data-review-id')
@@ -398,8 +402,8 @@
                     // Unauthorized
                     window.location.href = "/login?error=denied"
                 }
-
                 if (response.ok) {
+                    button.querySelector('span').textContent = '';
                     showMessagingToast(response.statusText);
                     return response.text();
                 } else if (!response.ok) {
@@ -472,7 +476,7 @@
     }
 
     // if got back from authentication entry point, reload the page.
-    window.onpageshow = function(event) {
+    window.onpageshow = function (event) {
         if (event.persisted) {
             location.reload();
         }

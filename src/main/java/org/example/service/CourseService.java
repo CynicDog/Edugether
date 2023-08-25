@@ -138,7 +138,7 @@ public class CourseService {
         }
 
         try {
-            BigInteger likedCount = reviewRepository.getReviewLikedCount(reviewId, userId);
+            BigInteger likedCount = reviewRepository.getReviewLikedCount(reviewId);
             return likedCount;
         } catch (Exception e) {
             throw e;

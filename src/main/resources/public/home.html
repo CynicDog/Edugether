@@ -512,6 +512,13 @@
             })
         })
     })
+
+    // if got back from authentication entry point, reload the page.
+    window.onpageshow = function(event) {
+        if (event.persisted) {
+            location.reload();
+        }
+    };
 </script>
 </body>
 </html>

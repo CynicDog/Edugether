@@ -21,13 +21,12 @@ public class ReviewRepositoryImpl implements ReviewRepository {
     }
 
     @Override
-    public BigInteger getReviewLikedCount(Long reviewId, Long userId) {
+    public BigInteger getReviewLikedCount(Long reviewId) {
         return (BigInteger) JpaOperationUtil.apply(entityManagerFactory, em -> {
 
             try {
-                return em.createNativeQuery("select count(*) from LikedReviews where reviewId = :reviewId and userId = :userId")
+                return em.createNativeQuery("select count(*) from LikedReviews where reviewId = :reviewId")
                         .setParameter("reviewId", reviewId)
-                        .setParameter("userId", userId)
                         .getSingleResult();
             } catch (Exception e) {
                 logger.info("[ ReviewRepositoryImpl.getReviewLikedCount(Long reviewId, Long userId) ]: " + e.getMessage());
@@ -35,6 +34,8 @@ public class ReviewRepositoryImpl implements ReviewRepository {
             }
         });
     }
+
+
 
     @Override
     public List<ReviewProjection> getPaginatedReviewsByCourseIdAndCreateDateDescending(Long courseId,
