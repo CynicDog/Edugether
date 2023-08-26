@@ -162,7 +162,7 @@ public class CourseService {
         return courseRepository.getPaginatedCoursesByEnrolledDateByUsernameAscending(user.getId(), page, limit);
     }
 
-    public List<RegistrationProjection> getPaginatedCoursesByWisherUsernameDescending(String username, Integer page, Integer limit) {
+    public List<CourseProjection> getPaginatedCoursesByWisherUsernameDescending(String username, Integer page, Integer limit) {
 
         User user = userRepository.loadUserByUsername(username);
 

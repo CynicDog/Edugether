@@ -10,6 +10,7 @@ import io.vertx.ext.web.handler.StaticHandler;
 import io.vertx.ext.web.sstore.LocalSessionStore;
 import org.example.entity.academics.Course;
 import org.example.entity.users.User;
+import org.example.projection.CourseProjection;
 import org.example.projection.RegistrationProjection;
 import org.example.projection.UserProjection;
 import org.example.service.CourseService;
@@ -133,7 +134,7 @@ public class UserController implements Controller {
         Optional<Integer> page = Optional.of(Integer.parseInt(routingContext.request().getParam("page")));
         Optional<Integer> limit = Optional.of(Integer.parseInt(routingContext.request().getParam("limit")));
 
-        List<RegistrationProjection> courses = courseService.getPaginatedCoursesByWisherUsernameDescending(
+        List<CourseProjection> courses = courseService.getPaginatedCoursesByWisherUsernameDescending(
                 username,
                 page.orElse(0),
                 limit.orElse(5)

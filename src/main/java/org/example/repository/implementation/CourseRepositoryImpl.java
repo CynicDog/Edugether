@@ -11,6 +11,7 @@ import org.example.util.JpaOperationUtil;
 import org.jboss.logging.Logger;
 
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import java.util.List;
 
@@ -63,19 +64,23 @@ public class CourseRepositoryImpl implements CourseRepository {
     }
 
     @Override
-    public List<RegistrationProjection> getPaginatedCoursesByWisherUsernameDescending(Long studentId, Integer page, Integer limit) {
+    public List<CourseProjection> getPaginatedCoursesByWisherUsernameDescending(Long studentId, Integer page, Integer limit) {
         return JpaOperationUtil.apply(entityManagerFactory, em -> {
 
             int startIndex = page * limit;
-            TypedQuery<RegistrationProjection> query = em.createQuery(
-                    "select new org.example.projection.RegistrationProjection(" +
-                            "r.id, " +
-                            "r.course, " +
-                            "r.registrationStatus, " +
-                            "r.enrolledDate) " +
-                            "from Registration r " +
-                            "where r.course.wishers = :studentId order by r.enrolledDate asc ",
-                    RegistrationProjection.class);
+
+            Query query = em.createNativeQuery("select " +
+                    "c.id, " +
+                    "c.name, " +
+                    "c.startingDay, " +
+                    "c.endingDay, " +
+                    "c.subject, " +
+                    "u.username as teacherUsername " +
+                    "from Course c " +
+                    "inner join Teacher t on C.teacherId = t.id " +
+                    "inner join User u on t.id = u.id " +
+                    "inner join WishListCourses wlc on c.id = wlc.courseId " +
+                    "where wlc.studentId = :studentId ", "CourseProjectionMapping");
 
             query.setParameter("studentId", studentId);
 

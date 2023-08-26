@@ -22,7 +22,7 @@ public interface CourseRepository {
     void updateCourse(Course course);
     List<RegistrationProjection> getPaginatedCoursesByEnrolledDateByUsernameDescending(Long studentId, Integer page, Integer limit);
     List<RegistrationProjection> getPaginatedCoursesByEnrolledDateByUsernameAscending(Long studentId, Integer page, Integer limit);
-    List<RegistrationProjection> getPaginatedCoursesByWisherUsernameDescending(Long studentId, Integer page, Integer limit);
+    List<CourseProjection> getPaginatedCoursesByWisherUsernameDescending(Long studentId, Integer page, Integer limit);
     Registration getRegistrationByRegistrationId(Long registrationId);
     void updateRegistration(Registration registration);
 }

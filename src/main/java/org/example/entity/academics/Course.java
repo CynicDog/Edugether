@@ -2,6 +2,7 @@ package org.example.entity.academics;
 
 import org.example.entity.users.Student;
 import org.example.entity.users.Teacher;
+import org.example.projection.CourseProjection;
 import org.example.util.enums.COURSE_STATUS;
 import org.example.util.enums.SUBJECT_TITLE;
 import org.hibernate.annotations.CreationTimestamp;
@@ -9,6 +10,18 @@ import org.hibernate.annotations.CreationTimestamp;
 import javax.persistence.*;
 import java.util.*;
 
+@SqlResultSetMapping(
+        name = "CourseProjectionMapping",
+        classes = @ConstructorResult(
+                targetClass = CourseProjection.class,
+                columns = {
+                        @ColumnResult(name = "id", type = Long.class),
+                        @ColumnResult(name = "name", type = String.class),
+                        @ColumnResult(name = "startingDay", type = Date.class),
+                        @ColumnResult(name = "endingDay", type = Date.class),
+                        @ColumnResult(name = "subject", type = String.class),
+                        @ColumnResult(name = "teacherUsername", type = String.class)
+                }))
 @Entity
 public class Course {
 

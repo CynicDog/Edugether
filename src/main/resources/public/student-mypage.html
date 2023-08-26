@@ -47,22 +47,20 @@
         </div>
         <div class="col-md-8">
             <div class="pb-4 mb-4 border-bottom text-end">
-                <span class="badge bg-primary-subtle text-primary-emphasis rounded-pill">Enrolled on courses
-                    <span id="enrolledCoursesButton"
-                          type="button"
-                          class="badge bg-light-subtle border border-light-subtle text-light-emphasis rounded-pill">NEWEST</span>
+                <span type="button"
+                      class="badge bg-primary-subtle text-primary-emphasis rounded-pill enrolledCoursesButton">Enrolled
+                    <span type="button"
+                          class="badge bg-light-subtle border border-light-subtle text-light-emphasis rounded-pill enrolledCoursesButton">NEWEST</span>
                     <span id="enrolledCoursesOldestButton"
                           type="button"
                           class="badge bg-light-subtle border border-light-subtle text-light-emphasis rounded-pill">OLDEST</span>
                 </span>
                 <span id="popularCoursesButton" type="button"
-                      class="badge bg-info-subtle text-info-emphasis rounded-pill">Wished for courses</span>
-                <span id="acclaimedCoursesButton" type="button"
-                      class="badge bg-success-subtle text-success-emphasis rounded-pill">button3</span>
+                      class="badge bg-success-subtle text-success-emphasis rounded-pill">Wished</span>
                 <span id="mixedCoursesButton" type="button"
-                      class="badge bg-warning-subtle text-warning-emphasis rounded-pill">button4</span>
+                      class="badge bg-warning-subtle text-warning-emphasis rounded-pill">button3</span>
                 <span id="criticizedCoursesButton" type="button"
-                      class="badge bg-danger-subtle text-danger-emphasis rounded-pill">button5</span>
+                      class="badge bg-danger-subtle text-danger-emphasis rounded-pill">button4</span>
             </div>
             <div>
                 <div id="contentOutputArea" class="row">
@@ -236,8 +234,10 @@
             if (data.length < 5) {
                 isCourseLast = true;
             }
-            data.courses.forEach(registration => {
-                contentOutputArea.innerHTML += `
+            data.courses.forEach(datum => {
+                // if `course` is not flattened
+                if (datum.registrationStatus) {
+                    contentOutputArea.innerHTML += `
                     <div class="row">
                         <div class="col my-3">
                             <div class="card card-cover h-100 overflow-hidden text-bg-dark rounded-4 shadow-lg">
@@ -246,33 +246,33 @@
                                         <div class="row d-flex justify-content-center align-items-center">
                                             <div class="col-md-7">
                                                 <div class="badge bg-primary-subtle border border-primary-subtle text-primary-emphasis rounded-pill me-auto my-2">
-                                                    ${registration.course.subject}
+                                                    ${datum.course.subject}
                                                 </div>
                                             </div>
                                             <div class="col-md-5 text-end fw-lighter">
                                                 <span type="button"
-                                                    data-registration-id="${registration.id}"
+                                                    data-registration-id="${datum.id}"
                                                     class="badge bg-light-subtle border border-light-subtle text-light-emphasis rounded-pill mx-1 my-2 registrationModify">
-                                                    ${registration.registrationStatus} ${getRegistrationStatusEmoji(registration.registrationStatus)}
+                                                    ${datum.registrationStatus} ${getRegistrationStatusEmoji(datum.registrationStatus)}
                                                 </span>
                                             </div>
                                         </div>
                                     </div>
                                     <div>
-                                        <h3 type="button" class="pt-3 display-6 lh-1 fw-bold courseDetailsEntry" data-course-id="${registration.course.id}"> ${registration.course.name}</h3>
+                                        <h3 type="button" class="pt-3 display-6 lh-1 fw-bold courseDetailsEntry" data-course-id="${datum.course.id}"> ${datum.course.name}</h3>
                                         <ul class="d-flex list-unstyled mt-auto">
                                             <li class="fw-lighter my-3">
                                             Enrolled date:
                                                 <span class="fw-light">
-                                                    ${formatDate(registration.enrolledDate)}
+                                                    ${formatDate(datum.enrolledDate)}
                                                 </span>
                                             </li>
                                             <li class="ms-auto d-flex align-items-center me-3">
-                                                <small> by ${registration.course.teacher.username} </small>
+                                                <small> by ${datum.course.teacher.username} </small>
                                             </li>
                                             <li class="d-flex align-items-center">
-                                                <small> ${formatDate(registration.course.startingDay)} ~
-                                                    ${formatDate(registration.course.endingDay)} </small>
+                                                <small> ${formatDate(datum.course.startingDay)} ~
+                                                    ${formatDate(datum.course.endingDay)} </small>
                                             </li>
                                         </ul>
                                     </div>
@@ -281,6 +281,43 @@
                         </div>
                     </div>
                 `
+                }
+                // if `course` is flattened
+                else {
+                    contentOutputArea.innerHTML += `
+                    <div class="row">
+                        <div class="col my-3">
+                            <div class="card card-cover h-100 overflow-hidden text-bg-dark rounded-4 shadow-lg">
+                                <div class="d-flex flex-column h-100 p-5 pb-3 text-white text-shadow-1">
+                                    <div>
+                                        <div class="row d-flex justify-content-center align-items-center">
+                                            <div class="col-md-7">
+                                                <div class="badge bg-primary-subtle border border-primary-subtle text-primary-emphasis rounded-pill me-auto my-2">
+                                                    ${datum.subject}
+                                                </div>
+                                            </div>
+                                            <div class="col-md-5 text-end fw-lighter">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <h3 type="button" class="pt-3 display-6 lh-1 fw-bold courseDetailsEntry" data-course-id="${datum.id}"> ${datum.name}</h3>
+                                        <ul class="d-flex list-unstyled mt-auto">
+                                            <li class="ms-auto d-flex align-items-center me-3">
+                                                <small> by ${datum.teacherUsername} </small>
+                                            </li>
+                                            <li class="d-flex align-items-center">
+                                                <small> ${formatDate(datum.startingDay)} ~
+                                                    ${formatDate(datum.endingDay)} </small>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `
+                }
                 isCourseFetching = false;
             })
             contentLoadingSpinner.style.display = 'none';
@@ -290,7 +327,7 @@
     // initial fetching
     fetchAndRenderCourses(fetchingOption, pageOnCourses, fetchingDirection)
 
-    document.getElementById('enrolledCoursesButton').addEventListener('click', function () {
+    document.querySelector('.enrolledCoursesButton').addEventListener('click', function () {
 
         contentOutputArea.innerHTML = '';
 
@@ -332,12 +369,13 @@
     }
 
     document.addEventListener('click', function (event) {
-        if (event.target.classList.contains('courseDetailsEntry')) {
-            const button = event.target;
-            const courseId = button.getAttribute('data-course-id');
+            if (event.target.classList.contains('courseDetailsEntry')) {
+                const button = event.target;
+                const courseId = button.getAttribute('data-course-id');
 
-            window.location.href = `course/details-page?courseId=${courseId}`
-        }}
+                window.location.href = `course/details-page?courseId=${courseId}`
+            }
+        }
     )
 
     document.addEventListener('click', function (event) {
