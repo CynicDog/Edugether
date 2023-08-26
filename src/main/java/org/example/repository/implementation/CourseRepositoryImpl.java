@@ -5,6 +5,7 @@ import org.example.entity.academics.Registration;
 import org.example.entity.academics.Review;
 import org.example.entity.users.Student;
 import org.example.projection.CourseProjection;
+import org.example.projection.RegistrationProjection;
 import org.example.repository.CourseRepository;
 import org.example.util.JpaOperationUtil;
 import org.jboss.logging.Logger;
@@ -20,6 +21,20 @@ public class CourseRepositoryImpl implements CourseRepository {
 
     public CourseRepositoryImpl(EntityManagerFactory entityManagerFactory) {
         this.entityManagerFactory = entityManagerFactory;
+    }
+
+    @Override
+    public void updateRegistration(Registration registration) {
+        JpaOperationUtil.consume(entityManagerFactory, em -> {
+            em.merge(registration);
+        });
+    }
+
+    @Override
+    public Registration getRegistrationByRegistrationId(Long registrationId) {
+        return JpaOperationUtil.apply(entityManagerFactory, em -> {
+            return em.find(Registration.class, registrationId);
+        });
     }
 
     @Override
@@ -48,11 +63,82 @@ public class CourseRepositoryImpl implements CourseRepository {
     }
 
     @Override
+    public List<RegistrationProjection> getPaginatedCoursesByWisherUsernameDescending(Long studentId, Integer page, Integer limit) {
+        return JpaOperationUtil.apply(entityManagerFactory, em -> {
+
+            int startIndex = page * limit;
+            TypedQuery<RegistrationProjection> query = em.createQuery(
+                    "select new org.example.projection.RegistrationProjection(" +
+                            "r.id, " +
+                            "r.course, " +
+                            "r.registrationStatus, " +
+                            "r.enrolledDate) " +
+                            "from Registration r " +
+                            "where r.course.wishers = :studentId order by r.enrolledDate asc ",
+                    RegistrationProjection.class);
+
+            query.setParameter("studentId", studentId);
+
+            query.setFirstResult(startIndex);
+            query.setMaxResults(limit);
+
+            return query.getResultList();
+        });
+    }
+
+    @Override
+    public List<RegistrationProjection> getPaginatedCoursesByEnrolledDateByUsernameAscending(Long studentId, Integer page, Integer limit) {
+        return JpaOperationUtil.apply(entityManagerFactory, em -> {
+
+            int startIndex = page * limit;
+            TypedQuery<RegistrationProjection> query = em.createQuery(
+                    "select new org.example.projection.RegistrationProjection(" +
+                            "r.id, " +
+                            "r.course, " +
+                            "r.registrationStatus, " +
+                            "r.enrolledDate) " +
+                            "from Registration r where r.student.id = :studentId order by r.enrolledDate asc ",
+                    RegistrationProjection.class);
+
+            query.setParameter("studentId", studentId);
+
+            query.setFirstResult(startIndex);
+            query.setMaxResults(limit);
+
+            return query.getResultList();
+        });
+    }
+
+    @Override
+    public List<RegistrationProjection> getPaginatedCoursesByEnrolledDateByUsernameDescending(Long studentId, Integer page, Integer limit) {
+        return JpaOperationUtil.apply(entityManagerFactory, em -> {
+
+            int startIndex = page * limit;
+            TypedQuery<RegistrationProjection> query = em.createQuery(
+                    "select new org.example.projection.RegistrationProjection(" +
+                            "r.id, " +
+                            "r.course, " +
+                            "r.registrationStatus, " +
+                            "r.enrolledDate) " +
+                            "from Registration r where r.student.id = :studentId order by r.enrolledDate desc",
+                    RegistrationProjection.class);
+
+            query.setParameter("studentId", studentId);
+
+            query.setFirstResult(startIndex);
+            query.setMaxResults(limit);
+
+            return query.getResultList();
+        });
+    }
+
+    @Override
     public List<Course> getPaginatedCoursesByPublishedDateAndByUsernameDescending(String username, Integer page, Integer limit) {
         return JpaOperationUtil.apply(entityManagerFactory, em -> {
 
             int startIndex = page * limit;
-            TypedQuery<Course> query = em.createQuery("select distinct c from Course c left join fetch c.wishers where c.teacher.username = :username order by c.publishedDate desc", Course.class);
+            TypedQuery<Course> query = em.createQuery(
+                    "select distinct c from Course c left join fetch c.wishers where c.teacher.username = :username order by c.publishedDate desc", Course.class);
 
             query.setParameter("username", username);
 
@@ -69,7 +155,14 @@ public class CourseRepositoryImpl implements CourseRepository {
 
             int startIndex = page * limit;
 
-            TypedQuery<CourseProjection> query = em.createQuery("select new org.example.projection.CourseProjection(" + "c.id, " + "c.name, " + "c.description, " + "c.startingDay, " + "c.endingDay, " + "c.subject, " + "teacher.username) from Course c " + "order by c.publishedDate asc", CourseProjection.class);
+            TypedQuery<CourseProjection> query = em.createQuery("select new org.example.projection.CourseProjection(" +
+                    "c.id, " +
+                    "c.name, " +
+                    "c.description, " +
+                    "c.startingDay, " +
+                    "c.endingDay, " +
+                    "c.subject, " +
+                    "teacher.username) from Course c " + "order by c.publishedDate asc", CourseProjection.class);
 
             query.setFirstResult(startIndex);
             query.setMaxResults(limit);
@@ -84,7 +177,14 @@ public class CourseRepositoryImpl implements CourseRepository {
 
             int startIndex = page * limit;
 
-            TypedQuery<CourseProjection> query = em.createQuery("select new org.example.projection.CourseProjection(" + "c.id, " + "c.name, " + "c.description, " + "c.startingDay, " + "c.endingDay, " + "c.subject, " + "teacher.username) from Course c " + "order by c.publishedDate desc", CourseProjection.class);
+            TypedQuery<CourseProjection> query = em.createQuery("select new org.example.projection.CourseProjection(" +
+                    "c.id, " +
+                    "c.name, " +
+                    "c.description, " +
+                    "c.startingDay, " +
+                    "c.endingDay, " +
+                    "c.subject, " +
+                    "teacher.username) from Course c " + "order by c.publishedDate desc", CourseProjection.class);
 
             query.setFirstResult(startIndex);
             query.setMaxResults(limit);
@@ -116,7 +216,8 @@ public class CourseRepositoryImpl implements CourseRepository {
     public List<Student> getStudentsByRegistration_CourseId(Long courseId) {
         return JpaOperationUtil.apply(entityManagerFactory, em -> {
 
-            return em.createQuery("select r.student from Registration r where r.course.id = :courseId", Student.class).setParameter("courseId", courseId).getResultList();
+            return em.createQuery(
+                    "select r.student from Registration r where r.course.id = :courseId and r.registrationStatus = 'ENROLLED'", Student.class).setParameter("courseId", courseId).getResultList();
         });
     }
 
@@ -125,6 +226,17 @@ public class CourseRepositoryImpl implements CourseRepository {
         try {
             JpaOperationUtil.consume(entityManagerFactory, em -> {
                 em.merge(review);
+            });
+        } catch (Exception e) {
+            throw e;
+        }
+    }
+
+    @Override
+    public void updateCourse(Course course) {
+        try {
+            JpaOperationUtil.consume(entityManagerFactory, em -> {
+                em.merge(course);
             });
         } catch (Exception e) {
             throw e;

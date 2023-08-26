@@ -213,7 +213,8 @@
             });
     })
 
-    const username = localStorage.getItem('Authentication')
+    const params = new URLSearchParams(window.location.search);
+    const username = params.get("username")
 
     const qualificationTitleInput = document.querySelector('input[name=qualificationTitle]');
     const qualificationInputsValidationStatus = {
@@ -233,12 +234,7 @@
     const contentLoadingSpinner = document.getElementById('contentLoadingSpinner');
 
     fetch(`/teacher?username=${username}`)
-        .then(response => {
-
-            if (response.ok) {
-                return response.json()
-            }
-        })
+        .then(response => response.json())
         .then(data => {
             document.getElementById('usernameOutputArea').textContent = data.user.username;
             document.getElementById('emailOutputArea').textContent = data.user.email;
@@ -449,7 +445,7 @@
     })
 
     const getCourses = page => {
-        return fetch(`/teacher/course?page=${page}&limit=3`).then(response => response.json());
+        return fetch(`/teacher/course?username=${username}&page=${page}&limit=3`).then(response => response.json());
     }
 
     function fetchAndRenderCourses(page) {

@@ -5,6 +5,7 @@ import org.example.entity.academics.Registration;
 import org.example.entity.academics.Review;
 import org.example.entity.users.Student;
 import org.example.projection.CourseProjection;
+import org.example.projection.RegistrationProjection;
 
 import java.util.List;
 
@@ -18,5 +19,11 @@ public interface CourseRepository {
     boolean isRegistered(Long studentId, Long courseId);
     List<Student> getStudentsByRegistration_CourseId(Long courseId);
     void updateReview(Review review);
+    void updateCourse(Course course);
+    List<RegistrationProjection> getPaginatedCoursesByEnrolledDateByUsernameDescending(Long studentId, Integer page, Integer limit);
+    List<RegistrationProjection> getPaginatedCoursesByEnrolledDateByUsernameAscending(Long studentId, Integer page, Integer limit);
+    List<RegistrationProjection> getPaginatedCoursesByWisherUsernameDescending(Long studentId, Integer page, Integer limit);
+    Registration getRegistrationByRegistrationId(Long registrationId);
+    void updateRegistration(Registration registration);
 }
 

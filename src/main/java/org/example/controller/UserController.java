@@ -10,7 +10,7 @@ import io.vertx.ext.web.handler.StaticHandler;
 import io.vertx.ext.web.sstore.LocalSessionStore;
 import org.example.entity.academics.Course;
 import org.example.entity.users.User;
-import org.example.projection.CourseProjection;
+import org.example.projection.RegistrationProjection;
 import org.example.projection.UserProjection;
 import org.example.service.CourseService;
 import org.example.service.UserService;
@@ -59,27 +59,40 @@ public class UserController implements Controller {
 
             router.get("/teacher").handler(this::handleTeacher);
             router.get("/teacher/course").handler(this::handleTeacherCourse);
+            router.get("/student/enrolled-course").handler(this::handleStudentEnrolledCourse);
+            router.get("/student/wished-course").handler(this::handleStudentWishedCourse);
 
-            router.get("/user-details").handler(this::handleTeacherDetails);
+            router.get("/student").handler(this::handleStudent);
+
+            router.get("/user-details").handler(this::handleUserDetails);
         }
         {   // POST handlers
             router.post("/signup/student").handler(BodyHandler.create()).handler(this::handleStudentSignup);
             router.post("/signup/teacher").handler(BodyHandler.create()).handler(this::handleTeacherSignup);
             router.post("/teacher/qualification").handler(BodyHandler.create()).handler(this::handleTeacherQualification);
+            router.post("/student/interest").handler(BodyHandler.create()).handler(this::handleStudentInterest);
+            router.post("/registration/modify-status").handler(this::handleRegistrationModifyStatus);
         }
     }
 
-    private void handleTeacherDetails(RoutingContext routingContext) {
-        String username = routingContext.request().getParam("username");
+    private void handleRegistrationModifyStatus(RoutingContext routingContext) {
 
+        Long registrationId = Long.parseLong(routingContext.request().getParam("registrationId"));
+
+        String modifiedStatus = courseService.modifyRegistrationStatus(registrationId);
+
+        routingContext.response().setStatusCode(200).end(modifiedStatus);
+    }
+
+    private void handleUserDetails(RoutingContext routingContext) {
+        String username = routingContext.request().getParam("username");
         User user = userService.getUserByUsername(username);
+
         if (user.getType().name().equals("TEACHER")) {
             routingContext.response().putHeader("Content-Type", "text/html").sendFile(PUBLIC + "teacher-details.html");
         } else if (user.getType().name().equals("STUDENT")) {
             routingContext.response().putHeader("Content-Type", "text/html").sendFile(PUBLIC + "student-details.html");
         }
-
-
     }
 
     private void handleTeacherCourse(RoutingContext routingContext) {
@@ -88,27 +101,79 @@ public class UserController implements Controller {
         try {
             TimeUnit.SECONDS.sleep(1);
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            logger.info(e.getMessage());
         }
 
-        UserProjection authentication = routingContext.session().get("Authentication");
-
-        if (authentication == null) {
-            routingContext.response().setStatusCode(401).end();
-            return;
-        } else if (!authentication.getType().toString().equals("TEACHER")) {
-            routingContext.response().setStatusCode(403).end();
-            return;
-        }
+        String username = routingContext.request().getParam("username");
 
         Optional<Integer> page = Optional.of(Integer.parseInt(routingContext.request().getParam("page")));
         Optional<Integer> limit = Optional.of(Integer.parseInt(routingContext.request().getParam("limit")));
 
         List<Course> courses = courseService.getPaginatedCoursesByPublishedDateAndByUsernameDescending(
-                authentication.getUsername(),
+                username,
                 page.orElse(0),
                 limit.orElse(3)
         );
+
+        JsonObject data = new JsonObject().put("courses", courses);
+
+        routingContext.response().setStatusCode(200).end(data.encode());
+    }
+
+    private void handleStudentWishedCourse(RoutingContext routingContext) {
+
+        try {
+            TimeUnit.SECONDS.sleep(1);
+        } catch (InterruptedException e) {
+            logger.info(e.getMessage());
+        }
+
+        String username = routingContext.request().getParam("username");
+
+        Optional<Integer> page = Optional.of(Integer.parseInt(routingContext.request().getParam("page")));
+        Optional<Integer> limit = Optional.of(Integer.parseInt(routingContext.request().getParam("limit")));
+
+        List<RegistrationProjection> courses = courseService.getPaginatedCoursesByWisherUsernameDescending(
+                username,
+                page.orElse(0),
+                limit.orElse(5)
+        );
+
+        JsonObject data = new JsonObject().put("courses", courses);
+
+        routingContext.response().setStatusCode(200).end(data.encode());
+    }
+
+    private void handleStudentEnrolledCourse(RoutingContext routingContext) {
+
+        try {
+            TimeUnit.SECONDS.sleep(1);
+        } catch (InterruptedException e) {
+            logger.info(e.getMessage());
+        }
+
+        String username = routingContext.request().getParam("username");
+
+        Optional<Integer> page = Optional.of(Integer.parseInt(routingContext.request().getParam("page")));
+        Optional<Integer> limit = Optional.of(Integer.parseInt(routingContext.request().getParam("limit")));
+
+        Optional<String> direction = Optional.of(routingContext.request().getParam("direction"));
+
+        List<RegistrationProjection> courses = null;
+
+        if (direction.get().equals("asc")) {
+            courses = courseService.getPaginatedCoursesByEnrolledDateByUsernameAscending(
+                    username,
+                    page.orElse(0),
+                    limit.orElse(5)
+            );
+        } else {
+            courses = courseService.getPaginatedCoursesByEnrolledDateByUsernameDescending(
+                    username,
+                    page.orElse(0),
+                    limit.orElse(5)
+            );
+        }
 
         JsonObject data = new JsonObject().put("courses", courses);
 
@@ -133,31 +198,52 @@ public class UserController implements Controller {
 
         userService.registerQualification(authentication.getUsername(), qualification);
 
-        routingContext.response().setStatusCode(200).setStatusMessage("Successfully registered your qualification :) Reload to see!").end();
+        routingContext.response().setStatusCode(200).setStatusMessage("Successfully registered :) Reload to see!").end();
     }
 
-    // Authenticated
-    private void handleTeacher(RoutingContext routingContext) {
+    private void handleStudentInterest(RoutingContext routingContext) {
 
         UserProjection authentication = routingContext.session().get("Authentication");
 
         if (authentication == null) {
             routingContext.response().setStatusCode(401).end();
             return;
-        } else if (!authentication.getType().toString().equals("TEACHER")) {
+        } else if (!authentication.getType().toString().equals("STUDENT")) {
             routingContext.response().setStatusCode(403).end();
             return;
         }
 
-        User user = userService.getUserByUsername(authentication.getUsername());
+        JsonObject interestCommand = routingContext.getBodyAsJson();
+        String interest = interestCommand.getString("name");
 
-        JsonObject userCommand = new JsonObject();
-        userCommand.put("user", user);
+        userService.registerInterest(authentication.getUsername(), interest);
 
-        routingContext.response().setStatusCode(200).end(userCommand.encode());
+        routingContext.response().setStatusCode(200).setStatusMessage("Successfully registered :) Reload to see!").end();
+
     }
 
-    // Authenticated
+    private void handleTeacher(RoutingContext routingContext) {
+
+        String username = routingContext.request().getParam("username");
+        User user = userService.getUserByUsername(username);
+
+        JsonObject data = new JsonObject();
+        data.put("user", user);
+
+        routingContext.response().setStatusCode(200).end(data.encode());
+    }
+
+    private void handleStudent(RoutingContext routingContext) {
+
+        String username = routingContext.request().getParam("username");
+        User user = userService.getUserByUsername(username);
+
+        JsonObject data = new JsonObject();
+        data.put("user", user);
+
+        routingContext.response().setStatusCode(200).end(data.encode());
+    }
+
     private void handleMyPage(RoutingContext routingContext) {
 
         UserProjection authentication = routingContext.session().get("Authentication");

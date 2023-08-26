@@ -519,6 +519,34 @@
         });
 
         document.addEventListener('click', function(event) {
+            if (event.target.classList.contains('wishCourseButton')) {
+                const button = event.target;
+                const courseId = button.getAttribute('data-course-id');
+
+                fetch(`course/wish?courseId=${courseId}`, {
+                    method: "POST"
+                }).then(response => {
+                    if (response.status === 401) {
+                        // Authentication entry point
+                        window.location.href = "/login?error=anonymous"
+                    }
+                    if (response.status === 403) {
+                        // Unauthorized
+                        window.location.href = "/login?error=denied"
+                    }
+
+                    if (response.ok) {
+                        showMessagingToast(response.statusText);
+                        new bootstrap.Toast(document.getElementById('courseAddToast')).hide();
+                    } else if (!response.ok) {
+                        showMessagingToast(response.statusText);
+                        new bootstrap.Toast(document.getElementById('courseAddToast')).hide();
+                    }
+                })
+            }
+        })
+
+        document.addEventListener('click', function(event) {
             if (event.target.classList.contains('courseDetailsEntry')) {
                 const button = event.target;
                 const courseId = button.getAttribute('data-course-id');

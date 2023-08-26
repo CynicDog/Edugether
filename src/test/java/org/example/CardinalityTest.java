@@ -47,11 +47,11 @@ public class CardinalityTest {
     public void studentSocietyEventCardinality() {
 
         Student student1 = new Student("miles", "1234", "miles@test.com", TYPE.STUDENT);
-        student1.setInterests(Arrays.asList("Mathematics", "Philosophy", "Physics"));
+//        student1.setInterests(Arrays.asList("Mathematics", "Philosophy", "Physics"));
         em.persist(student1);
 
         Student student2 = new Student("oscar", "1234", "oscar@test.com", TYPE.STUDENT);
-        student2.setInterests(Arrays.asList("Computer Science", "Music", "Art"));
+//        student2.setInterests(Arrays.asList("Computer Science", "Music", "Art"));
         em.persist(student2);
 
         Society society = new Society("Math and Science Enthusiasts");

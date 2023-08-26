@@ -18,7 +18,9 @@
             </ul>
             <ul class="navbar-nav mx-4">
                 <li class="nav-item">
-                    <a type="button" class="nav-link" href="/my-page">👨🏻‍💻 My Page</a>
+                    <a type="button" class="nav-link" onclick="function myPage() {
+                        window.location.href = `/my-page?username=${localStorage.getItem('Authentication')}`
+                    } myPage()">👨🏻‍💻 My Page</a>
                 </li>
                 <li class="nav-item">
                     <a type="button" class="nav-link" onclick="function sessionClear() {

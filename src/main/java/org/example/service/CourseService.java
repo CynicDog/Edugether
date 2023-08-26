@@ -8,15 +8,18 @@ import org.example.entity.users.Student;
 import org.example.entity.users.Teacher;
 import org.example.entity.users.User;
 import org.example.projection.CourseProjection;
+import org.example.projection.RegistrationProjection;
 import org.example.projection.ReviewProjection;
 import org.example.repository.CourseRepository;
 import org.example.repository.ReviewRepository;
 import org.example.repository.UserRepository;
+import org.example.util.enums.REGISTRATION_STATUS;
 import org.example.util.enums.REVIEW_SENTIMENT;
 import org.jboss.logging.Logger;
 
 import java.math.BigInteger;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.List;
 
 public class CourseService {
@@ -79,7 +82,28 @@ public class CourseService {
         try {
             courseRepository.insertRegistration(registration);
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.info("[ enrollOnCourse(String username, Long courseId) ]: " + e.getMessage());
+            throw e;
+        }
+    }
+
+    public void wishForCourse(String username, Long courseId) {
+
+        Student student = userRepository.loadStudentByUsername(username);
+        Course course = courseRepository.getCourseById(courseId);
+
+        // TODO: `ManyToMany` unique constraints exception throwing fails ..... why?
+        if (course.getWishers().stream().anyMatch(wisher -> wisher.getUsername().equals(username))) {
+            logger.info("course.getWishers().contains(student)");
+            throw new IllegalStateException("Already wished for.");
+        }
+
+        course.addWisher(student);
+
+        try {
+            courseRepository.updateCourse(course);
+        } catch (Exception e) {
+            logger.info("[ wishForCourse(String username, Long courseId) ]: " + e.getMessage());
             throw e;
         }
     }
@@ -124,11 +148,37 @@ public class CourseService {
         return reviewRepository.getPaginatedReviewsByCourseIdAndCreateDateDescending(courseId, page, limit);
     }
 
+    public List<RegistrationProjection> getPaginatedCoursesByEnrolledDateByUsernameDescending(String username, Integer page, Integer limit) {
+
+        User user = userRepository.loadUserByUsername(username);
+
+        return courseRepository.getPaginatedCoursesByEnrolledDateByUsernameDescending(user.getId(), page, limit);
+    }
+
+    public List<RegistrationProjection> getPaginatedCoursesByEnrolledDateByUsernameAscending(String username, Integer page, Integer limit) {
+
+        User user = userRepository.loadUserByUsername(username);
+
+        return courseRepository.getPaginatedCoursesByEnrolledDateByUsernameAscending(user.getId(), page, limit);
+    }
+
+    public List<RegistrationProjection> getPaginatedCoursesByWisherUsernameDescending(String username, Integer page, Integer limit) {
+
+        User user = userRepository.loadUserByUsername(username);
+
+        return courseRepository.getPaginatedCoursesByWisherUsernameDescending(user.getId(), page, limit);
+    }
+
     public BigInteger registerLike(Long reviewId, Long userId) {
 
         User user = userRepository.getUserById(userId);
-
         Review review = reviewRepository.getReviewById(reviewId);
+
+        // TODO: `ManyToMany` unique constraints exception throwing fails ..... why?
+        if (review.getLikers().stream().anyMatch(liker -> liker.getUsername().equals(user.getUsername()))) {
+            throw new IllegalStateException("Already liked.");
+        }
+
         review.addLikers(user);
 
         try {
@@ -143,5 +193,19 @@ public class CourseService {
         } catch (Exception e) {
             throw e;
         }
+    }
+
+    public String modifyRegistrationStatus(Long registrationId) {
+
+        Registration registration = courseRepository.getRegistrationByRegistrationId(registrationId);
+
+        REGISTRATION_STATUS modified = (registration.getRegistrationStatus() == REGISTRATION_STATUS.ENROLLED) ?
+                REGISTRATION_STATUS.ABORTED :
+                REGISTRATION_STATUS.ENROLLED;
+
+        registration.setRegistrationStatus(modified);
+        courseRepository.updateRegistration(registration);
+
+        return modified.toString();
     }
 }

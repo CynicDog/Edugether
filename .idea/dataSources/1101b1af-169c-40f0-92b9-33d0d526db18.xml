@@ -1934,43 +1934,40 @@ courseId</ColNames>
     <key id="516" parent="378" name="UK_jreodf78a7pl5qidfh43axdfb">
       <UnderlyingIndexName>UK_jreodf78a7pl5qidfh43axdfb</UnderlyingIndexName>
     </key>
-    <column id="517" parent="379" name="studentId">
+    <column id="517" parent="379" name="courseId">
       <DasType>bigint|0s</DasType>
       <NotNull>1</NotNull>
       <Position>1</Position>
     </column>
-    <column id="518" parent="379" name="courseId">
+    <column id="518" parent="379" name="studentId">
       <DasType>bigint|0s</DasType>
       <NotNull>1</NotNull>
       <Position>2</Position>
     </column>
-    <foreign-key id="519" parent="379" name="FK1b022gdb9v0rnuppyu8uxw7gi">
-      <ColNames>studentId</ColNames>
-      <RefColNames>id</RefColNames>
-      <RefTableName>Student</RefTableName>
-    </foreign-key>
-    <foreign-key id="520" parent="379" name="FKn570kaxa62mxr456wlf5birr5">
-      <ColNames>studentId</ColNames>
-      <RefColNames>id</RefColNames>
-      <RefTableName>Course</RefTableName>
-    </foreign-key>
-    <foreign-key id="521" parent="379" name="FK18tgp1xqxs4lv4c7cdwy8cek6">
+    <foreign-key id="519" parent="379" name="FK18tgp1xqxs4lv4c7cdwy8cek6">
       <ColNames>courseId</ColNames>
       <RefColNames>id</RefColNames>
       <RefTableName>Course</RefTableName>
     </foreign-key>
-    <foreign-key id="522" parent="379" name="FKljbjcxq0xsdguhh47n5295ury">
-      <ColNames>courseId</ColNames>
+    <foreign-key id="520" parent="379" name="FK1b022gdb9v0rnuppyu8uxw7gi">
+      <ColNames>studentId</ColNames>
       <RefColNames>id</RefColNames>
       <RefTableName>Student</RefTableName>
     </foreign-key>
-    <index id="523" parent="379" name="FK1b022gdb9v0rnuppyu8uxw7gi">
+    <index id="521" parent="379" name="PRIMARY">
+      <ColNames>courseId
+studentId</ColNames>
+      <Type>btree</Type>
+      <Unique>1</Unique>
+    </index>
+    <index id="522" parent="379" name="FK1b022gdb9v0rnuppyu8uxw7gi">
       <ColNames>studentId</ColNames>
       <Type>btree</Type>
     </index>
-    <index id="524" parent="379" name="FK18tgp1xqxs4lv4c7cdwy8cek6">
-      <ColNames>courseId</ColNames>
-      <Type>btree</Type>
-    </index>
+    <key id="523" parent="379" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <Primary>1</Primary>
+      <UnderlyingIndexName>PRIMARY</UnderlyingIndexName>
+    </key>
   </database-model>
 </dataSource>

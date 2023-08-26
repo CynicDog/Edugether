@@ -45,7 +45,6 @@ public class Teacher extends User{
     }
 
     public void addQualification(String qualification) {
-
         if (this.qualifications == null) {
             this.qualifications = new HashSet<>();
         }

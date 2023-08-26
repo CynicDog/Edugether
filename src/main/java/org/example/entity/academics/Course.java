@@ -144,4 +144,13 @@ public class Course {
     public void setSubject(SUBJECT_TITLE subject) {
         this.subject = subject;
     }
+
+    public void addWisher(Student student) {
+
+        if (this.wishers == null) {
+            this.wishers = new HashSet<>();
+        }
+
+        wishers.add(student);
+    }
 }

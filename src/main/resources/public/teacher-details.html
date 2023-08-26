@@ -76,15 +76,25 @@
 <script>
     document.addEventListener("DOMContentLoaded", function () {
 
-        fetch('/nav-authenticated')
-            .then(response => response.text())
-            .then(data => {
-                document.getElementById('navbar-placeholder').innerHTML = data;
-            });
+        let username = localStorage.getItem('Authentication')
+
+        if (username !== null) {
+            fetch(`/nav-authenticated`)
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById('navbar-placeholder').innerHTML = data;
+                });
+        } else {
+            fetch(`/nav-anonymous`)
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById('navbar-placeholder').innerHTML = data;
+                })
+        }
     })
 
     const params = new URLSearchParams(window.location.search);
-    const username = params.get("username")
+    username = params.get("username")
 
     let currentFetchingOptions = null
 
@@ -117,7 +127,7 @@
         });
 
     const getCourses = page => {
-        return fetch(`/teacher/course?page=${page}&limit=3`).then(response => response.json());
+        return fetch(`/teacher/course?username=${username}&page=${page}&limit=3`).then(response => response.json());
     }
 
     function fetchAndRenderCourses(page) {

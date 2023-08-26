@@ -62,6 +62,7 @@ public class CourseController implements Controller {
         {   // POST handlers
             router.post("/course/register").handler(BodyHandler.create()).handler(this::handleCourseRegister);
             router.post("/course/enroll").handler(BodyHandler.create()).handler(this::handleCourseEnroll);
+            router.post("/course/wish").handler(BodyHandler.create()).handler(this::handleCourseWish);
             router.post("/review/register").handler(BodyHandler.create()).handler(this::handleReviewRegister);
             router.post("/review/like").handler(this::handleReviewLike);
         }
@@ -83,7 +84,7 @@ public class CourseController implements Controller {
             BigInteger likedCount = courseService.registerLike(reviewId, authentication.getId());
             routingContext.response().setStatusCode(200).setStatusMessage("You liked the review, awesome!").end(String.valueOf(likedCount));
         } catch (Exception e) {
-            routingContext.response().setStatusCode(500).setStatusMessage("Something went wrong.. You might want to check your inputs again.").end();
+            routingContext.response().setStatusCode(500).setStatusMessage(e.getMessage()).end();
         }
     }
 
@@ -179,7 +180,32 @@ public class CourseController implements Controller {
             courseService.enrollOnCourse(authentication.getUsername(), courseId);
             routingContext.response().setStatusCode(200).setStatusMessage("Successfully enrolled on the course!").end();
         } catch (Exception e) {
-            routingContext.response().setStatusCode(500).setStatusMessage("Something went wrong.. You might have already enrolled on the course.").end();
+            routingContext.response().setStatusCode(500).setStatusMessage("Already enrolled on.").end();
+        }
+    }
+
+    // Authenticated
+    private void handleCourseWish(RoutingContext routingContext) {
+
+        UserProjection authentication = routingContext.session().get("Authentication");
+
+        if (authentication == null) {
+            logger.info("[ Authentication entry point ]");
+            routingContext.response().setStatusCode(401).end();
+            return;
+        } else if (!authentication.getType().toString().equals("STUDENT")) {
+            logger.info("[ Unauthorized ]");
+            routingContext.response().setStatusCode(403).end();
+            return;
+        }
+
+        Long courseId = Long.parseLong(routingContext.request().getParam("courseId"));
+
+        try {
+            courseService.wishForCourse(authentication.getUsername(), courseId);
+            routingContext.response().setStatusCode(200).setStatusMessage("Successfully enrolled on the course!").end();
+        } catch (Exception e) {
+            routingContext.response().setStatusCode(500).setStatusMessage(e.getMessage()).end();
         }
     }
 

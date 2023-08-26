@@ -71,9 +71,9 @@ public class UserService {
         return userRepository.getUsersRandomlyLimitBy(limit);
     }
 
-    public Teacher getUserByUsername(String name) {
+    public User getUserByUsername(String name) {
 
-        return (Teacher) userRepository.loadUserByUsername(name);
+        return userRepository.loadUserByUsername(name);
     }
 
     public void registerQualification(String username, String qualification) {
@@ -83,5 +83,14 @@ public class UserService {
         teacher.addQualification(qualification);
 
         userRepository.updateUser((User) teacher);
+    }
+
+    public void registerInterest(String username, String interest) {
+
+        Student student = userRepository.loadStudentByUsername(username);
+
+        student.addInterest(interest);
+
+        userRepository.updateUser((User) student);
     }
 }

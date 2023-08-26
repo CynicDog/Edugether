@@ -367,7 +367,7 @@
                     <div class="bg-light rounded-3 p-3 my-3 shadow-sm">
                             <div class="row d-flex">
                                 <div class="col-lg-7">
-                                    <span class="badge bg-success-subtle border border-success-subtle text-success-emphasis rounded-pill mx-1">
+                                    <span type="button" class="badge bg-success-subtle border border-success-subtle text-success-emphasis rounded-pill mx-1 studentDetailsButton" data-student-username="${review.writer.username}">
                                         ${review.writer.username}
                                     </span>
                                     <span class="badge bg-light-subtle border border-light-subtle text-light-emphasis rounded-pill mx-1">
@@ -439,15 +439,24 @@
                     window.location.href = "/login?error=denied"
                 }
                 if (response.ok) {
-                    button.querySelector('span').textContent = '';
                     showMessagingToast(response.statusText);
                     return response.text();
                 } else if (!response.ok) {
                     showMessagingToast(response.statusText);
+                    return button.querySelector('span').textContent;
                 }
             }).then(count => {
                 button.querySelector('span').textContent = count;
             })
+        }
+    })
+
+    document.addEventListener('click', function(event) {
+        if (event.target.classList.contains('studentDetailsButton')) {
+            const button = event.target;
+            const studentUsername = button.getAttribute('data-student-username')
+
+            window.location.href = `/user-details?username=${studentUsername}`
         }
     })
 
@@ -507,7 +516,7 @@
             case 'CONFUSED':
                 return '😕';
             default:
-                return ''; // Use a question mark for unknown sentiments
+                return '';
         }
     }
 
