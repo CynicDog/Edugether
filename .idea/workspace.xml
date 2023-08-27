@@ -6,12 +6,8 @@
   <component name="ChangeListManager">
     <list default="true" id="83ac0769-501d-47c5-aa4c-9efb288ea6db" name="Changes" comment="modified">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/controller/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/controller/UserController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/entity/academics/Course.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/entity/academics/Course.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/projection/CourseProjection.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/projection/CourseProjection.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/repository/CourseRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/repository/CourseRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/repository/implementation/CourseRepositoryImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/repository/implementation/CourseRepositoryImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/service/CourseService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/service/CourseService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/controller/CourseController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/controller/CourseController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/public/society-entry.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/public/society-entry.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/public/student-mypage.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/public/student-mypage.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -188,7 +184,9 @@
       <workItem from="1692928175944" duration="14919000" />
       <workItem from="1692955678991" duration="5975000" />
       <workItem from="1692965402968" duration="16596000" />
-      <workItem from="1693029573068" duration="17957000" />
+      <workItem from="1693029573068" duration="18262000" />
+      <workItem from="1693048822722" duration="4000" />
+      <workItem from="1693129268394" duration="1245000" />
     </task>
     <task id="LOCAL-00001" summary="init (dependencies, entities)">
       <created>1692451459255</created>
@@ -372,7 +370,14 @@
       <option name="project" value="LOCAL" />
       <updated>1693040949305</updated>
     </task>
-    <option name="localTasksCounter" value="27" />
+    <task id="LOCAL-00027" summary="modified">
+      <created>1693048152420</created>
+      <option name="number" value="00027" />
+      <option name="presentableId" value="LOCAL-00027" />
+      <option name="project" value="LOCAL" />
+      <updated>1693048152420</updated>
+    </task>
+    <option name="localTasksCounter" value="28" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

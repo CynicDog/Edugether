@@ -82,7 +82,7 @@ public class CourseController implements Controller {
 
         try {
             BigInteger likedCount = courseService.registerLike(reviewId, authentication.getId());
-            routingContext.response().setStatusCode(200).setStatusMessage("You liked the review, awesome!").end(String.valueOf(likedCount));
+            routingContext.response().setStatusCode(200).setStatusMessage("Liked the review, awesome!").end(String.valueOf(likedCount));
         } catch (Exception e) {
             routingContext.response().setStatusCode(500).setStatusMessage(e.getMessage()).end();
         }
