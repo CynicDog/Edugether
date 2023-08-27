@@ -5,19 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="83ac0769-501d-47c5-aa4c-9efb288ea6db" name="Changes" comment="modified">
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/1101b1af-169c-40f0-92b9-33d0d526db18.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/1101b1af-169c-40f0-92b9-33d0d526db18.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/EdugetherMainApp.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/EdugetherMainApp.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/controller/SocietyController.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/entity/socials/Society.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/entity/socials/SocietyEvent.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/entity/users/Student.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/entity/users/Student.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/repository/SocietyRepository.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/repository/implementation/SocietyRepositoryImpl.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/service/SocietyService.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/public/nav-anonymous.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/public/nav-anonymous.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/public/nav-authenticated.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/public/nav-authenticated.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/public/nav-blank.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/public/nav-blank.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/org/example/CardinalityTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/org/example/CardinalityTest.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -39,7 +28,7 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="main" />
+        <entry key="$PROJECT_DIR$" value="society_drop" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -59,7 +48,7 @@
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "WebServerToolWindowFactoryState": "false",
-    "git-widget-placeholder": "society__drop",
+    "git-widget-placeholder": "main",
     "last_opened_file_path": "/Users/ginsenglee/Documents/GitHub/vertx/Edugether/src/main/resources/public",
     "list.type.of.created.stylesheet": "CSS",
     "node.js.detected.package.eslint": "true",
@@ -156,8 +145,8 @@
       <list>
         <item itemvalue="Application.EdugetherMainApp" />
         <item itemvalue="JUnit.CardinalityTest.studentSocietyEventCardinality" />
-        <item itemvalue="JUnit.CardinalityTest" />
         <item itemvalue="JUnit.CardinalityTest.connectionTest" />
+        <item itemvalue="JUnit.CardinalityTest" />
         <item itemvalue="Application.EdugetherMainApp" />
       </list>
     </recent_temporary>
