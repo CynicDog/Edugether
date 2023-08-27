@@ -7,18 +7,14 @@ import io.vertx.core.http.HttpServer;
 import io.vertx.ext.web.Router;
 import org.example.controller.CourseController;
 import org.example.controller.HomeController;
-import org.example.controller.SocietyController;
 import org.example.controller.UserController;
 import org.example.repository.CourseRepository;
 import org.example.repository.ReviewRepository;
-import org.example.repository.SocietyRepository;
 import org.example.repository.UserRepository;
 import org.example.repository.implementation.CourseRepositoryImpl;
 import org.example.repository.implementation.ReviewRepositoryImpl;
-import org.example.repository.implementation.SocietyRepositoryImpl;
 import org.example.repository.implementation.UserRepositoryImpl;
 import org.example.service.CourseService;
-import org.example.service.SocietyService;
 import org.example.service.UserService;
 
 import javax.persistence.EntityManagerFactory;
@@ -35,12 +31,10 @@ public class EdugetherMainApp extends AbstractVerticle {
 
         UserRepository userRepository = new UserRepositoryImpl(emf);
         CourseRepository courseRepository = new CourseRepositoryImpl(emf);
-        SocietyRepository societyRepository = new SocietyRepositoryImpl(emf);
         ReviewRepository reviewRepository = new ReviewRepositoryImpl(emf);
 
         UserService userService = new UserService(userRepository);
         CourseService courseService = new CourseService(courseRepository, userRepository, reviewRepository);
-        SocietyService societyService = new SocietyService(societyRepository);
 
         UserController userController = new UserController(userService, courseService);
         userController.registerRoutes(vertx, router);
@@ -50,9 +44,6 @@ public class EdugetherMainApp extends AbstractVerticle {
 
         CourseController courseController = new CourseController(userService, courseService);
         courseController.registerRoutes(vertx, router);
-
-        SocietyController societyController = new SocietyController(userService, societyService);
-        societyController.registerRoutes(vertx, router);
 
         server.requestHandler(router).listen(8080, result -> {
             if (result.succeeded()) {

@@ -1,13 +1,10 @@
 package org.example.entity.users;
 
-import org.example.entity.socials.Society;
 import org.example.util.enums.RELATIONSHIP;
 import org.example.util.enums.TYPE;
 
 import javax.persistence.*;
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @Entity
