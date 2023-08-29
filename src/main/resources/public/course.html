@@ -271,6 +271,39 @@
             fetchAndRenderCourses(courseFetchingOption, pageOnCourses)
         })
 
+        document.getElementById('acclaimedCoursesButton').addEventListener('click', function () {
+            coursesOutputArea.innerHTML = '';
+
+            courseFetchingOption = 'acclaimed'
+            isCourseFetching = false;
+            isCourseLast = false;
+            pageOnCourses = 0;
+
+            fetchAndRenderCourses(courseFetchingOption, pageOnCourses)
+        })
+
+        document.getElementById('mixedCoursesButton').addEventListener('click', function () {
+            coursesOutputArea.innerHTML = '';
+
+            courseFetchingOption = 'mixed'
+            isCourseFetching = false;
+            isCourseLast = false;
+            pageOnCourses = 0;
+
+            fetchAndRenderCourses(courseFetchingOption, pageOnCourses)
+        })
+
+        document.getElementById('criticizedCoursesButton').addEventListener('click', function () {
+            coursesOutputArea.innerHTML = '';
+
+            courseFetchingOption = 'criticized'
+            isCourseFetching = false;
+            isCourseLast = false;
+            pageOnCourses = 0;
+
+            fetchAndRenderCourses(courseFetchingOption, pageOnCourses)
+        })
+
         window.onscroll = function () {
             if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
 
@@ -454,7 +487,7 @@
             }
         });
 
-        document.addEventListener('click', function(event) {
+        document.addEventListener('click', function (event) {
             if (event.target.classList.contains('wishCourseButton')) {
                 const button = event.target;
                 const courseId = button.getAttribute('data-course-id');
@@ -482,12 +515,12 @@
             }
         })
 
-        document.addEventListener('click', function(event) {
-            if (event.target.classList.contains('courseDetailsEntry')) {
-                const button = event.target;
-                const courseId = button.getAttribute('data-course-id');
+        document.addEventListener('click', function (event) {
+                if (event.target.classList.contains('courseDetailsEntry')) {
+                    const button = event.target;
+                    const courseId = button.getAttribute('data-course-id');
 
-                window.location.href = `course/details-page?courseId=${courseId}`
+                    window.location.href = `course/details-page?courseId=${courseId}`
                 }
             }
         )
@@ -571,7 +604,7 @@
     })
 
     // if got back from authentication entry point, reload the page.
-    window.onpageshow = function(event) {
+    window.onpageshow = function (event) {
         if (event.persisted) {
             location.reload();
         }

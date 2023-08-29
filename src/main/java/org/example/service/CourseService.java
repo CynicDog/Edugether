@@ -66,9 +66,13 @@ public class CourseService {
             return courseRepository.getPaginatedCoursesByPublishedDateAscending(page, limit);
         } else if (option.equals(FETCHING_OPTION.POPULAR.toString().toLowerCase())) {
             return courseRepository.getPaginatedCoursesByRegistrationCount(page, limit);
+        } else if (option.equals(FETCHING_OPTION.ACCLAIMED.toString().toLowerCase())) {
+            return courseRepository.getPaginatedCoursesByReviewSentimentAcclaimed(page, limit);
+        } else if (option.equals(FETCHING_OPTION.MIXED.toString().toLowerCase())) {
+            return courseRepository.getPaginatedCoursesByReviewSentimentMixed(page, limit);
+        } else { // criticized
+            return courseRepository.getPaginatedCoursesByReviewSentimentCriticized(page, limit);
         }
-
-        return null;
     }
 
     public void enrollOnCourse(String username, Long courseId) {

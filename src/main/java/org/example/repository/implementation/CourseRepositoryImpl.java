@@ -8,12 +8,15 @@ import org.example.projection.CourseProjection;
 import org.example.projection.RegistrationProjection;
 import org.example.repository.CourseRepository;
 import org.example.util.JpaOperationUtil;
+import org.example.util.enums.REVIEW_SENTIMENT;
 import org.jboss.logging.Logger;
 
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
+import java.util.EnumSet;
 import java.util.List;
+import java.util.Set;
 
 public class CourseRepositoryImpl implements CourseRepository {
 
@@ -61,6 +64,106 @@ public class CourseRepositoryImpl implements CourseRepository {
             logger.info("[ CourseRepositoryImpl.insertRegistration(Registration registration) ]: " + ex.getMessage());
             throw ex;
         }
+    }
+
+    @Override
+    public List<CourseProjection> getPaginatedCoursesByReviewSentimentCriticized(Integer page, Integer limit) {
+        return JpaOperationUtil.apply(entityManagerFactory, em -> {
+
+            int startIndex = page * limit;
+
+            TypedQuery<CourseProjection> query = em.createQuery(
+                    "select new org.example.projection.CourseProjection(" +
+                            "c.id, " +
+                            "c.name, " +
+                            "c.description, " +
+                            "c.startingDay, " +
+                            "c.endingDay, " +
+                            "c.subject, " +
+                            "c.teacher.username) " +
+                            "from Course c " +
+                            "left join Review r on r.course.id = c.id " +
+                            "where r.reviewSentiment in :sentiment " +
+                            "group by c.id, c.name, c.description, c.startingDay, c.endingDay, c.subject, c.teacher.username " +
+                            "order by count(r.id) desc", CourseProjection.class);
+
+            Set<REVIEW_SENTIMENT> acclaimedSentiments = EnumSet.of(REVIEW_SENTIMENT.DISLIKED, REVIEW_SENTIMENT.CONFUSED);
+
+            query.setParameter("sentiment", acclaimedSentiments);
+
+            query.setFirstResult(startIndex);
+            query.setMaxResults(limit);
+
+            return query.getResultList();
+        });
+    }
+
+    @Override
+    public List<CourseProjection> getPaginatedCoursesByReviewSentimentMixed(Integer page, Integer limit) {
+        return JpaOperationUtil.apply(entityManagerFactory, em -> {
+
+            int startIndex = page * limit;
+
+            TypedQuery<CourseProjection> query = em.createQuery(
+                    "select new org.example.projection.CourseProjection(" +
+                            "c.id, " +
+                            "c.name, " +
+                            "c.description, " +
+                            "c.startingDay, " +
+                            "c.endingDay, " +
+                            "c.subject, " +
+                            "c.teacher.username) " +
+                            "from Course c " +
+                            "left join Review r on r.course.id = c.id " +
+                            "where r.reviewSentiment in :sentiment " +
+                            "group by c.id, c.name, c.description, c.startingDay, c.endingDay, c.subject, c.teacher.username " +
+                            "order by count(r.id) desc", CourseProjection.class);
+
+            Set<REVIEW_SENTIMENT> acclaimedSentiments = EnumSet.of(REVIEW_SENTIMENT.MIXED, REVIEW_SENTIMENT.NEUTRAL);
+
+            query.setParameter("sentiment", acclaimedSentiments);
+
+            query.setFirstResult(startIndex);
+            query.setMaxResults(limit);
+
+            return query.getResultList();
+        });
+    }
+
+    @Override
+    public List<CourseProjection> getPaginatedCoursesByReviewSentimentAcclaimed(Integer page, Integer limit) {
+        return JpaOperationUtil.apply(entityManagerFactory, em -> {
+
+            int startIndex = page * limit;
+
+            TypedQuery<CourseProjection> query = em.createQuery(
+                    "select new org.example.projection.CourseProjection(" +
+                            "c.id, " +
+                            "c.name, " +
+                            "c.description, " +
+                            "c.startingDay, " +
+                            "c.endingDay, " +
+                            "c.subject, " +
+                            "c.teacher.username) " +
+                            "from Course c " +
+                            "left join Review r on r.course.id = c.id " +
+                            "where r.reviewSentiment in :sentiment " +
+                            "group by c.id, c.name, c.description, c.startingDay, c.endingDay, c.subject, c.teacher.username " +
+                            "order by count(r.id) desc", CourseProjection.class);
+
+            Set<REVIEW_SENTIMENT> acclaimedSentiments = EnumSet.of(
+                    REVIEW_SENTIMENT.LOVED,
+                    REVIEW_SENTIMENT.IMPRESSED,
+                    REVIEW_SENTIMENT.INSPIRED,
+                    REVIEW_SENTIMENT.OVERWHELMED);
+
+            query.setParameter("sentiment", acclaimedSentiments);
+
+            query.setFirstResult(startIndex);
+            query.setMaxResults(limit);
+
+            return query.getResultList();
+        });
     }
 
     @Override

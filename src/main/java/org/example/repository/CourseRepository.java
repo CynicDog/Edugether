@@ -26,5 +26,9 @@ public interface CourseRepository {
     Registration getRegistrationByRegistrationId(Long registrationId);
     void updateRegistration(Registration registration);
     List<CourseProjection> getPaginatedCoursesByRegistrationCount(Integer page, Integer limit);
+    List<CourseProjection> getPaginatedCoursesByReviewSentimentAcclaimed(Integer page, Integer limit);
+    List<CourseProjection> getPaginatedCoursesByReviewSentimentMixed(Integer page, Integer limit);
+    List<CourseProjection> getPaginatedCoursesByReviewSentimentCriticized(Integer page, Integer limit);
 }
+
 
