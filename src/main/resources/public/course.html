@@ -44,7 +44,6 @@
             <span id="oldestCoursesButton" type="button"
                   class="badge bg-dark-subtle text-dark-emphasis rounded-pill">Oldest</span>
         </div>
-
     </div>
     <div id="coursesOutputArea" class="row row-cols-1 row-cols-lg-3 align-items-stretch g-4 py-5">
     </div>
@@ -169,30 +168,25 @@
         }
 
         const coursesLoadingSpinner = document.getElementById('coursesLoadingSpinner')
-
-        let currentFetchingOptions = null;
-
         const coursesOutputArea = document.getElementById('coursesOutputArea');
 
-        let isNewestCourseFetching = false;
-        let isNewestCoursesLast = false;
-        let PageOnCourses = 0;
+        let isCourseFetching = false;
+        let isCourseLast = false;
+        let pageOnCourses = 0;
+        let courseFetchingOption = 'newest'
 
-        let isOldestCourseFetching = false;
-        let isOldestCoursesLast = false;
-
-        const getNewestCourses = page => {
-            return fetch(`/course/newest?page=${page}&limit=9`).then(response => response.json());
+        const getCourses = (option, page) => {
+            return fetch(`/courses?option=${option}&page=${page}&limit=9`).then(response => response.json());
         }
 
-        function fetchAndRenderNewestCourses(page) {
+        function fetchAndRenderCourses(option, page) {
 
-            isNewestCourseFetching = true;
+            isCourseFetching = true;
             coursesLoadingSpinner.style.display = 'block';
 
-            getNewestCourses(page).then(data => {
+            getCourses(option, page).then(data => {
                 if (data.length < 9) {
-                    isNewestCoursesLast = true;
+                    isCourseLast = true;
                 }
                 data.courses.forEach(course => {
                     coursesOutputArea.innerHTML += `
@@ -234,115 +228,57 @@
                             </div>
                         </div>
                     `
-                    isNewestCourseFetching = false;
+                    isCourseFetching = false;
                 })
                 coursesLoadingSpinner.style.display = 'none';
             })
         }
 
         // initial rendering of the courses
-        fetchAndRenderNewestCourses(PageOnCourses);
-        // register current fetching function in the variable
-        currentFetchingOptions = (page) => {
-            return fetchAndRenderNewestCourses(page);
-        };
+        fetchAndRenderCourses(courseFetchingOption, pageOnCourses);
 
         // rending on click event
         document.getElementById('newestCoursesButton').addEventListener('click', function () {
-
-            isNewestCourseFetching = false;
-            isOldestCourseFetching = false;
-
             coursesOutputArea.innerHTML = '';
 
-            PageOnCourses = 0
-            fetchAndRenderNewestCourses(PageOnCourses)
-            currentFetchingOptions = (page) => {
-                return fetchAndRenderNewestCourses(page);
-            }
+            courseFetchingOption = 'newest'
+            isCourseFetching = false;
+            isCourseLast = false;
+            pageOnCourses = 0;
+
+            fetchAndRenderCourses(courseFetchingOption, pageOnCourses)
         })
 
-        const getOldestCourses = page => {
-            return fetch(`/course/oldest?page=${page}&limit=9`).then(response => response.json());
-        }
-
-        function fetchAndRenderOldestCourses(page) {
-
-            isOldestCourseFetching = true;
-            coursesLoadingSpinner.style.display = 'block';
-
-            getOldestCourses(page).then(data => {
-                if (data.length < 9) {
-                    isOldestCoursesLast = true;
-                }
-                data.courses.forEach(course => {
-                    coursesOutputArea.innerHTML += `
-                        <div class="col">
-                            <div class="card card-cover h-100 overflow-hidden text-bg-dark rounded-4 shadow-lg">
-                                <div class="d-flex flex-column h-100 p-5 pb-3 text-white text-shadow-1">
-                                    <div class="row">
-                                        <div class="col-8">
-                                            <div class="badge bg-primary-subtle border border-primary-subtle text-primary-emphasis rounded-pill me-auto my-2">
-                                                ${course.subject}
-                                            </div>
-                                        </div>
-                                        <div class="col-2">
-                                            <div class="btn btn-dark btn-sm my-1 enrollCourseButton" data-course-id="${course.id}" style="font-size: .8rem">enroll</div>
-                                        </div>
-                                        <div class="col-2">
-                                            <div class="btn btn-dark btn-sm my-1 wishCourseButton" data-course-id="${course.id}" style="font-size: .8rem">wish</div>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <h3 type="button" class="pt-4 my-4 display-6 lh-1 fw-bold courseDetailsEntry" data-course-id="${course.id}"> ${course.name} </h3>
-                                        <div class="overflow-scroll fw-lighter my-2" style="max-height: 150px">
-                                            ${course.description}
-                                        </div>
-                                        <ul class="d-flex list-unstyled mt-auto">
-                                            <li class="ms-auto d-flex align-items-center me-3">
-                                                <small> by
-                                                    <span class="badge bg-secondary-subtle border border-secondary-subtle text-secondary-emphasis rounded-pill">
-                                                        ${course.teacherUsername}
-                                                    </span>
-                                                </small>
-                                            </li>
-                                            <li class="d-flex align-items-center">
-                                                <small> ${formatDate(course.startingDay)} ~ ${formatDate(course.endingDay)} </small>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    `
-                    isOldestCourseFetching = false;
-                })
-                coursesLoadingSpinner.style.display = 'none';
-            })
-        }
-
         document.getElementById('oldestCoursesButton').addEventListener('click', function () {
-
-            isNewestCourseFetching = false;
-            isOldestCourseFetching = false;
-
             coursesOutputArea.innerHTML = '';
 
-            PageOnCourses = 0
-            fetchAndRenderOldestCourses(PageOnCourses)
-            currentFetchingOptions = (page) => {
-                return fetchAndRenderOldestCourses(page);
-            }
+            courseFetchingOption = 'oldest'
+            isCourseFetching = false;
+            isCourseLast = false;
+            pageOnCourses = 0;
+
+            fetchAndRenderCourses(courseFetchingOption, pageOnCourses)
+        })
+
+        document.getElementById('popularCoursesButton').addEventListener('click', function () {
+            coursesOutputArea.innerHTML = '';
+
+            courseFetchingOption = 'popular'
+            isCourseFetching = false;
+            isCourseLast = false;
+            pageOnCourses = 0;
+
+            fetchAndRenderCourses(courseFetchingOption, pageOnCourses)
         })
 
         window.onscroll = function () {
             if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
 
-                if (isNewestCourseFetching || isOldestCourseFetching) {
+                if (isCourseFetching || isCourseLast) {
                     // do nothing
                 } else {
-                    PageOnCourses += 1;
-                    currentFetchingOptions(PageOnCourses);
+                    pageOnCourses += 1;
+                    fetchAndRenderCourses(courseFetchingOption, pageOnCourses)
                 }
             }
         }

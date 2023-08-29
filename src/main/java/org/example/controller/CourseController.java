@@ -49,8 +49,7 @@ public class CourseController implements Controller {
                 routingContext.response().putHeader("Content-Type", "text/html").sendFile(PUBLIC + "course.html");
             });
             router.get("/course/subjects").handler(this::handleCourseSubjects);
-            router.get("/course/newest").handler(this::handleCourseNewest);
-            router.get("/course/oldest").handler(this::handleCourseOldest);
+            router.get("/courses").handler(this::handleCourses);
             router.get("/course/details-page").handler(routingContext -> {
                 routingContext.response().putHeader("Content-Type", "text/html").sendFile(PUBLIC + "course-details.html");
             });
@@ -203,32 +202,13 @@ public class CourseController implements Controller {
 
         try {
             courseService.wishForCourse(authentication.getUsername(), courseId);
-            routingContext.response().setStatusCode(200).setStatusMessage("Successfully enrolled on the course!").end();
+            routingContext.response().setStatusCode(200).setStatusMessage("Successfully wished for the course!").end();
         } catch (Exception e) {
             routingContext.response().setStatusCode(500).setStatusMessage(e.getMessage()).end();
         }
     }
 
-    private void handleCourseOldest(RoutingContext routingContext) {
-        // for pagination rendering
-        try {
-            TimeUnit.SECONDS.sleep(1);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
-        Optional<Integer> page = Optional.of(Integer.parseInt(routingContext.request().getParam("page")));
-        Optional<Integer> limit = Optional.of(Integer.parseInt(routingContext.request().getParam("limit")));
-
-        List<CourseProjection> newestCourses = courseService.getPaginatedCoursesByPublishedDateAscending(page.orElse(0), limit.orElse(9));
-
-        JsonObject data = new JsonObject().put("courses", newestCourses);
-
-        routingContext.response().setStatusCode(200).end(data.encode());
-    }
-
-
-    private void handleCourseNewest(RoutingContext routingContext) {
+    private void handleCourses(RoutingContext routingContext) {
 
         // for pagination rendering
         try {
@@ -237,12 +217,16 @@ public class CourseController implements Controller {
             e.printStackTrace();
         }
 
+        Optional<String> option = Optional.of(routingContext.request().getParam("option"));
         Optional<Integer> page = Optional.of(Integer.parseInt(routingContext.request().getParam("page")));
         Optional<Integer> limit = Optional.of(Integer.parseInt(routingContext.request().getParam("limit")));
 
-        List<CourseProjection> newestCourses = courseService.getPaginatedCoursesByPublishedDateDescending(page.orElse(0), limit.orElse(9));
+        List<CourseProjection> courses = courseService.getPaginatedCoursesByOption(
+                option.orElse("newest"),
+                page.orElse(0),
+                limit.orElse(9));
 
-        JsonObject data = new JsonObject().put("courses", newestCourses);
+        JsonObject data = new JsonObject().put("courses", courses);
 
         routingContext.response().setStatusCode(200).end(data.encode());
     }

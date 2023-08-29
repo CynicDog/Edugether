@@ -25,5 +25,6 @@ public interface CourseRepository {
     List<CourseProjection> getPaginatedCoursesByWisherUsernameDescending(Long studentId, Integer page, Integer limit);
     Registration getRegistrationByRegistrationId(Long registrationId);
     void updateRegistration(Registration registration);
+    List<CourseProjection> getPaginatedCoursesByRegistrationCount(Integer page, Integer limit);
 }
 

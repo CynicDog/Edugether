@@ -33,7 +33,6 @@ public class Course {
 
     @Column(nullable = false, length = 2000)
     private String description;
-    private Integer registrationCount = 0;
 
     @Enumerated(EnumType.STRING)
     private COURSE_STATUS courseStatus = COURSE_STATUS.OPEN;
@@ -92,14 +91,6 @@ public class Course {
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public Integer getRegistrationCount() {
-        return registrationCount;
-    }
-
-    public void setRegistrationCount(Integer registrationCount) {
-        this.registrationCount = registrationCount;
     }
 
     public COURSE_STATUS getCourseStatus() {

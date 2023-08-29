@@ -330,7 +330,10 @@
             document.getElementById('participantsNumberArea').textContent = data.participants.length
             data.participants.forEach(participant => {
                 document.getElementById('participantsArea').innerHTML += `
-                    <span type="button" class="badge bg-light-subtle border border-light-subtle text-light-emphasis rounded-pill">
+                    <span
+                        data-student-username="${participant.username}"
+                        type="button"
+                        class="badge bg-light-subtle border border-light-subtle text-light-emphasis rounded-pill studentDetailsButton">
                         ${participant.username}
                     </span>
                 `

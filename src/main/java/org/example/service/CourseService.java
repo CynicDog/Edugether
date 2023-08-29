@@ -13,6 +13,7 @@ import org.example.projection.ReviewProjection;
 import org.example.repository.CourseRepository;
 import org.example.repository.ReviewRepository;
 import org.example.repository.UserRepository;
+import org.example.util.enums.FETCHING_OPTION;
 import org.example.util.enums.REGISTRATION_STATUS;
 import org.example.util.enums.REVIEW_SENTIMENT;
 import org.jboss.logging.Logger;
@@ -57,19 +58,17 @@ public class CourseService {
         }
     }
 
-    public List<CourseProjection> getPaginatedCoursesByPublishedDateDescending(Integer page, Integer limit) {
+    public List<CourseProjection> getPaginatedCoursesByOption(String option, Integer page, Integer limit) {
 
-        return courseRepository.getPaginatedCoursesByPublishedDateDescending(page, limit);
-    }
+        if (option.equals(FETCHING_OPTION.NEWEST.toString().toLowerCase())) {
+            return courseRepository.getPaginatedCoursesByPublishedDateDescending(page, limit);
+        } else if (option.equals(FETCHING_OPTION.OLDEST.toString().toLowerCase())) {
+            return courseRepository.getPaginatedCoursesByPublishedDateAscending(page, limit);
+        } else if (option.equals(FETCHING_OPTION.POPULAR.toString().toLowerCase())) {
+            return courseRepository.getPaginatedCoursesByRegistrationCount(page, limit);
+        }
 
-    public List<Course> getPaginatedCoursesByPublishedDateAndByUsernameDescending(String username, Integer page, Integer limit) {
-
-        return courseRepository.getPaginatedCoursesByPublishedDateAndByUsernameDescending(username, page, limit);
-    }
-
-    public List<CourseProjection> getPaginatedCoursesByPublishedDateAscending(Integer page, Integer limit) {
-
-        return courseRepository.getPaginatedCoursesByPublishedDateAscending(page, limit);
+        return null;
     }
 
     public void enrollOnCourse(String username, Long courseId) {
@@ -141,6 +140,11 @@ public class CourseService {
     public List<Student> getStudentsByRegistration_CourseId(Long courseId) {
 
         return courseRepository.getStudentsByRegistration_CourseId(courseId);
+    }
+
+    public List<Course> getPaginatedCoursesByPublishedDateAndByUsernameDescending(String username, Integer page, Integer limit) {
+
+        return courseRepository.getPaginatedCoursesByPublishedDateAndByUsernameDescending(username, page, limit);
     }
 
     public List<ReviewProjection> getPaginatedReviewsByCourseIdAndCreateDateDescending(Long courseId, Integer page, Integer limit) {

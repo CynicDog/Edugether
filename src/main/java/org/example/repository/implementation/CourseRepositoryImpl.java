@@ -64,6 +64,33 @@ public class CourseRepositoryImpl implements CourseRepository {
     }
 
     @Override
+    public List<CourseProjection> getPaginatedCoursesByRegistrationCount(Integer page, Integer limit) {
+        return JpaOperationUtil.apply(entityManagerFactory, em -> {
+
+            int startIndex = page * limit;
+
+            TypedQuery<CourseProjection> query = em.createQuery(
+                    "select new org.example.projection.CourseProjection(" +
+                            "c.id, " +
+                            "c.name, " +
+                            "c.description, " +
+                            "c.startingDay, " +
+                            "c.endingDay, " +
+                            "c.subject, " +
+                            "c.teacher.username) " +
+                            "from Course c " +
+                            "left join Registration r on r.course.id = c.id " +
+                            "group by c.id, c.name, c.description, c.startingDay, c.endingDay, c.subject, c.teacher.username " +
+                            "order by count(r.id) desc", CourseProjection.class);
+
+            query.setFirstResult(startIndex);
+            query.setMaxResults(limit);
+
+            return query.getResultList();
+        });
+    }
+
+    @Override
     public List<CourseProjection> getPaginatedCoursesByWisherUsernameDescending(Long studentId, Integer page, Integer limit) {
         return JpaOperationUtil.apply(entityManagerFactory, em -> {
 
@@ -167,7 +194,8 @@ public class CourseRepositoryImpl implements CourseRepository {
                     "c.startingDay, " +
                     "c.endingDay, " +
                     "c.subject, " +
-                    "teacher.username) from Course c " + "order by c.publishedDate asc", CourseProjection.class);
+                    "c.teacher.username) from Course c " +
+                    "order by c.publishedDate asc", CourseProjection.class);
 
             query.setFirstResult(startIndex);
             query.setMaxResults(limit);
@@ -189,7 +217,7 @@ public class CourseRepositoryImpl implements CourseRepository {
                     "c.startingDay, " +
                     "c.endingDay, " +
                     "c.subject, " +
-                    "teacher.username) from Course c " + "order by c.publishedDate desc", CourseProjection.class);
+                    "c.teacher.username) from Course c " + "order by c.publishedDate desc", CourseProjection.class);
 
             query.setFirstResult(startIndex);
             query.setMaxResults(limit);
