@@ -6,12 +6,14 @@
   <component name="ChangeListManager">
     <list default="true" id="83ac0769-501d-47c5-aa4c-9efb288ea6db" name="Changes" comment="modified">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/controller/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/controller/UserController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/example/repository/CourseRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/repository/CourseRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/repository/ReviewRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/repository/ReviewRepository.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/example/repository/implementation/CourseRepositoryImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/repository/implementation/CourseRepositoryImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/repository/implementation/ReviewRepositoryImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/repository/implementation/ReviewRepositoryImpl.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/example/service/CourseService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/service/CourseService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/util/enums/REVIEW_SENTIMENT.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/util/enums/REVIEW_SENTIMENT.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/public/course-details.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/public/course-details.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/public/course.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/public/course.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/public/student-mypage.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/public/student-mypage.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -211,7 +213,7 @@
       <workItem from="1693195184248" duration="5036000" />
       <workItem from="1693221692107" duration="2027000" />
       <workItem from="1693224743674" duration="5000" />
-      <workItem from="1693267197480" duration="6998000" />
+      <workItem from="1693267197480" duration="14167000" />
     </task>
     <task id="LOCAL-00001" summary="init (dependencies, entities)">
       <created>1692451459255</created>
@@ -423,7 +425,14 @@
       <option name="project" value="LOCAL" />
       <updated>1693271787138</updated>
     </task>
-    <option name="localTasksCounter" value="31" />
+    <task id="LOCAL-00031" summary="modified">
+      <created>1693275875246</created>
+      <option name="number" value="00031" />
+      <option name="presentableId" value="LOCAL-00031" />
+      <option name="project" value="LOCAL" />
+      <updated>1693275875246</updated>
+    </task>
+    <option name="localTasksCounter" value="32" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

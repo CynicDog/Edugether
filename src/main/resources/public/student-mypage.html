@@ -47,16 +47,17 @@
         </div>
         <div class="col-md-8">
             <div class="pb-4 mb-4 border-bottom text-end">
-                <span type="button"
-                      class="badge bg-primary-subtle text-primary-emphasis rounded-pill enrolledCoursesButton">Enrolled courses(newest)
+                <span id="enrolledCoursesButton"
+                      type="button"
+                      class="badge bg-primary-subtle text-primary-emphasis rounded-pill">Enrolled courses(newest)
                 </span>
                 <span id="enrolledCoursesOldestButton"
                       type="button"
                       class="badge bg-primary-subtle text-primary-emphasis rounded-pill">(oldest)</span>
-                <span id="popularCoursesButton" type="button"
+                <span id="wishedCoursesButton" type="button"
                       class="badge bg-success-subtle text-success-emphasis rounded-pill">Wished courses</span>
-                <span id="mixedCoursesButton" type="button"
-                      class="badge bg-warning-subtle text-warning-emphasis rounded-pill">button3</span>
+                <span id="myReviewsButton" type="button"
+                      class="badge bg-warning-subtle text-warning-emphasis rounded-pill">My Reviews</span>
                 <span id="criticizedCoursesButton" type="button"
                       class="badge bg-danger-subtle text-danger-emphasis rounded-pill">button4</span>
             </div>
@@ -144,7 +145,6 @@
     const interestSubmitButton = document.getElementById('interestSubmitButton')
     const interestsToastButton = document.getElementById('interestsToastButton')
 
-
     fetch(`/student?username=${username}`)
         .then(response => response.json())
         .then(data => {
@@ -211,7 +211,8 @@
         })
     })
 
-    let fetchingOption = 'enrolled';
+    let fetchingTopic = null;
+    let courseFetchingOption = 'enrolled';
     let pageOnCourses = 0;
     let fetchingDirection = 'desc'
     const contentLoadingSpinner = document.getElementById('contentLoadingSpinner')
@@ -323,16 +324,17 @@
     }
 
     // initial fetching
-    fetchAndRenderCourses(fetchingOption, pageOnCourses, fetchingDirection)
+    fetchAndRenderCourses(courseFetchingOption, pageOnCourses, fetchingDirection)
 
-    document.querySelector('.enrolledCoursesButton').addEventListener('click', function () {
+    document.getElementById('enrolledCoursesButton').addEventListener('click', function () {
 
         contentOutputArea.innerHTML = '';
 
         pageOnCourses = 0
-        fetchingOption = 'enrolled'
+        courseFetchingOption = 'enrolled'
         fetchingDirection = 'desc'
-        fetchAndRenderCourses(fetchingOption, pageOnCourses, fetchingDirection)
+        fetchingTopic = 'course'
+        fetchAndRenderCourses(courseFetchingOption, pageOnCourses, fetchingDirection)
     })
 
     document.getElementById('enrolledCoursesOldestButton').addEventListener('click', function () {
@@ -340,41 +342,21 @@
         contentOutputArea.innerHTML = '';
 
         pageOnCourses = 0
-        fetchingOption = 'enrolled'
+        courseFetchingOption = 'enrolled'
         fetchingDirection = 'asc'
-        fetchAndRenderCourses(fetchingOption, pageOnCourses, fetchingDirection)
+        fetchingTopic = 'course'
+        fetchAndRenderCourses(courseFetchingOption, pageOnCourses, fetchingDirection)
     })
 
-    document.getElementById('popularCoursesButton').addEventListener('click', function () {
+    document.getElementById('wishedCoursesButton').addEventListener('click', function () {
 
         contentOutputArea.innerHTML = '';
         pageOnCourses = 0
-        fetchingOption = 'wished'
+        courseFetchingOption = 'wished'
         fetchingDirection = 'desc'
-        fetchAndRenderCourses(fetchingOption, pageOnCourses, fetchingDirection)
+        fetchingTopic = 'course'
+        fetchAndRenderCourses(courseFetchingOption, pageOnCourses, fetchingDirection)
     })
-
-    window.onscroll = function () {
-        if ((window.innerHeight + window.scrollY) + 0.5 >= document.body.offsetHeight) {
-
-            if (isCourseFetching || isCourseLast) {
-                // do nothing
-            } else {
-                pageOnCourses += 1;
-                fetchAndRenderCourses(fetchingOption, pageOnCourses, fetchingDirection);
-            }
-        }
-    }
-
-    document.addEventListener('click', function (event) {
-            if (event.target.classList.contains('courseDetailsEntry')) {
-                const button = event.target;
-                const courseId = button.getAttribute('data-course-id');
-
-                window.location.href = `course/details-page?courseId=${courseId}`
-            }
-        }
-    )
 
     document.addEventListener('click', function (event) {
         if (event.target.classList.contains('registrationModify')) {
@@ -390,6 +372,105 @@
                 })
         }
     })
+
+    let pageOnReviews = 0;
+    let isReviewFetching = false;
+    let isReviewLast = false;
+
+    const getReviews = page => {
+        return fetch(`/student/review?username=${username}&page=${page}&limit=5`).then(response => response.json());
+    }
+
+    function fetchAndRenderReviews(page) {
+
+        isReviewFetching = true;
+        contentLoadingSpinner.style.display = 'block';
+
+        getReviews(page).then(data => {
+            if (data.length < 5) {
+                isReviewLast = true;
+            }
+
+            data.reviews.forEach(datum => {
+
+                const truncatedContent = (datum.content.split(' ').length > 50)
+                    ? `${datum.content.split(' ').slice(0, 50).join(' ')} (...)`
+                    : datum.content;
+
+                contentOutputArea.innerHTML += `
+                        <div class="bg-light rounded-3 p-3 my-3 shadow-sm">
+                            <div class="row d-flex align-items-center justify-content-center">
+                                <div class="col-lg-9">
+                                    <span type="button" class="badge bg-warning-subtle border border-warning-subtle text-warning-emphasis rounded-pill" data-course-id="${datum.course.id}">
+                                        ${datum.course.name}
+                                    </span>
+                                    <span type="button" class="badge bg-light-subtle border border-light-subtle text-light-emphasis rounded-pill ">
+                                        ${datum.course.teacher.username}
+                                    </span>
+                                        <span class="badge bg-light-subtle border border-light-subtle text-light-emphasis rounded-pill mx-1">
+                                            ${datum.reviewSentiment} ${getSentimentEmoji(datum.reviewSentiment)}
+                                        </span>
+                                </div>
+                                <div class="col-lg-3">
+                                    <div class="text-end">
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="fw-light my-1 p-3 overflow-auto">
+                                ${truncatedContent}
+                            </div>
+                            <div class="text-end">
+                                <span class="badge bg-light-subtle border border-light-subtle text-light-emphasis rounded-pill">
+                                    ${formatDate(datum.createDate)}
+                                </span>
+                            </div>
+                        </div>
+                `
+                isReviewFetching = false;
+            })
+            contentLoadingSpinner.style.display = 'none';
+        })
+    }
+
+    document.getElementById('myReviewsButton').addEventListener('click', function () {
+
+        contentOutputArea.innerHTML = '';
+        pageOnReviews = 0
+        fetchingTopic = 'review'
+        fetchAndRenderReviews(pageOnReviews);
+    })
+
+    window.onscroll = function () {
+        if ((window.innerHeight + window.scrollY) + 0.5 >= document.body.offsetHeight) {
+
+            if (fetchingTopic === 'course') {
+                if (isCourseFetching || isCourseLast) {
+                    // do nothing
+                } else {
+                    pageOnCourses += 1;
+                    fetchAndRenderCourses(courseFetchingOption, pageOnCourses, fetchingDirection);
+                }
+            } else if (fetchingTopic === 'review') {
+                if (isReviewFetching || isReviewLast) {
+                    // do nothing
+                } else {
+                    pageOnReviews += 1;
+                    fetchAndRenderReviews(pageOnReviews);
+                }
+            }
+        }
+    }
+
+    document.addEventListener('click', function (event) {
+            if (event.target.classList.contains('courseDetailsEntry')) {
+                const button = event.target;
+                const courseId = button.getAttribute('data-course-id');
+
+                window.location.href = `course/details-page?courseId=${courseId}`
+            }
+        }
+    )
 
     function showMessagingToast(message) {
         const messagingToast = document.getElementById('messagingToast');
@@ -473,6 +554,29 @@
                 return '💔';
             case 'ENROLLED':
                 return '❤️';
+            default:
+                return '';
+        }
+    }
+
+    function getSentimentEmoji(sentiment) {
+        switch (sentiment) {
+            case 'NEUTRAL':
+                return '😐';
+            case 'LOVED':
+                return '❤️';
+            case 'IMPRESSED':
+                return '🤩';
+            case 'MIXED':
+                return '🤔';
+            case 'INSPIRED':
+                return '🌟';
+            case 'OVERWHELMED':
+                return '😲';
+            case 'DISLIKED':
+                return '😞';
+            case 'CONFUSED':
+                return '😕';
             default:
                 return '';
         }

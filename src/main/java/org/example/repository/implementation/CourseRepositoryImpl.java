@@ -194,7 +194,7 @@ public class CourseRepositoryImpl implements CourseRepository {
     }
 
     @Override
-    public List<CourseProjection> getPaginatedCoursesByWisherUsernameDescending(Long studentId, Integer page, Integer limit) {
+    public List<CourseProjection> getPaginatedCoursesByWisherId(Long studentId, Integer page, Integer limit) {
         return JpaOperationUtil.apply(entityManagerFactory, em -> {
 
             int startIndex = page * limit;
@@ -222,7 +222,7 @@ public class CourseRepositoryImpl implements CourseRepository {
     }
 
     @Override
-    public List<RegistrationProjection> getPaginatedCoursesByEnrolledDateByUsernameAscending(Long studentId, Integer page, Integer limit) {
+    public List<RegistrationProjection> getPaginatedCoursesByUserIdOrderByEnrolledDateAsc(Long studentId, Integer page, Integer limit) {
         return JpaOperationUtil.apply(entityManagerFactory, em -> {
 
             int startIndex = page * limit;
@@ -245,7 +245,7 @@ public class CourseRepositoryImpl implements CourseRepository {
     }
 
     @Override
-    public List<RegistrationProjection> getPaginatedCoursesByEnrolledDateByUsernameDescending(Long studentId, Integer page, Integer limit) {
+    public List<RegistrationProjection> getPaginatedCoursesByUserIdOrderByEnrolledDateDesc(Long studentId, Integer page, Integer limit) {
         return JpaOperationUtil.apply(entityManagerFactory, em -> {
 
             int startIndex = page * limit;
@@ -268,7 +268,7 @@ public class CourseRepositoryImpl implements CourseRepository {
     }
 
     @Override
-    public List<Course> getPaginatedCoursesByPublishedDateAndByUsernameDescending(String username, Integer page, Integer limit) {
+    public List<Course> getPaginatedCoursesByUsernameOrderByPublishedDateDesc(String username, Integer page, Integer limit) {
         return JpaOperationUtil.apply(entityManagerFactory, em -> {
 
             int startIndex = page * limit;
@@ -285,7 +285,7 @@ public class CourseRepositoryImpl implements CourseRepository {
     }
 
     @Override
-    public List<CourseProjection> getPaginatedCoursesByPublishedDateAscending(Integer page, Integer limit) {
+    public List<CourseProjection> getPaginatedCoursesByPublishedDateAsc(Integer page, Integer limit) {
         return JpaOperationUtil.apply(entityManagerFactory, em -> {
 
             int startIndex = page * limit;
@@ -308,7 +308,7 @@ public class CourseRepositoryImpl implements CourseRepository {
     }
 
     @Override
-    public List<CourseProjection> getPaginatedCoursesByPublishedDateDescending(Integer page, Integer limit) {
+    public List<CourseProjection> getPaginatedCoursesByPublishedDateDesc(Integer page, Integer limit) {
         return JpaOperationUtil.apply(entityManagerFactory, em -> {
 
             int startIndex = page * limit;

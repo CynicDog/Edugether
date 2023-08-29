@@ -35,12 +35,23 @@ public class ReviewRepositoryImpl implements ReviewRepository {
         });
     }
 
+    @Override
+    public List<Review> getPaginatedReviewsByStudentId(Long studentId, Integer page, Integer limit) {
+        return JpaOperationUtil.apply(entityManagerFactory, em -> {
 
+            int startIndex = page * limit;
+            TypedQuery<Review> query = em.createQuery("select r from Review r where r.writer.id = :studentId", Review.class);
+
+            query.setParameter("studentId", studentId);
+            query.setFirstResult(startIndex);
+            query.setMaxResults(limit);
+
+            return query.getResultList();
+        });
+    }
 
     @Override
-    public List<ReviewProjection> getPaginatedReviewsByCourseIdAndCreateDateDescending(Long courseId,
-                                                                                       Integer page,
-                                                                                       Integer limit) {
+    public List<ReviewProjection> getPaginatedReviewsByCourseIdOrderByCreateDateDesc(Long courseId, Integer page, Integer limit) {
         return JpaOperationUtil.apply(entityManagerFactory, em -> {
 
             int startIndex = page * limit;

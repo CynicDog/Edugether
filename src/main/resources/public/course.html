@@ -207,14 +207,18 @@
                                         </div>
                                     </div>
                                     <div>
-                                        <h3 type="button" class="pt-4 my-4 display-6 lh-1 fw-bold courseDetailsEntry" data-course-id="${course.id}"> ${course.name} </h3>
+                                        <h3 type="button"
+                                            class="pt-4 my-4 display-6 lh-1 fw-bold courseDetailsEntry"
+                                            data-course-id="${course.id}"> ${course.name} </h3>
                                         <div class="overflow-scroll fw-lighter my-2" style="max-height: 150px">
                                             ${course.description}
                                         </div>
                                         <ul class="d-flex list-unstyled mt-auto">
                                             <li class="ms-auto d-flex align-items-center me-3">
                                                 <small> by
-                                                    <span class="badge bg-secondary-subtle border border-secondary-subtle text-secondary-emphasis rounded-pill">
+                                                    <span type="button"
+                                                          class="badge bg-secondary-subtle border border-secondary-subtle text-secondary-emphasis rounded-pill teacherDetailsEntry"
+                                                          data-teacher-username="${course.teacherUsername}">
                                                         ${course.teacherUsername}
                                                     </span>
                                                 </small>
@@ -516,14 +520,20 @@
         })
 
         document.addEventListener('click', function (event) {
-                if (event.target.classList.contains('courseDetailsEntry')) {
-                    const button = event.target;
-                    const courseId = button.getAttribute('data-course-id');
-
-                    window.location.href = `course/details-page?courseId=${courseId}`
-                }
-            }
+            if (event.target.classList.contains('courseDetailsEntry')) {
+                const button = event.target;
+                const courseId = button.getAttribute('data-course-id');
+                window.location.href = `course/details-page?courseId=${courseId}`
+            }}
         )
+
+        document.addEventListener('click', function (event) {
+            if (event.target.classList.contains('teacherDetailsEntry')) {
+                const button = event.target;
+                const teacherUsername  = button.getAttribute('data-teacher-username');
+                window.location.href = `/user-details?username=${teacherUsername}`
+            }
+        })
 
         function showMessagingToast(message) {
             const messagingToast = document.getElementById('messagingToast');

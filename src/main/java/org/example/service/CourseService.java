@@ -20,7 +20,6 @@ import org.jboss.logging.Logger;
 
 import java.math.BigInteger;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
 import java.util.List;
 
 public class CourseService {
@@ -61,9 +60,9 @@ public class CourseService {
     public List<CourseProjection> getPaginatedCoursesByOption(String option, Integer page, Integer limit) {
 
         if (option.equals(FETCHING_OPTION.NEWEST.toString().toLowerCase())) {
-            return courseRepository.getPaginatedCoursesByPublishedDateDescending(page, limit);
+            return courseRepository.getPaginatedCoursesByPublishedDateDesc(page, limit);
         } else if (option.equals(FETCHING_OPTION.OLDEST.toString().toLowerCase())) {
-            return courseRepository.getPaginatedCoursesByPublishedDateAscending(page, limit);
+            return courseRepository.getPaginatedCoursesByPublishedDateAsc(page, limit);
         } else if (option.equals(FETCHING_OPTION.POPULAR.toString().toLowerCase())) {
             return courseRepository.getPaginatedCoursesByRegistrationCount(page, limit);
         } else if (option.equals(FETCHING_OPTION.ACCLAIMED.toString().toLowerCase())) {
@@ -148,33 +147,33 @@ public class CourseService {
 
     public List<Course> getPaginatedCoursesByPublishedDateAndByUsernameDescending(String username, Integer page, Integer limit) {
 
-        return courseRepository.getPaginatedCoursesByPublishedDateAndByUsernameDescending(username, page, limit);
+        return courseRepository.getPaginatedCoursesByUsernameOrderByPublishedDateDesc(username, page, limit);
     }
 
     public List<ReviewProjection> getPaginatedReviewsByCourseIdAndCreateDateDescending(Long courseId, Integer page, Integer limit) {
 
-        return reviewRepository.getPaginatedReviewsByCourseIdAndCreateDateDescending(courseId, page, limit);
+        return reviewRepository.getPaginatedReviewsByCourseIdOrderByCreateDateDesc(courseId, page, limit);
     }
 
-    public List<RegistrationProjection> getPaginatedCoursesByEnrolledDateByUsernameDescending(String username, Integer page, Integer limit) {
+    public List<RegistrationProjection> getPaginatedCoursesByUsernameDesc(String username, Integer page, Integer limit) {
 
         User user = userRepository.loadUserByUsername(username);
 
-        return courseRepository.getPaginatedCoursesByEnrolledDateByUsernameDescending(user.getId(), page, limit);
+        return courseRepository.getPaginatedCoursesByUserIdOrderByEnrolledDateDesc(user.getId(), page, limit);
     }
 
-    public List<RegistrationProjection> getPaginatedCoursesByEnrolledDateByUsernameAscending(String username, Integer page, Integer limit) {
+    public List<RegistrationProjection> getPaginatedCoursesByUsernameAsc(String username, Integer page, Integer limit) {
 
         User user = userRepository.loadUserByUsername(username);
 
-        return courseRepository.getPaginatedCoursesByEnrolledDateByUsernameAscending(user.getId(), page, limit);
+        return courseRepository.getPaginatedCoursesByUserIdOrderByEnrolledDateAsc(user.getId(), page, limit);
     }
 
-    public List<CourseProjection> getPaginatedCoursesByWisherUsernameDescending(String username, Integer page, Integer limit) {
+    public List<CourseProjection> getPaginatedCoursesByWisherUsername(String username, Integer page, Integer limit) {
 
         User user = userRepository.loadUserByUsername(username);
 
-        return courseRepository.getPaginatedCoursesByWisherUsernameDescending(user.getId(), page, limit);
+        return courseRepository.getPaginatedCoursesByWisherId(user.getId(), page, limit);
     }
 
     public BigInteger registerLike(Long reviewId, Long userId) {
@@ -215,5 +214,12 @@ public class CourseService {
         courseRepository.updateRegistration(registration);
 
         return modified.toString();
+    }
+
+    public List<Review> getPaginatedReviewsByStudentUsername(String username, Integer page, Integer limit) {
+
+        User user = userRepository.loadUserByUsername(username);
+
+        return reviewRepository.getPaginatedReviewsByStudentId(user.getId(), page, limit);
     }
 }

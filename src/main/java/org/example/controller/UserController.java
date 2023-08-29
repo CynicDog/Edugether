@@ -9,6 +9,7 @@ import io.vertx.ext.web.handler.SessionHandler;
 import io.vertx.ext.web.handler.StaticHandler;
 import io.vertx.ext.web.sstore.LocalSessionStore;
 import org.example.entity.academics.Course;
+import org.example.entity.academics.Review;
 import org.example.entity.users.User;
 import org.example.projection.CourseProjection;
 import org.example.projection.RegistrationProjection;
@@ -60,11 +61,10 @@ public class UserController implements Controller {
 
             router.get("/teacher").handler(this::handleTeacher);
             router.get("/teacher/course").handler(this::handleTeacherCourse);
+            router.get("/student").handler(this::handleStudent);
             router.get("/student/enrolled-course").handler(this::handleStudentEnrolledCourse);
             router.get("/student/wished-course").handler(this::handleStudentWishedCourse);
-
-            router.get("/student").handler(this::handleStudent);
-
+            router.get("/student/review").handler(this::handleStudentReview);
             router.get("/user-details").handler(this::handleUserDetails);
         }
         {   // POST handlers
@@ -121,6 +121,29 @@ public class UserController implements Controller {
         routingContext.response().setStatusCode(200).end(data.encode());
     }
 
+    private void handleStudentReview(RoutingContext routingContext) {
+
+        try {
+            TimeUnit.SECONDS.sleep(1);
+        } catch (InterruptedException e) {
+            logger.info(e.getMessage());
+        }
+        String username = routingContext.request().getParam("username");
+
+        Optional<Integer> page = Optional.of(Integer.parseInt(routingContext.request().getParam("page")));
+        Optional<Integer> limit = Optional.of(Integer.parseInt(routingContext.request().getParam("limit")));
+
+        List<Review> courses = courseService.getPaginatedReviewsByStudentUsername(
+                username,
+                page.orElse(0),
+                limit.orElse(5)
+        );
+
+        JsonObject data = new JsonObject().put("reviews", courses);
+
+        routingContext.response().setStatusCode(200).end(data.encode());
+    }
+
     private void handleStudentWishedCourse(RoutingContext routingContext) {
 
         try {
@@ -134,7 +157,7 @@ public class UserController implements Controller {
         Optional<Integer> page = Optional.of(Integer.parseInt(routingContext.request().getParam("page")));
         Optional<Integer> limit = Optional.of(Integer.parseInt(routingContext.request().getParam("limit")));
 
-        List<CourseProjection> courses = courseService.getPaginatedCoursesByWisherUsernameDescending(
+        List<CourseProjection> courses = courseService.getPaginatedCoursesByWisherUsername(
                 username,
                 page.orElse(0),
                 limit.orElse(5)
@@ -163,13 +186,13 @@ public class UserController implements Controller {
         List<RegistrationProjection> courses = null;
 
         if (direction.get().equals("asc")) {
-            courses = courseService.getPaginatedCoursesByEnrolledDateByUsernameAscending(
+            courses = courseService.getPaginatedCoursesByUsernameAsc(
                     username,
                     page.orElse(0),
                     limit.orElse(5)
             );
         } else {
-            courses = courseService.getPaginatedCoursesByEnrolledDateByUsernameDescending(
+            courses = courseService.getPaginatedCoursesByUsernameDesc(
                     username,
                     page.orElse(0),
                     limit.orElse(5)
