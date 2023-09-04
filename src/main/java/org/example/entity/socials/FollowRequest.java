@@ -10,8 +10,8 @@ public class FollowRequest {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Integer senderId;
-    private Integer recipientId;
+    private Long senderId;
+    private Long recipientId;
 
     @Enumerated(EnumType.STRING)
     private FOLLOW_REQUEST_STATUS followRequestStatus;
@@ -19,28 +19,29 @@ public class FollowRequest {
     public FollowRequest() {
     }
 
-    public FollowRequest(Integer senderId, Integer recipientId) {
+    public FollowRequest(Long senderId, Long recipientId) {
         this.senderId = senderId;
         this.recipientId = recipientId;
+        this.followRequestStatus = FOLLOW_REQUEST_STATUS.PENDING;
     }
 
     public Long getId() {
         return id;
     }
 
-    public Integer getSenderId() {
+    public Long getSenderId() {
         return senderId;
     }
 
-    public void setSenderId(Integer senderId) {
+    public void setSenderId(Long senderId) {
         this.senderId = senderId;
     }
 
-    public Integer getRecipientId() {
+    public Long getRecipientId() {
         return recipientId;
     }
 
-    public void setRecipientId(Integer recipientId) {
+    public void setRecipientId(Long recipientId) {
         this.recipientId = recipientId;
     }
 

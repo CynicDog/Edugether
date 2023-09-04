@@ -387,7 +387,8 @@
                                             like(<span class="fw-medium">${review.likedCount}</span>)
                                         </span>
                                         <span type="button"
-                                              class="badge bg-dark-subtle border border-dark-subtle text-dark-emphasis rounded-pill">
+                                              class="badge bg-dark-subtle border border-dark-subtle text-dark-emphasis rounded-pill writerFollowEntry"
+                                              data-writer-id=${review.writer.id}>
                                             follow
                                         </span>
                                     </div>
@@ -460,6 +461,32 @@
             const studentUsername = button.getAttribute('data-student-username')
 
             window.location.href = `/user-details?username=${studentUsername}`
+        }
+    })
+
+    document.addEventListener('click', function(event) {
+        if (event.target.classList.contains('writerFollowEntry')) {
+            const button = event.target;
+            const writerId = button.getAttribute('data-writer-id')
+
+            fetch(`/follow/request?recipientId=${writerId}&senderUsername=${username}`, {
+                method: "POST"
+            }).then(response => {
+                if (response.status === 401) {
+                    // Authentication entry point
+                    window.location.href = "/login?error=anonymous"
+                }
+                if (response.status === 403) {
+                    // Unauthorized
+                    window.location.href = "/login?error=denied"
+                }
+
+                if (response.ok) {
+                    showMessagingToast(response.statusText);
+                } else if (!response.ok) {
+                    showMessagingToast(response.statusText);
+                }
+            })
         }
     })
 

@@ -73,7 +73,29 @@ public class UserController implements Controller {
             router.post("/teacher/qualification").handler(BodyHandler.create()).handler(this::handleTeacherQualification);
             router.post("/student/interest").handler(BodyHandler.create()).handler(this::handleStudentInterest);
             router.post("/registration/modify-status").handler(this::handleRegistrationModifyStatus);
+            router.post("/follow/request").handler(this::handleFollowRequestPost);
         }
+    }
+
+    private void handleFollowRequestPost(RoutingContext routingContext) {
+
+        UserProjection authentication = routingContext.session().get("Authentication");
+
+        if (authentication == null) {
+            logger.info("[ Authentication entry point ]");
+            routingContext.response().setStatusCode(401).end();
+            return;
+        }
+
+        try {
+            userService.registerFollowRequest(
+                    Long.parseLong(routingContext.request().getParam("recipientId")),
+                    routingContext.request().getParam("senderUsername"));
+            routingContext.response().setStatusCode(200).setStatusMessage("Successfully done!").end();
+        } catch (Exception e) {
+            routingContext.response().setStatusCode(500).setStatusMessage("Already requested.").end();
+        }
+
     }
 
     private void handleRegistrationModifyStatus(RoutingContext routingContext) {
@@ -110,11 +132,7 @@ public class UserController implements Controller {
         Optional<Integer> page = Optional.of(Integer.parseInt(routingContext.request().getParam("page")));
         Optional<Integer> limit = Optional.of(Integer.parseInt(routingContext.request().getParam("limit")));
 
-        List<Course> courses = courseService.getPaginatedCoursesByPublishedDateAndByUsernameDescending(
-                username,
-                page.orElse(0),
-                limit.orElse(3)
-        );
+        List<Course> courses = courseService.getPaginatedCoursesByPublishedDateAndByUsernameDescending(username, page.orElse(0), limit.orElse(3));
 
         JsonObject data = new JsonObject().put("courses", courses);
 
@@ -133,11 +151,7 @@ public class UserController implements Controller {
         Optional<Integer> page = Optional.of(Integer.parseInt(routingContext.request().getParam("page")));
         Optional<Integer> limit = Optional.of(Integer.parseInt(routingContext.request().getParam("limit")));
 
-        List<Review> courses = courseService.getPaginatedReviewsByStudentUsername(
-                username,
-                page.orElse(0),
-                limit.orElse(5)
-        );
+        List<Review> courses = courseService.getPaginatedReviewsByStudentUsername(username, page.orElse(0), limit.orElse(5));
 
         JsonObject data = new JsonObject().put("reviews", courses);
 
@@ -157,11 +171,7 @@ public class UserController implements Controller {
         Optional<Integer> page = Optional.of(Integer.parseInt(routingContext.request().getParam("page")));
         Optional<Integer> limit = Optional.of(Integer.parseInt(routingContext.request().getParam("limit")));
 
-        List<CourseProjection> courses = courseService.getPaginatedCoursesByWisherUsername(
-                username,
-                page.orElse(0),
-                limit.orElse(5)
-        );
+        List<CourseProjection> courses = courseService.getPaginatedCoursesByWisherUsername(username, page.orElse(0), limit.orElse(5));
 
         JsonObject data = new JsonObject().put("courses", courses);
 
@@ -186,17 +196,9 @@ public class UserController implements Controller {
         List<RegistrationProjection> courses = null;
 
         if (direction.get().equals("asc")) {
-            courses = courseService.getPaginatedCoursesByUsernameAsc(
-                    username,
-                    page.orElse(0),
-                    limit.orElse(5)
-            );
+            courses = courseService.getPaginatedCoursesByUsernameAsc(username, page.orElse(0), limit.orElse(5));
         } else {
-            courses = courseService.getPaginatedCoursesByUsernameDesc(
-                    username,
-                    page.orElse(0),
-                    limit.orElse(5)
-            );
+            courses = courseService.getPaginatedCoursesByUsernameDesc(username, page.orElse(0), limit.orElse(5));
         }
 
         JsonObject data = new JsonObject().put("courses", courses);

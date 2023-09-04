@@ -9,9 +9,11 @@ import org.example.controller.CourseController;
 import org.example.controller.HomeController;
 import org.example.controller.UserController;
 import org.example.repository.CourseRepository;
+import org.example.repository.FollowRequestRepository;
 import org.example.repository.ReviewRepository;
 import org.example.repository.UserRepository;
 import org.example.repository.implementation.CourseRepositoryImpl;
+import org.example.repository.implementation.FollowRequestRepositoryImpl;
 import org.example.repository.implementation.ReviewRepositoryImpl;
 import org.example.repository.implementation.UserRepositoryImpl;
 import org.example.service.CourseService;
@@ -32,8 +34,9 @@ public class EdugetherMainApp extends AbstractVerticle {
         UserRepository userRepository = new UserRepositoryImpl(emf);
         CourseRepository courseRepository = new CourseRepositoryImpl(emf);
         ReviewRepository reviewRepository = new ReviewRepositoryImpl(emf);
+        FollowRequestRepository followRequestRepository = new FollowRequestRepositoryImpl(emf);
 
-        UserService userService = new UserService(userRepository);
+        UserService userService = new UserService(userRepository, followRequestRepository);
         CourseService courseService = new CourseService(courseRepository, userRepository, reviewRepository);
 
         UserController userController = new UserController(userService, courseService);

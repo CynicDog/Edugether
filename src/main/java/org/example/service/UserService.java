@@ -2,10 +2,12 @@ package org.example.service;
 
 import at.favre.lib.crypto.bcrypt.BCrypt;
 import io.vertx.core.json.JsonObject;
+import org.example.entity.socials.FollowRequest;
 import org.example.entity.users.Student;
 import org.example.entity.users.Teacher;
 import org.example.entity.users.User;
 import org.example.projection.UserProjection;
+import org.example.repository.FollowRequestRepository;
 import org.example.repository.UserRepository;
 import org.example.util.enums.TYPE;
 import org.jboss.logging.Logger;
@@ -16,9 +18,11 @@ public class UserService {
 
     private final Logger logger = Logger.getLogger(UserService.class);
     private final UserRepository userRepository;
+    private final FollowRequestRepository followRequestRepository;
 
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository, FollowRequestRepository followRequestRepository) {
         this.userRepository = userRepository;
+        this.followRequestRepository = followRequestRepository;
     }
 
     public void registerStudent(JsonObject userCommand) {
@@ -92,5 +96,16 @@ public class UserService {
         student.addInterest(interest);
 
         userRepository.updateUser((User) student);
+    }
+
+    public void registerFollowRequest(Long recipientId, String senderUsername) {
+
+        User sender = userRepository.loadUserByUsername(senderUsername);
+
+        try {
+            followRequestRepository.insertFollowRequest(new FollowRequest(sender.getId(), recipientId));
+        } catch (Exception e) {
+            throw e;
+        }
     }
 }
