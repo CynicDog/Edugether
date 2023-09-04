@@ -195,7 +195,7 @@
                                 <div class="d-flex flex-column h-100 p-5 pb-3 text-white text-shadow-1">
                                     <div class="row">
                                         <div class="col-8">
-                                            <div class="badge bg-primary-subtle border border-primary-subtle text-primary-emphasis rounded-pill me-auto my-2">
+                                            <div class="badge text-bg-secondary rounded-pill fw-light me-auto my-2">
                                                 ${course.subject}
                                             </div>
                                         </div>
@@ -217,7 +217,7 @@
                                             <li class="ms-auto d-flex align-items-center me-3">
                                                 <small> by
                                                     <span type="button"
-                                                          class="badge bg-secondary-subtle border border-secondary-subtle text-secondary-emphasis rounded-pill teacherDetailsEntry"
+                                                          class="badge text-bg-secondary rounded-pill fw-light teacherDetailsEntry"
                                                           data-teacher-username="${course.teacherUsername}">
                                                         ${course.teacherUsername}
                                                     </span>
@@ -309,7 +309,8 @@
         })
 
         window.onscroll = function () {
-            if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
+
+            if ((window.innerHeight + window.scrollY + .5) >= document.body.offsetHeight) {
 
                 if (isCourseFetching || isCourseLast) {
                     // do nothing

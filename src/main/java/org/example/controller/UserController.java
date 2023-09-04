@@ -50,10 +50,10 @@ public class UserController implements Controller {
                 routingContext.response().putHeader("Content-Type", "text/html").sendFile(PUBLIC + "signup-entry.html");
             });
             router.get("/signup/student").handler(routingContext -> {
-                routingContext.response().putHeader("Content-Type", "text/html").sendFile(PUBLIC + "signup-student-mypage.html");
+                routingContext.response().putHeader("Content-Type", "text/html").sendFile(PUBLIC + "signup-student.html");
             });
             router.get("/signup/teacher").handler(routingContext -> {
-                routingContext.response().putHeader("Content-Type", "text/html").sendFile(PUBLIC + "signup-teacher-mypage.html");
+                routingContext.response().putHeader("Content-Type", "text/html").sendFile(PUBLIC + "signup-teacher.html");
             });
             router.get("/user/check-username").handler(this::handleCheckUsername);
             router.get("/user/check-email").handler(this::handleCheckEmail);
