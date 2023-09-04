@@ -261,12 +261,13 @@
     })
 
     const contentLoadingSpinner = document.getElementById('contentLoadingSpinner')
+
+    let fetchingDirection = 'desc'
     let fetchingTopic = null;
 
     let pageOnCourses = 0;
     let isCourseFetching = false;
     let isCourseLast = false;
-    let fetchingDirection = 'desc'
     let courseFetchingOption = 'enrolled';
 
     const getCourses = (option, page, direction) => {

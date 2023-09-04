@@ -7,6 +7,11 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.6.0/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        .custom-tooltip {
+            --bs-tooltip-font-size: .7rem;
+        }
+    </style>
 </head>
 <body>
 <div id="navbar-placeholder"></div>
@@ -32,6 +37,41 @@
                     </p>
                 </div>
                 <div class="shadow-sm p-4 mb-3 bg-body-tertiary rounded">
+                    <h4 class="fw-lighter py-2">🥂 Socials</h4>
+                    <div id="pendingRequests"
+                         type="button"
+                         class="badge bg-light-subtle border border-light-subtle text-light-emphasis rounded-pill ">
+                        Pending
+                    </div>
+                    <div id="acceptedRequests"
+                         type="button"
+                         class="badge bg-light-subtle border border-light-subtle text-light-emphasis rounded-pill ">
+                        Accepted
+                    </div>
+                    <div id="declinedRequests"
+                         type="button"
+                         class="badge bg-light-subtle border border-light-subtle text-light-emphasis rounded-pill ">
+                        Declined
+                    </div>
+                    <div id="sentRequests"
+                         type="button"
+                         class="badge bg-light-subtle border border-light-subtle text-light-emphasis rounded-pill ">
+                        Sent
+                    </div>
+                    <hr/>
+                    <div id="requestsOutputArea" class="overflow-scroll" style="max-height: 170px">
+                    </div>
+                    <div class="text-center">
+                        <div class="btn border border-0 disabled">
+                            <div id="requestLoadingSpinner"
+                                 class="spinner-border spinner-border-sm text-primary m-1" role="status"
+                                 style="display: none;">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="shadow-sm p-4 mb-3 bg-body-tertiary rounded">
                     <h4 class="fw-lighter py-2">📚 Qualifications
                         <i id="qualificationToastButton" type="button" class="bi bi-plus mx-3"
                            style="color:#838383"></i>
@@ -39,20 +79,32 @@
                     <div id="qualificationsOutputArea">
                     </div>
                 </div>
-
-                <div class="shadow-sm p-4 mb-3 bg-body-tertiary rounded">
-                    <h4 class="fw-lighter py-2">Join me!</h4>
-                    <p class="mb-0">upcoming society events</p>
-                </div>
             </div>
         </div>
         <div class="col-md-8">
             <div class="pb-4 mb-4 border-bottom text-end">
                 <span type="button"
                       id="courseToastButton"
-                      class="badge bg-light-subtle border border-light-subtle text-light-emphasis rounded-pill">📕 Add course</span>
+                      class="badge bg-primary-subtle text-primary-emphasis rounded-pill">
+                    📕 Add course</span>
                 <span id="coursesButton" type="button"
-                      class="badge bg-primary-subtle text-primary-emphasis rounded-pill">Courses</span>
+                      class="badge bg-success-subtle text-success-emphasis rounded-pill">
+                    Courses</span>
+                <span id="followersButton" type="button"
+                      class="badge bg-light-subtle border border-light-subtle text-light-emphasis rounded-pill position-relative mx-2"
+                      data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Click to toggle direction"
+                      data-bs-custom-class="custom-tooltip">Followers
+                     <span id="followersCount"
+                           class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"></span>
+                </span>
+                <span id="followingsButton" type="button"
+                      class="badge bg-light-subtle border border-light-subtle text-light-emphasis rounded-pill position-relative mx-2"
+                      data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Click to toggle direction"
+                      data-bs-custom-class="custom-tooltip">
+                    Followings
+                     <span id="followingsCount"
+                           class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"></span>
+                </span>
             </div>
             <div>
                 <div id="contentOutputArea" class="row">
@@ -216,6 +268,8 @@
     const qualificationSubmitButton = document.getElementById('qualificationSubmitButton')
     const qualificationToastButton = document.getElementById('qualificationToastButton')
 
+    let fetchingDirection = 'desc'
+    let fetchingTopic = null;
     let currentFetchingOptions = null
 
     const contentOutputArea = document.getElementById('contentOutputArea')
@@ -436,6 +490,159 @@
         })
     })
 
+    let isRequestLast = false;
+    let isRequestsFetching = false;
+    let pageOnRequests = 0
+    let requestFetchingOption = 'pending'
+
+    const requestLoadingSpinner = document.getElementById('requestLoadingSpinner')
+    const requestsOutputArea = document.getElementById('requestsOutputArea')
+
+    const getRequests = (option, page) => {
+        return fetch(`/follow/request?option=${option}&page=${page}&limit=5`).then(response => response.json())
+    }
+
+    function fetchAndRenderRequests(option, page) {
+        isRequestsFetching = true
+        requestLoadingSpinner.style.display = 'block';
+
+        getRequests(option, page).then(data => {
+
+            if (data.users.length < 5) {
+                isRequestLast = true;
+                isRequestsFetching = false;
+                requestLoadingSpinner.style.display = 'none';
+            }
+
+            data.users.forEach(datum => {
+
+                function getStatusClasses(status) {
+                    switch (status) {
+                        case 'PENDING':
+                            return 'badge bg-primary-subtle text-primary-emphasis rounded-pill my-1 requestStatusButton';
+                        case 'ACCEPTED':
+                            return 'badge bg-success-subtle text-success-emphasis rounded-pill my-1 requestStatusButton';
+                        case 'DECLINED':
+                            return 'badge bg-danger-subtle text-danger-emphasis rounded-pill my-1 requestStatusButton';
+                        default:
+                            return 'badge bg-warning-subtle text-warning-emphasis rounded-pill my-1 requestStatusButton';
+                    }
+                }
+
+                const statusClasses = getStatusClasses(datum.requestStatus);
+
+                requestsOutputArea.innerHTML += `
+                    <div class="border rounded p-2 my-2 d-flex align-items-center">
+                        <div class="fw-light mx-1 userDetailEntry" type="button"  data-username="${datum.username}">${datum.username}</div>
+                        <div class="ms-auto">
+                            <span type="button"
+                                  data-request-id="${datum.followRequestId}"
+                                  class="${statusClasses}">${datum.requestStatus}</span>
+                        </div>
+                    </div>
+                    `
+                requestLoadingSpinner.style.display = 'none';
+                isRequestsFetching = false;
+            })
+        })
+    }
+
+    fetchAndRenderRequests(requestFetchingOption, pageOnRequests);
+
+    document.getElementById('pendingRequests').addEventListener('click', function () {
+        requestsOutputArea.innerHTML = ''
+
+        pageOnRequests = 0
+        isRequestLast = false;
+        requestFetchingOption = 'pending'
+        fetchAndRenderRequests(requestFetchingOption, pageOnRequests);
+    })
+
+    document.getElementById('acceptedRequests').addEventListener('click', function () {
+        requestsOutputArea.innerHTML = ''
+
+        pageOnRequests = 0
+        isRequestLast = false;
+        requestFetchingOption = 'accepted'
+        fetchAndRenderRequests(requestFetchingOption, pageOnRequests);
+    })
+
+    document.getElementById('declinedRequests').addEventListener('click', function () {
+        requestsOutputArea.innerHTML = ''
+
+        pageOnRequests = 0
+        isRequestLast = false;
+        requestFetchingOption = 'declined'
+        fetchAndRenderRequests(requestFetchingOption, pageOnRequests);
+    })
+
+    document.getElementById('sentRequests').addEventListener('click', function () {
+        requestsOutputArea.innerHTML = ''
+
+        pageOnRequests = 0
+        isRequestLast = false;
+        requestFetchingOption = 'sent'
+        fetchAndRenderRequests(requestFetchingOption, pageOnRequests);
+    })
+
+    requestsOutputArea.addEventListener('scroll', function () {
+
+        const scrollPos = this.scrollTop + this.clientHeight;
+        const scrollHeight = this.scrollHeight;
+
+        if (scrollPos + .5 >= scrollHeight) {
+            if (isRequestsFetching || isRequestLast) {
+                // do nothing
+            } else {
+                pageOnRequests += 1;
+                fetchAndRenderRequests(requestFetchingOption, pageOnRequests);
+            }
+        }
+    })
+
+    document.addEventListener('click', function (event) {
+        if (event.target.classList.contains('requestStatusButton')) {
+            const button = event.target;
+            const requestId = button.getAttribute('data-request-id')
+
+            fetch(`/follow/request-modify?requestId=${requestId}`, {
+                method: "POST"
+            })
+                .then(response => response.json())
+                .then(data => {
+
+                    function getStatusClasses(status) {
+                        switch (status) {
+                            case 'PENDING':
+                                return 'badge bg-primary-subtle text-primary-emphasis rounded-pill my-1 requestStatusButton';
+                            case 'ACCEPTED':
+                                return 'badge bg-success-subtle text-success-emphasis rounded-pill my-1 requestStatusButton';
+                            case 'DECLINED':
+                                return 'badge bg-danger-subtle text-danger-emphasis rounded-pill my-1 requestStatusButton';
+                            default:
+                                return 'badge bg-warning-subtle text-warning-emphasis rounded-pill my-1 requestStatusButton';
+                        }
+                    }
+
+                    const newStatusClasses = getStatusClasses(data.status);
+
+                    button.textContent = data.status;
+                    button.className = newStatusClasses;
+
+                    updateFollowersCount();
+                })
+        }
+    })
+
+    document.addEventListener('click', function (event) {
+        if (event.target.classList.contains('userDetailEntry')) {
+            const button = event.target;
+            const username = button.getAttribute('data-username')
+
+            window.location.href = `/user-details?username=${username}`
+        }
+    })
+
     const getCourses = page => {
         return fetch(`/teacher/course?username=${username}&page=${page}&limit=3`).then(response => response.json());
     }
@@ -487,30 +694,166 @@
         })
     }
 
+    // initial fetching
     fetchAndRenderCourses(pageOnCourses);
-    currentFetchingOptions = (page) => {
-        return fetchAndRenderCourses(page);
-    }
 
     document.getElementById('coursesButton').addEventListener('click', function () {
 
         contentOutputArea.innerHTML = '';
 
         pageOnCourses = 0
+        isCourseFetching = false;
+        isCourseLast = false;
+        fetchingTopic = 'course'
         fetchAndRenderCourses(pageOnCourses)
-        currentFetchingOptions = (page) => {
-            return fetchAndRenderCourses(page);
-        }
+    })
+
+    const getSocials = (page, direction, option) => {
+        return fetch(`/socials?page=${page}&limit=5&direction=${direction}&option=${option}`).then(response => response.json());
+    }
+
+    function fetchAndRenderSocials(page, direction, option) {
+
+        isSocialFetching = true;
+        contentLoadingSpinner.style.display = 'block';
+
+        getSocials(page, direction, option).then(data => {
+
+            if (data.socials.length < 5) {
+                isSocialLast = true;
+                isSocialFetching = false;
+                contentLoadingSpinner.style.display = 'none';
+            }
+
+            data.socials.forEach(datum => {
+
+                if (datum.type === 'TEACHER') {
+
+                    let qualificationsBadges = '';
+                    datum.qualifications.forEach(qualification => {
+                        const qualificationBadge = `
+                        <span class="badge bg-light-subtle border border-light-subtle text-light-emphasis rounded-pill my-2">
+                            ${qualification}
+                        </span>
+                    `
+                        qualificationsBadges += qualificationBadge;
+                    })
+
+                    contentOutputArea.innerHTML += `
+                        <div class="bg-light rounded-3 p-3 my-4 shadow-sm">
+                            <div class="row d-flex align-items-center justify-content-center p-3">
+                                <div class="col-lg-9">
+                                    <span type="button" class="fs-3 fw-lighter userDetailEntry" data-username="${datum.username}">
+                                        ${datum.username}
+                                    </span>
+                                    <span class="badge bg-light-subtle border border-light-subtle text-light-emphasis rounded-pill ">
+                                        ${datum.email}
+                                    </span>
+                                </div>
+                                <div class="col-lg-3">
+                                    <div class="text-end">
+                                        <span class="badge bg-secondary-subtle border border-secondary-subtle text-secondary-emphasis rounded-pill mx-1">
+                                            ${datum.type}
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="fw-light shadow-sm rounded-2 bg-white mt-3 mb-2 p-2 overflow-auto">
+                                    Qualification: ${qualificationsBadges}
+                                </div>
+                            </div>
+                        </div>
+                    `
+                    isSocialFetching = false;
+                } else {
+
+                    let interestsBadges = '';
+                    datum.interests.forEach(interest => {
+                        const interestBadge = `
+                        <span class="badge bg-light-subtle border border-light-subtle text-light-emphasis rounded-pill my-2">
+                            ${interest}
+                        </span>
+                    `
+                        interestsBadges += interestBadge;
+                    })
+
+                    contentOutputArea.innerHTML += `
+                        <div class="bg-light rounded-3 p-3 my-4 shadow-sm">
+                            <div class="row d-flex align-items-center justify-content-center p-3">
+                                <div class="col-lg-9">
+                                    <span type="button" class="fs-3 fw-lighter userDetailEntry" data-username="${datum.username}">
+                                        ${datum.username}
+                                    </span>
+                                    <span class="badge bg-light-subtle border border-light-subtle text-light-emphasis rounded-pill ">
+                                        ${datum.email}
+                                    </span>
+                                </div>
+                                <div class="col-lg-3">
+                                    <div class="text-end">
+                                        <span class="badge bg-secondary-subtle border border-secondary-subtle text-secondary-emphasis rounded-pill mx-1">
+                                            ${datum.type}
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="fw-light shadow-sm rounded-2 bg-white mt-3 mb-2 p-2 overflow-auto">
+                                    Interests: ${interestsBadges}
+                                </div>
+                            </div>
+                        </div>`
+                    isSocialFetching = false;
+                }
+                contentLoadingSpinner.style.display = 'none';
+            })
+        })
+    }
+
+    let socialFetchingOption = 'followers';
+    let pageOnSocials = 0
+    let isSocialFetching = false;
+    let isSocialLast = false;
+
+    document.getElementById('followersButton').addEventListener('click', function() {
+
+        contentOutputArea.innerHTML = '';
+
+        pageOnSocials = 0
+        isSocialFetching = false;
+        isSocialLast = false;
+        fetchingDirection = (fetchingDirection === 'desc') ? 'asc' : 'desc';
+        socialFetchingOption = 'followers'
+        fetchingTopic = 'socials'
+        fetchAndRenderSocials(pageOnSocials, fetchingDirection, socialFetchingOption)
+    })
+
+    document.getElementById('followingsButton').addEventListener('click', function() {
+
+        contentOutputArea.innerHTML = '';
+
+        pageOnSocials = 0
+        isSocialFetching = false;
+        isSocialLast = false;
+        fetchingDirection = (fetchingDirection === 'desc') ? 'asc' : 'desc';
+        socialFetchingOption = 'followings'
+        fetchingTopic = 'socials'
+        fetchAndRenderSocials(pageOnSocials, fetchingDirection, socialFetchingOption)
     })
 
     window.onscroll = function () {
-        if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
+        if ((window.innerHeight + window.scrollY + 0.5) >= document.body.offsetHeight) {
 
-            if (isCourseFetching || isCourseLast) {
-                // do nothing
-            } else {
-                pageOnCourses += 1;
-                currentFetchingOptions(pageOnCourses);
+            if (fetchingTopic === 'course') {
+                if (isCourseFetching || isCourseLast) {
+                    // do nothing
+                } else {
+                    pageOnCourses += 1;
+                    fetchAndRenderCourses(pageOnCourses);
+                }
+            } else if (fetchingTopic === 'socials') {
+                if (isSocialFetching || isSocialLast) {
+                    // do nothing
+                } else {
+                    pageOnSocials += 1;
+                    fetchAndRenderSocials(pageOnSocials, fetchingDirection, socialFetchingOption);
+                }
             }
         }
     }
@@ -610,5 +953,30 @@
     function formatDate(timestamp) {
         return new Date(timestamp).toLocaleDateString("en-US");
     }
+
+    const updateFollowersCount = () => {
+        fetch(`/followers-count`)
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('followersCount').textContent = data.count;
+            });
+    };
+    updateFollowersCount();
+
+    const updateFollowingsCount = () => {
+        fetch(`/followings-count`)
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('followingsCount').textContent = data.count;
+            });
+    };
+    updateFollowingsCount();
+
+    const followersButtonTooltip = document.getElementById('followersButton')
+    const tooltip2 = bootstrap.Tooltip.getOrCreateInstance(followersButtonTooltip)
+
+    const followingsButtonTooltip = document.getElementById('followingsButton')
+    const tooltip3 = bootstrap.Tooltip.getOrCreateInstance(followingsButtonTooltip)
+
 </script>
 </html>
