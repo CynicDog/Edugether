@@ -5,17 +5,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="83ac0769-501d-47c5-aa4c-9efb288ea6db" name="Changes" comment="modified">
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/repository/FollowRepository.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/repository/implementation/FollowRepositoryImpl.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/EdugetherMainApp.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/EdugetherMainApp.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/example/controller/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/controller/UserController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/entity/socials/FollowRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/entity/socials/FollowRequest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/entity/socials/Follow.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/entity/socials/Follow.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/example/projection/UserProjection.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/projection/UserProjection.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/repository/FollowRequestRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/repository/FollowRequestRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/repository/FollowRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/repository/FollowRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/repository/implementation/FollowRepositoryImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/repository/implementation/FollowRepositoryImpl.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/example/repository/implementation/FollowRequestRepositoryImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/repository/implementation/FollowRequestRepositoryImpl.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/example/service/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/service/UserService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/util/enums/FOLLOW_REQUEST_STATUS.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/util/enums/FOLLOW_REQUEST_STATUS.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/public/student-mypage.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/public/student-mypage.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -231,7 +228,7 @@
       <workItem from="1693538270266" duration="599000" />
       <workItem from="1693544659439" duration="1193000" />
       <workItem from="1693664518454" duration="66000" />
-      <workItem from="1693789817085" duration="14399000" />
+      <workItem from="1693789817085" duration="23244000" />
     </task>
     <task id="LOCAL-00001" summary="init (dependencies, entities)">
       <created>1692451459255</created>
@@ -471,7 +468,14 @@
       <option name="project" value="LOCAL" />
       <updated>1693795358318</updated>
     </task>
-    <option name="localTasksCounter" value="35" />
+    <task id="LOCAL-00035" summary="modified">
+      <created>1693810230493</created>
+      <option name="number" value="00035" />
+      <option name="presentableId" value="LOCAL-00035" />
+      <option name="project" value="LOCAL" />
+      <updated>1693810230493</updated>
+    </task>
+    <option name="localTasksCounter" value="36" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

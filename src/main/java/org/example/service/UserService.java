@@ -16,6 +16,7 @@ import org.example.util.enums.TYPE;
 import org.jboss.logging.Logger;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class UserService {
 
@@ -124,7 +125,13 @@ public class UserService {
         } else if (option.equals("declined")) {
             return followRequestRepository.getDeclinedRequestsByRecipientId(recipientId, page, limit);
         } else {
-            return followRequestRepository.getSentRequestsByRecipientId(recipientId, page, limit);
+            return followRequestRepository.getSentRequestsByRecipientId(recipientId, page, limit)
+                    .stream()
+                    .map(request -> {
+                        request.setRequestStatus(FOLLOW_REQUEST_STATUS.SENT);
+                        return request;
+                    })
+                    .collect(Collectors.toList());
         }
     }
 
@@ -134,7 +141,8 @@ public class UserService {
 
         if (followRequest.getRecipientId() == authentication.getId()) {
 
-            Follow follow = followRepository.getFollowByFollowerAndFollowed(followRequest.getSenderId(), followRequest.getRecipientId());
+            Follow follow = followRepository.getFollowByFollowerAndFollowed(
+                    followRequest.getSenderId(), followRequest.getRecipientId());
 
             if (followRequest.getFollowRequestStatus().equals(FOLLOW_REQUEST_STATUS.PENDING)) {
                 if (follow == null) {
@@ -160,4 +168,33 @@ public class UserService {
         return followRequest.getFollowRequestStatus().toString();
     }
 
+    public long getFollowingsCountByUserId(Long userId) {
+
+        return followRepository.countFollowByFollowerId(userId);
+    }
+
+    public long getFollowersCountByUserId(Long userId) {
+
+        return followRepository.countFollowByFollowedId(userId);
+    }
+
+    public List<User> getFollowersPaginatedByUserIdOrderByCreateDateAsc(Long userId, Integer page, Integer limit) {
+
+        return followRepository.getFollowersPaginatedByUserIdOrderByCreateDateAsc(userId, page, limit);
+    }
+
+    public List<User> getFollowersPaginatedByUserIdOrderByCreateDateDesc(Long userId, Integer page, Integer limit) {
+
+        return followRepository.getFollowersPaginatedByUserIdOrderByCreateDateDesc(userId, page, limit);
+    }
+
+    public List<User> getFollowingsPaginatedByUserIdOrderByCreateDateDesc(Long userId, Integer page, Integer limit) {
+
+        return followRepository.getFollowingsPaginatedByUserIdOrderByCreateDateDesc(userId, page, limit);
+    }
+
+    public List<User> getFollowingsPaginatedByUserIdOrderByCreateDateAsc(Long userId, Integer page, Integer limit) {
+
+        return followRepository.getFollowingsPaginatedByUserIdOrderByCreateDateAsc(userId, page, limit);
+    }
 }

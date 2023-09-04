@@ -1,6 +1,9 @@
 package org.example.entity.socials;
 
+import org.hibernate.annotations.CreationTimestamp;
+
 import javax.persistence.*;
+import java.util.Date;
 
 @Entity
 @Table(uniqueConstraints = @UniqueConstraint(columnNames = { "followerId", "followedId" }))
@@ -14,6 +17,9 @@ public class Follow {
 
     @Column(nullable = false)
     private Long followedId;
+
+    @CreationTimestamp
+    private Date createDate = new Date();
 
     public Follow() {
     }

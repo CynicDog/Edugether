@@ -37,14 +37,6 @@
                     </p>
                 </div>
                 <div class="shadow-sm p-4 mb-3 bg-body-tertiary rounded">
-                    <h4 class="fw-lighter py-2">📚 Interests
-                        <i id="interestsToastButton" type="button" class="bi bi-plus mx-3"
-                           style="color:#838383"></i>
-                    </h4>
-                    <div id="interestsOutputArea">
-                    </div>
-                </div>
-                <div class="shadow-sm p-4 mb-3 bg-body-tertiary rounded">
                     <h4 class="fw-lighter py-2">🥂 Socials</h4>
                     <div id="pendingRequests"
                          type="button"
@@ -67,7 +59,7 @@
                         Sent
                     </div>
                     <hr/>
-                    <div id="requestsOutputArea" class="overflow-scroll" style="max-height: 200px">
+                    <div id="requestsOutputArea" class="overflow-scroll" style="max-height: 170px">
                     </div>
                     <div class="text-center">
                         <div class="btn border border-0 disabled">
@@ -79,6 +71,14 @@
                         </div>
                     </div>
                 </div>
+                <div class="shadow-sm p-4 mb-3 bg-body-tertiary rounded">
+                    <h4 class="fw-lighter py-2">📚 Interests
+                        <i id="interestsToastButton" type="button" class="bi bi-plus mx-3"
+                           style="color:#838383"></i>
+                    </h4>
+                    <div id="interestsOutputArea">
+                    </div>
+                </div>
             </div>
         </div>
         <div class="col-md-8">
@@ -86,14 +86,29 @@
                 <span id="enrolledCoursesButton"
                       type="button"
                       class="badge bg-primary-subtle text-primary-emphasis rounded-pill"
-                      data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Click to toggle direction" data-bs-custom-class="custom-tooltip">Enrolled courses
+                      data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Click to toggle direction"
+                      data-bs-custom-class="custom-tooltip">Enrolled courses
                 </span>
                 <span id="wishedCoursesButton" type="button"
                       class="badge bg-success-subtle text-success-emphasis rounded-pill">Wished courses</span>
                 <span id="myReviewsButton" type="button"
                       class="badge bg-warning-subtle text-warning-emphasis rounded-pill">My Reviews</span>
-                <span id="subjectsButton" type="button"
-                      class="badge bg-danger-subtle text-danger-emphasis rounded-pill">Subjects</span>
+                <span id="followersButton" type="button"
+                      class="badge bg-light-subtle border border-light-subtle text-light-emphasis rounded-pill position-relative mx-2"
+                      data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Click to toggle direction"
+                      data-bs-custom-class="custom-tooltip">Followers
+                     <span id="followersCount"
+                           class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"></span>
+                </span>
+                <span id="followingsButton" type="button"
+                      class="badge bg-light-subtle border border-light-subtle text-light-emphasis rounded-pill position-relative mx-2"
+                      data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Click to toggle direction"
+                      data-bs-custom-class="custom-tooltip">
+                    Followings
+                     <span id="followingsCount"
+                           class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"></span>
+                </span>
+
             </div>
             <div>
                 <div id="contentOutputArea" class="row">
@@ -156,6 +171,7 @@
             </div>
         </div>
     </div>
+
 </div>
 </body>
 <script>
@@ -465,6 +481,135 @@
         fetchAndRenderReviews(pageOnReviews);
     })
 
+    let socialFetchingOption = 'followers';
+    let pageOnSocials = 0
+    let isSocialFetching = false;
+    let isSocialLast = false;
+
+    const getSocials = (page, direction, option) => {
+        return fetch(`/socials?page=${page}&limit=5&direction=${direction}&option=${option}`).then(response => response.json());
+    }
+
+    function fetchAndRenderSocials(page, direction, option) {
+
+        isSocialFetching = true;
+        contentLoadingSpinner.style.display = 'block';
+
+        getSocials(page, direction, option).then(data => {
+
+            if (data.socials.length < 5) {
+                isSocialLast = true;
+                isSocialFetching = false;
+                contentLoadingSpinner.style.display = 'none';
+            }
+
+            data.socials.forEach(datum => {
+
+                if (datum.type === 'TEACHER') {
+
+                    let qualificationsBadges = '';
+                    datum.qualifications.forEach(qualification => {
+                        const qualificationBadge = `
+                        <span class="badge bg-light-subtle border border-light-subtle text-light-emphasis rounded-pill my-2">
+                            ${qualification}
+                        </span>
+                    `
+                        qualificationsBadges += qualificationBadge;
+                    })
+
+                    contentOutputArea.innerHTML += `
+                        <div class="bg-light rounded-3 p-3 my-4 shadow-sm">
+                            <div class="row d-flex align-items-center justify-content-center p-3">
+                                <div class="col-lg-9">
+                                    <span type="button" class="fs-3 fw-lighter userDetailEntry" data-username="${datum.username}">
+                                        ${datum.username}
+                                    </span>
+                                    <span class="badge bg-light-subtle border border-light-subtle text-light-emphasis rounded-pill ">
+                                        ${datum.email}
+                                    </span>
+                                </div>
+                                <div class="col-lg-3">
+                                    <div class="text-end">
+                                        <span class="badge bg-secondary-subtle border border-secondary-subtle text-secondary-emphasis rounded-pill mx-1">
+                                            ${datum.type}
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="fw-light shadow-sm rounded-2 bg-white mt-3 mb-2 p-2 overflow-auto">
+                                    Qualification: ${qualificationsBadges}
+                                </div>
+                            </div>
+                        </div>
+                    `
+                    isSocialFetching = false;
+                } else {
+
+                    let interestsBadges = '';
+                    datum.interests.forEach(interest => {
+                        const interestBadge = `
+                        <span class="badge bg-light-subtle border border-light-subtle text-light-emphasis rounded-pill my-2">
+                            ${interest}
+                        </span>
+                    `
+                        interestsBadges += interestBadge;
+                    })
+
+                    contentOutputArea.innerHTML += `
+                        <div class="bg-light rounded-3 p-3 my-4 shadow-sm">
+                            <div class="row d-flex align-items-center justify-content-center p-3">
+                                <div class="col-lg-9">
+                                    <span type="button" class="fs-3 fw-lighter userDetailEntry" data-username="${datum.username}">
+                                        ${datum.username}
+                                    </span>
+                                    <span class="badge bg-light-subtle border border-light-subtle text-light-emphasis rounded-pill ">
+                                        ${datum.email}
+                                    </span>
+                                </div>
+                                <div class="col-lg-3">
+                                    <div class="text-end">
+                                        <span class="badge bg-secondary-subtle border border-secondary-subtle text-secondary-emphasis rounded-pill mx-1">
+                                            ${datum.type}
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="fw-light shadow-sm rounded-2 bg-white mt-3 mb-2 p-2 overflow-auto">
+                                    Interests: ${interestsBadges}
+                                </div>
+                            </div>
+                        </div>`
+                    isSocialFetching = false;
+                }
+                contentLoadingSpinner.style.display = 'none';
+            })
+        })
+    }
+
+    document.getElementById('followersButton').addEventListener('click', function() {
+
+        contentOutputArea.innerHTML = '';
+
+        pageOnSocials = 0
+        isSocialFetching = false;
+        isSocialLast = false;
+        fetchingDirection = (fetchingDirection === 'desc') ? 'asc' : 'desc';
+        socialFetchingOption = 'followers'
+        fetchingTopic = 'socials'
+        fetchAndRenderSocials(pageOnSocials, fetchingDirection, socialFetchingOption)
+    })
+
+    document.getElementById('followingsButton').addEventListener('click', function() {
+
+        contentOutputArea.innerHTML = '';
+
+        pageOnSocials = 0
+        isSocialFetching = false;
+        isSocialLast = false;
+        fetchingDirection = (fetchingDirection === 'desc') ? 'asc' : 'desc';
+        socialFetchingOption = 'followings'
+        fetchingTopic = 'socials'
+        fetchAndRenderSocials(pageOnSocials, fetchingDirection, socialFetchingOption)
+    })
+
     window.onscroll = function () {
         if ((window.innerHeight + window.scrollY) + 0.5 >= document.body.offsetHeight) {
 
@@ -482,20 +627,16 @@
                     pageOnReviews += 1;
                     fetchAndRenderReviews(pageOnReviews);
                 }
+            } else if (fetchingTopic === 'socials') {
+                if (isSocialFetching || isSocialLast) {
+                    // do nothing
+                } else {
+                    pageOnSocials += 1;
+                    fetchAndRenderSocials(pageOnSocials, fetchingDirection, socialFetchingOption);
+                }
             }
         }
     }
-
-    // TODO
-    document.getElementById('subjectsButton').addEventListener('click', function() {
-
-        fetch(`/student/subject?username=${username}`)
-            .then(response => response.json())
-            .then(data => {
-                console.log(data)
-            })
-        ;
-    })
 
     document.addEventListener('click', function (event) {
             if (event.target.classList.contains('courseDetailsEntry')) {
@@ -525,7 +666,7 @@
 
         getRequests(option, page).then(data => {
 
-            if (data.length < 5) {
+            if (data.users.length < 5) {
                 isRequestLast = true;
                 isRequestsFetching = false;
                 requestLoadingSpinner.style.display = 'none';
@@ -626,7 +767,7 @@
                 method: "POST"
             })
                 .then(response => response.json())
-                .then(status => {
+                .then(data => {
 
                     function getStatusClasses(status) {
                         switch (status) {
@@ -641,10 +782,12 @@
                         }
                     }
 
-                    const newStatusClasses = getStatusClasses(status);
+                    const newStatusClasses = getStatusClasses(data.status);
 
-                    button.textContent = status.status;
+                    button.textContent = data.status;
                     button.className = newStatusClasses;
+
+                    updateFollowersCount();
                 })
         }
     })
@@ -657,6 +800,24 @@
             window.location.href = `/user-details?username=${username}`
         }
     })
+
+    const updateFollowersCount = () => {
+        fetch(`/followers-count`)
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('followersCount').textContent = data.count;
+            });
+    };
+    updateFollowersCount();
+
+    const updateFollowingsCount = () => {
+        fetch(`/followings-count`)
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('followingsCount').textContent = data.count;
+            });
+    };
+    updateFollowingsCount();
 
     function showMessagingToast(message) {
         const messagingToast = document.getElementById('messagingToast');
@@ -769,7 +930,13 @@
     }
 
     const enrolledCoursesButtonTooltip = document.getElementById('enrolledCoursesButton')
-    const tooltip = bootstrap.Tooltip.getOrCreateInstance(enrolledCoursesButtonTooltip)
+    const tooltip1 = bootstrap.Tooltip.getOrCreateInstance(enrolledCoursesButtonTooltip)
+
+    const followersButtonTooltip = document.getElementById('followersButton')
+    const tooltip2 = bootstrap.Tooltip.getOrCreateInstance(followersButtonTooltip)
+
+    const followingsButtonTooltip = document.getElementById('followingsButton')
+    const tooltip3 = bootstrap.Tooltip.getOrCreateInstance(followingsButtonTooltip)
 
 </script>
 </html>

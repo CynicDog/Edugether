@@ -114,7 +114,27 @@ public class FollowRequestRepositoryImpl implements FollowRequestRepository {
 
     @Override
     public List<UserProjection> getSentRequestsByRecipientId(Long recipientId, Integer page, Integer limit) {
-        return null;
+        return JpaOperationUtil.apply(entityManagerFactory, em -> {
+
+            int startIndex = page * limit;
+
+            TypedQuery<UserProjection> query = em.createQuery("select new org.example.projection.UserProjection(" +
+                    "u.id, " +
+                    "u.username, " +
+                    "u.type, " +
+                    "fr.id, " +
+                    "fr.followRequestStatus) " +
+                    "from FollowRequest fr inner join User u on u.id = fr.recipientId " +
+                    "where fr.senderId = :recipientId " +
+                    "order by fr.createDate desc", UserProjection.class);
+
+            query.setParameter("recipientId", recipientId);
+
+            query.setFirstResult(startIndex);
+            query.setMaxResults(limit);
+
+            return query.getResultList();
+        });
     }
 
     @Override

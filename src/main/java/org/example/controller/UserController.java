@@ -66,7 +66,11 @@ public class UserController implements Controller {
             router.get("/student/wished-course").handler(this::handleStudentWishedCourse);
             router.get("/student/review").handler(this::handleStudentReview);
             router.get("/user-details").handler(this::handleUserDetails);
+
+            router.get("/socials").handler(this::handleSocials);
             router.get("/follow/request").handler(this::handleFollowRequestGet);
+            router.get("/followers-count").handler(this::handleFollowersCount);
+            router.get("/followings-count").handler(this::handleFollowingsCount);
         }
         {   // POST handlers
             router.post("/signup/student").handler(BodyHandler.create()).handler(this::handleStudentSignup);
@@ -77,6 +81,74 @@ public class UserController implements Controller {
             router.post("/follow/request").handler(this::handleFollowRequestPost);
             router.post("/follow/request-modify").handler(this::handleFollowRequestModify);
         }
+    }
+
+    private void handleSocials(RoutingContext routingContext) {
+
+        UserProjection authentication = routingContext.session().get("Authentication");
+
+        Optional<Integer> page = Optional.of(Integer.parseInt(routingContext.request().getParam("page")));
+        Optional<Integer> limit = Optional.of(Integer.parseInt(routingContext.request().getParam("limit")));
+        Optional<String> direction = Optional.of(routingContext.request().getParam("direction"));
+        Optional<String> option = Optional.of(routingContext.request().getParam("option"));
+
+        List<User> socials = null;
+
+        if (option.get().equals("followers")) {
+
+            if (direction.get().equals("asc")) {
+                socials = userService.getFollowersPaginatedByUserIdOrderByCreateDateAsc(
+                        authentication.getId(),
+                        page.orElse(0),
+                        limit.orElse(5)
+                );
+            } else {
+                socials = userService.getFollowersPaginatedByUserIdOrderByCreateDateDesc(
+                        authentication.getId(),
+                        page.orElse(0),
+                        limit.orElse(5)
+                );
+            }
+
+            JsonObject data = new JsonObject().put("socials", socials);
+            routingContext.response().setStatusCode(200).end(data.encode());
+        } else {
+
+            if (direction.get().equals("asc")) {
+                socials = userService.getFollowingsPaginatedByUserIdOrderByCreateDateAsc(
+                        authentication.getId(),
+                        page.orElse(0),
+                        limit.orElse(5)
+                );
+            } else {
+                socials = userService.getFollowingsPaginatedByUserIdOrderByCreateDateDesc(
+                        authentication.getId(),
+                        page.orElse(0),
+                        limit.orElse(5)
+                );
+            }
+
+            JsonObject data = new JsonObject().put("socials", socials);
+            routingContext.response().setStatusCode(200).end(data.encode());
+        }
+    }
+
+    private void handleFollowingsCount(RoutingContext routingContext) {
+
+        UserProjection authentication = routingContext.session().get("Authentication");
+        long followingsCount = userService.getFollowingsCountByUserId(authentication.getId());
+
+        JsonObject data = new JsonObject().put("count", followingsCount);
+        routingContext.response().setStatusCode(200).end(data.encode());
+    }
+
+    private void handleFollowersCount(RoutingContext routingContext) {
+
+        UserProjection authentication = routingContext.session().get("Authentication");
+        long followingsCount = userService.getFollowersCountByUserId(authentication.getId());
+
+        JsonObject data = new JsonObject().put("count", followingsCount);
+        routingContext.response().setStatusCode(200).end(data.encode());
     }
 
     private void handleFollowRequestModify(RoutingContext routingContext) {

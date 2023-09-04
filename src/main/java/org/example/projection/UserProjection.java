@@ -57,4 +57,8 @@ public class UserProjection {
     public Long getFollowRequestId() {
         return followRequestId;
     }
+
+    public void setRequestStatus(FOLLOW_REQUEST_STATUS requestStatus) {
+        this.requestStatus = requestStatus;
+    }
 }
