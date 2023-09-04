@@ -92,51 +92,66 @@ public class UserController implements Controller {
         Optional<String> direction = Optional.of(routingContext.request().getParam("direction"));
         Optional<String> option = Optional.of(routingContext.request().getParam("option"));
 
+        String username = routingContext.request().getParam("username");
+
         List<User> socials = null;
 
-        if (option.get().equals("followers")) {
+        if (username == null) { // from my page
 
-            if (direction.get().equals("asc")) {
-                socials = userService.getFollowersPaginatedByUserIdOrderByCreateDateAsc(
-                        authentication.getId(),
-                        page.orElse(0),
-                        limit.orElse(5)
-                );
-            } else {
-                socials = userService.getFollowersPaginatedByUserIdOrderByCreateDateDesc(
-                        authentication.getId(),
-                        page.orElse(0),
-                        limit.orElse(5)
-                );
+            if (option.get().equals("followers")) {
+
+                if (direction.get().equals("asc")) {
+                    socials = userService.getFollowersPaginatedByUserIdOrderByCreateDateAsc(authentication.getId(), page.orElse(0), limit.orElse(5));
+                } else {
+                    socials = userService.getFollowersPaginatedByUserIdOrderByCreateDateDesc(authentication.getId(), page.orElse(0), limit.orElse(5));
+                }
+                JsonObject data = new JsonObject().put("socials", socials);
+                routingContext.response().setStatusCode(200).end(data.encode());
+            } else { // for fetching `followings`
+                if (direction.get().equals("asc")) {
+                    socials = userService.getFollowingsPaginatedByUserIdOrderByCreateDateAsc(authentication.getId(), page.orElse(0), limit.orElse(5));
+                } else {
+                    socials = userService.getFollowingsPaginatedByUserIdOrderByCreateDateDesc(authentication.getId(), page.orElse(0), limit.orElse(5));
+                }
+                JsonObject data = new JsonObject().put("socials", socials);
+                routingContext.response().setStatusCode(200).end(data.encode());
             }
+        } else { // from student-details
+            User user = userService.getUserByUsername(username);
 
-            JsonObject data = new JsonObject().put("socials", socials);
-            routingContext.response().setStatusCode(200).end(data.encode());
-        } else {
+            if (option.get().equals("followers")) {
 
-            if (direction.get().equals("asc")) {
-                socials = userService.getFollowingsPaginatedByUserIdOrderByCreateDateAsc(
-                        authentication.getId(),
-                        page.orElse(0),
-                        limit.orElse(5)
-                );
-            } else {
-                socials = userService.getFollowingsPaginatedByUserIdOrderByCreateDateDesc(
-                        authentication.getId(),
-                        page.orElse(0),
-                        limit.orElse(5)
-                );
+                if (direction.get().equals("asc")) {
+                    socials = userService.getFollowersPaginatedByUserIdOrderByCreateDateAsc(user.getId(), page.orElse(0), limit.orElse(5));
+                } else {
+                    socials = userService.getFollowersPaginatedByUserIdOrderByCreateDateDesc(user.getId(), page.orElse(0), limit.orElse(5));
+                }
+                JsonObject data = new JsonObject().put("socials", socials);
+                routingContext.response().setStatusCode(200).end(data.encode());
+            } else { // for fetching `followings`
+                if (direction.get().equals("asc")) {
+                    socials = userService.getFollowingsPaginatedByUserIdOrderByCreateDateAsc(user.getId(), page.orElse(0), limit.orElse(5));
+                } else {
+                    socials = userService.getFollowingsPaginatedByUserIdOrderByCreateDateDesc(user.getId(), page.orElse(0), limit.orElse(5));
+                }
+                JsonObject data = new JsonObject().put("socials", socials);
+                routingContext.response().setStatusCode(200).end(data.encode());
             }
-
-            JsonObject data = new JsonObject().put("socials", socials);
-            routingContext.response().setStatusCode(200).end(data.encode());
         }
     }
 
     private void handleFollowingsCount(RoutingContext routingContext) {
 
         UserProjection authentication = routingContext.session().get("Authentication");
-        long followingsCount = userService.getFollowingsCountByUserId(authentication.getId());
+        String username = routingContext.request().getParam("username");
+
+        long followingsCount = 0;
+
+        if (username == null) { // from my page
+            followingsCount = userService.getFollowingsCountByUserId(authentication.getId());
+        } else { // from student-details
+            followingsCount = userService.getFollowingsCountByUserId(userService.getUserByUsername(username).getId());
+        }
 
         JsonObject data = new JsonObject().put("count", followingsCount);
         routingContext.response().setStatusCode(200).end(data.encode());
@@ -145,9 +160,17 @@ public class UserController implements Controller {
     private void handleFollowersCount(RoutingContext routingContext) {
 
         UserProjection authentication = routingContext.session().get("Authentication");
-        long followingsCount = userService.getFollowersCountByUserId(authentication.getId());
+        String username = routingContext.request().getParam("username");
 
-        JsonObject data = new JsonObject().put("count", followingsCount);
+        long followersCount = 0;
+
+        if (username == null) { // from my page
+            followersCount = userService.getFollowersCountByUserId(authentication.getId());
+        } else { // from student-details
+            followersCount = userService.getFollowersCountByUserId(userService.getUserByUsername(username).getId());
+        }
+
+        JsonObject data = new JsonObject().put("count", followersCount);
         routingContext.response().setStatusCode(200).end(data.encode());
     }
 
@@ -175,11 +198,7 @@ public class UserController implements Controller {
         Optional<Integer> page = Optional.of(Integer.parseInt(routingContext.request().getParam("page")));
         Optional<Integer> limit = Optional.of(Integer.parseInt(routingContext.request().getParam("limit")));
 
-        List<UserProjection> users = userService.getRequestsPaginatedByRecipientIdAndByStatus(
-                authentication.getId(),
-                page.orElse(0),
-                limit.orElse(7),
-                option);
+        List<UserProjection> users = userService.getRequestsPaginatedByRecipientIdAndByStatus(authentication.getId(), page.orElse(0), limit.orElse(7), option);
 
         JsonObject data = new JsonObject().put("users", users);
 
@@ -197,11 +216,16 @@ public class UserController implements Controller {
             return;
         }
 
+        String recipientUsername = routingContext.request().getParam("recipientUsername");
         try {
-            userService.registerFollowRequest(
-                    Long.parseLong(routingContext.request().getParam("recipientId")),
-                    routingContext.request().getParam("senderUsername"));
-            routingContext.response().setStatusCode(200).setStatusMessage("Successfully done!").end();
+            if (recipientUsername == null) { // from course-details
+                userService.registerFollowRequest(Long.parseLong(routingContext.request().getParam("recipientId")), authentication.getUsername());
+                routingContext.response().setStatusCode(200).setStatusMessage("Successfully done!").end();
+            } else {
+                userService.registerFollowRequest( // from student-details
+                        userService.getUserByUsername(recipientUsername).getId(), authentication.getUsername());
+                routingContext.response().setStatusCode(200).setStatusMessage("Successfully done!").end();
+            }
         } catch (Exception e) {
             routingContext.response().setStatusCode(500).setStatusMessage("Already requested.").end();
         }
@@ -209,6 +233,14 @@ public class UserController implements Controller {
     }
 
     private void handleRegistrationModifyStatus(RoutingContext routingContext) {
+
+        UserProjection authentication = routingContext.session().get("Authentication");
+
+        if (authentication == null) {
+            logger.info("[ Authentication entry point ]");
+            routingContext.response().setStatusCode(401).end();
+            return;
+        }
 
         Long registrationId = Long.parseLong(routingContext.request().getParam("registrationId"));
 

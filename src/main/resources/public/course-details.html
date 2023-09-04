@@ -469,7 +469,7 @@
             const button = event.target;
             const writerId = button.getAttribute('data-writer-id')
 
-            fetch(`/follow/request?recipientId=${writerId}&senderUsername=${username}`, {
+            fetch(`/follow/request?recipientId=${writerId}`, {
                 method: "POST"
             }).then(response => {
                 if (response.status === 401) {

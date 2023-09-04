@@ -37,23 +37,45 @@
                     </div>
                 </div>
                 <div class="shadow-sm p-4 mb-3 bg-body-tertiary rounded">
-                    <h4 class="fw-lighter py-2">Join me!</h4>
-                    <p class="mb-0">upcoming society events</p>
+                    <div class="row">
+                        <div class="col-md-7 fs-4 fw-lighter my-1">Join me!</div>
+                        <div class="col-md-5 my-2 text-end">
+                            <span type="button"
+                                  class="badge bg-primary-subtle border border-primary-subtle text-primary-emphasis rounded-pill userFollowEntry">
+                                Follow
+                            </span>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
         <div class="col-md-8">
             <div class="pb-4 mb-4 border-bottom text-end">
-                <span id="coursesButton" type="button"
-                      class="badge bg-primary-subtle text-primary-emphasis rounded-pill">Courses</span>
-                <span id="popularCoursesButton" type="button"
-                      class="badge bg-info-subtle text-info-emphasis rounded-pill">button2</span>
-                <span id="acclaimedCoursesButton" type="button"
-                      class="badge bg-success-subtle text-success-emphasis rounded-pill">button3</span>
-                <span id="mixedCoursesButton" type="button"
-                      class="badge bg-warning-subtle text-warning-emphasis rounded-pill">button4</span>
-                <span id="criticizedCoursesButton" type="button"
-                      class="badge bg-danger-subtle text-danger-emphasis rounded-pill">button5</span>
+            <span id="enrolledCoursesButton"
+                  type="button"
+                  class="badge bg-primary-subtle text-primary-emphasis rounded-pill"
+                  data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Click to toggle direction"
+                  data-bs-custom-class="custom-tooltip">Enrolled courses
+            </span>
+                <span id="wishedCoursesButton" type="button"
+                      class="badge bg-success-subtle text-success-emphasis rounded-pill">Wished courses</span>
+                <span id="myReviewsButton" type="button"
+                      class="badge bg-warning-subtle text-warning-emphasis rounded-pill">Reviews</span>
+                <span id="followersButton" type="button"
+                      class="badge bg-light-subtle border border-light-subtle text-light-emphasis rounded-pill position-relative mx-2"
+                      data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Click to toggle direction"
+                      data-bs-custom-class="custom-tooltip">Followers
+                     <span id="followersCount"
+                           class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"></span>
+                </span>
+                <span id="followingsButton" type="button"
+                      class="badge bg-light-subtle border border-light-subtle text-light-emphasis rounded-pill position-relative mx-2"
+                      data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Click to toggle direction"
+                      data-bs-custom-class="custom-tooltip">
+                    Followings
+                     <span id="followingsCount"
+                           class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"></span>
+                </span>
             </div>
             <div>
                 <div id="contentOutputArea" class="row">
@@ -94,7 +116,8 @@
                     <div class="p-3">
                         <div class="my-2">
                             <div class="form-floating">
-                                <input type="text" class="form-control-plaintext" id="interestTitle" name="interestTitle" placeholder="">
+                                <input type="text" class="form-control-plaintext" id="interestTitle"
+                                       name="interestTitle" placeholder="">
                                 <label class="fw-lighter d-flex" for="interestTitle">Title
                                     <div class="ms-auto">
                                         <div class="validation interestTitle mx-3 text-danger"
@@ -156,10 +179,487 @@
             })
         })
 
+    document.querySelector('.userFollowEntry').addEventListener('click', function () {
+
+        fetch(`/follow/request?recipientUsername=${username}`, {
+            method: "POST"
+        }).then(response => {
+            if (response.status === 401) {
+                // Authentication entry point
+                window.location.href = "/login?error=anonymous"
+            }
+            if (response.status === 403) {
+                // Unauthorized
+                window.location.href = "/login?error=denied"
+            }
+
+            if (response.ok) {
+                showMessagingToast(response.statusText);
+            } else if (!response.ok) {
+                showMessagingToast(response.statusText);
+            }
+        })
+
+    })
+
     function formatDate(timestamp) {
         return new Date(timestamp).toLocaleDateString("en-US");
     }
 
+    function showMessagingToast(message) {
+        const messagingToast = document.getElementById('messagingToast');
+        const toastBody = messagingToast.querySelector('.toast-body');
+
+        toastBody.textContent = message;
+
+        const successfulToastBootstrap = bootstrap.Toast.getOrCreateInstance(messagingToast);
+        successfulToastBootstrap.show();
+    }
+
+    const contentLoadingSpinner = document.getElementById('contentLoadingSpinner')
+    let fetchingTopic = null;
+
+    let pageOnCourses = 0;
+    let isCourseFetching = false;
+    let isCourseLast = false;
+    let fetchingDirection = 'desc'
+    let courseFetchingOption = 'enrolled';
+
+    const getCourses = (option, page, direction) => {
+        return fetch(`/student/${option}-course?username=${username}&page=${page}&limit=5&direction=${direction}`)
+            .then(response => response.json());
+    }
+
+    function fetchAndRenderCourses(option, page, direction) {
+
+        isCourseFetching = true;
+        contentLoadingSpinner.style.display = 'block';
+
+        getCourses(option, page, direction).then(data => {
+            if (data.length < 5) {
+                isCourseLast = true;
+            }
+            data.courses.forEach(datum => {
+                // if `course` is not flattened
+                if (datum.registrationStatus) {
+                    contentOutputArea.innerHTML += `
+                    <div class="row">
+                        <div class="col my-3">
+                            <div class="card card-cover h-100 overflow-hidden text-bg-dark rounded-4 shadow-lg">
+                                <div class="d-flex flex-column h-100 p-5 pb-3 text-white text-shadow-1">
+                                    <div>
+                                        <div class="row d-flex justify-content-center align-items-center">
+                                            <div class="col-md-7">
+                                                <div class="badge bg-primary-subtle border border-primary-subtle text-primary-emphasis rounded-pill me-auto my-2">
+                                                    ${datum.course.subject}
+                                                </div>
+                                            </div>
+                                            <div class="col-md-5 text-end fw-lighter">
+                                                <span class="badge bg-light-subtle border border-light-subtle text-light-emphasis rounded-pill mx-1 my-2">
+                                                    ${datum.registrationStatus} ${getRegistrationStatusEmoji(datum.registrationStatus)}
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <h3 type="button" class="pt-3 display-6 lh-1 fw-bold courseDetailsEntry" data-course-id="${datum.course.id}"> ${datum.course.name}</h3>
+                                        <ul class="d-flex list-unstyled mt-auto">
+                                            <li class="fw-lighter my-3">
+                                            Enrolled date:
+                                                <span class="fw-light">
+                                                    ${formatDate(datum.enrolledDate)}
+                                                </span>
+                                            </li>
+                                            <li class="ms-auto d-flex align-items-center me-3">
+                                                <small> by ${datum.course.teacher.username} </small>
+                                            </li>
+                                            <li class="d-flex align-items-center">
+                                                <small> ${formatDate(datum.course.startingDay)} ~
+                                                    ${formatDate(datum.course.endingDay)} </small>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `
+                }
+                // if `course` is flattened
+                else {
+                    contentOutputArea.innerHTML += `
+                    <div class="row">
+                        <div class="col my-3">
+                            <div class="card card-cover h-100 overflow-hidden text-bg-dark rounded-4 shadow-lg">
+                                <div class="d-flex flex-column h-100 p-5 pb-3 text-white text-shadow-1">
+                                    <div>
+                                        <div class="row d-flex justify-content-center align-items-center">
+                                            <div class="col-md-7">
+                                                <div class="badge bg-primary-subtle border border-primary-subtle text-primary-emphasis rounded-pill me-auto my-2">
+                                                    ${datum.subject}
+                                                </div>
+                                            </div>
+                                            <div class="col-md-5 text-end fw-lighter">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <h3 type="button" class="pt-3 display-6 lh-1 fw-bold courseDetailsEntry" data-course-id="${datum.id}"> ${datum.name}</h3>
+                                        <ul class="d-flex list-unstyled mt-auto">
+                                            <li class="ms-auto d-flex align-items-center me-3">
+                                                <small> by ${datum.teacherUsername} </small>
+                                            </li>
+                                            <li class="d-flex align-items-center">
+                                                <small> ${formatDate(datum.startingDay)} ~
+                                                    ${formatDate(datum.endingDay)} </small>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `
+                }
+                isCourseFetching = false;
+            })
+            contentLoadingSpinner.style.display = 'none';
+        })
+    }
+
+    // initial fetching
+    fetchAndRenderCourses(courseFetchingOption, pageOnCourses, fetchingDirection)
+
+    document.getElementById('enrolledCoursesButton').addEventListener('click', function () {
+
+        contentOutputArea.innerHTML = '';
+
+        pageOnCourses = 0
+        courseFetchingOption = 'enrolled'
+        fetchingDirection = (fetchingDirection === 'desc') ? 'asc' : 'desc';
+        fetchingTopic = 'course'
+        fetchAndRenderCourses(courseFetchingOption, pageOnCourses, fetchingDirection)
+    })
+
+    document.getElementById('wishedCoursesButton').addEventListener('click', function () {
+
+        contentOutputArea.innerHTML = '';
+
+        pageOnCourses = 0
+        courseFetchingOption = 'wished'
+        fetchingDirection = 'desc'
+        fetchingTopic = 'course'
+        fetchAndRenderCourses(courseFetchingOption, pageOnCourses, fetchingDirection)
+    })
+
+    document.addEventListener('click', function (event) {
+            if (event.target.classList.contains('courseDetailsEntry')) {
+                const button = event.target;
+                const courseId = button.getAttribute('data-course-id');
+
+                window.location.href = `course/details-page?courseId=${courseId}`
+            }
+        }
+    )
+
+    let pageOnReviews = 0;
+    let isReviewFetching = false;
+    let isReviewLast = false;
+
+    const getReviews = page => {
+        return fetch(`/student/review?username=${username}&page=${page}&limit=5`).then(response => response.json());
+    }
+
+    function fetchAndRenderReviews(page) {
+
+        isReviewFetching = true;
+        contentLoadingSpinner.style.display = 'block';
+
+        getReviews(page).then(data => {
+            if (data.length < 5) {
+                isReviewLast = true;
+            }
+
+            data.reviews.forEach(datum => {
+
+                const truncatedContent = (datum.content.split(' ').length > 50)
+                    ? `${datum.content.split(' ').slice(0, 50).join(' ')} (...)`
+                    : datum.content;
+
+                contentOutputArea.innerHTML += `
+                        <div class="bg-light rounded-3 p-3 my-3 shadow-sm">
+                            <div class="row d-flex align-items-center justify-content-center">
+                                <div class="col-lg-9">
+                                    <span type="button" class="badge bg-warning-subtle border border-warning-subtle text-warning-emphasis rounded-pill courseDetailsEntry" data-course-id="${datum.course.id}">
+                                        ${datum.course.name}
+                                    </span>
+                                    <span type="button" class="badge bg-light-subtle border border-light-subtle text-light-emphasis rounded-pill ">
+                                        ${datum.course.teacher.username}
+                                    </span>
+                                </div>
+                                <div class="col-lg-3">
+                                    <div class="text-end">
+                                        <span class="badge bg-light-subtle border border-light-subtle text-light-emphasis rounded-pill mx-1">
+                                            ${datum.reviewSentiment} ${getSentimentEmoji(datum.reviewSentiment)}
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="fw-light my-1 p-3 overflow-auto">
+                                ${truncatedContent}
+                            </div>
+                            <div class="text-end">
+                                <span class="badge bg-light-subtle border border-light-subtle text-light-emphasis rounded-pill">
+                                    ${formatDate(datum.createDate)}
+                                </span>
+                            </div>
+                        </div>
+                `
+                isReviewFetching = false;
+            })
+            contentLoadingSpinner.style.display = 'none';
+        })
+    }
+
+    document.getElementById('myReviewsButton').addEventListener('click', function () {
+
+        contentOutputArea.innerHTML = '';
+
+        pageOnReviews = 0
+        fetchingTopic = 'review'
+        fetchAndRenderReviews(pageOnReviews);
+    })
+
+    let socialFetchingOption = 'followers';
+    let pageOnSocials = 0
+    let isSocialFetching = false;
+    let isSocialLast = false;
+
+    const getSocials = (page, direction, option) => {
+        return fetch(`/socials?page=${page}&limit=5&direction=${direction}&option=${option}&username=${username}`).then(response => response.json());
+    }
+
+    function fetchAndRenderSocials(page, direction, option) {
+
+        isSocialFetching = true;
+        contentLoadingSpinner.style.display = 'block';
+
+        getSocials(page, direction, option).then(data => {
+
+            if (data.socials.length < 5) {
+                isSocialLast = true;
+                isSocialFetching = false;
+                contentLoadingSpinner.style.display = 'none';
+            }
+
+            data.socials.forEach(datum => {
+
+                if (datum.type === 'TEACHER') {
+
+                    let qualificationsBadges = '';
+                    datum.qualifications.forEach(qualification => {
+                        const qualificationBadge = `
+                        <span class="badge bg-light-subtle border border-light-subtle text-light-emphasis rounded-pill my-2">
+                            ${qualification}
+                        </span>
+                    `
+                        qualificationsBadges += qualificationBadge;
+                    })
+
+                    contentOutputArea.innerHTML += `
+                        <div class="bg-light rounded-3 p-3 my-4 shadow-sm">
+                            <div class="row d-flex align-items-center justify-content-center p-3">
+                                <div class="col-lg-9">
+                                    <span type="button" class="fs-3 fw-lighter userDetailEntry" data-username="${datum.username}">
+                                        ${datum.username}
+                                    </span>
+                                    <span class="badge bg-light-subtle border border-light-subtle text-light-emphasis rounded-pill ">
+                                        ${datum.email}
+                                    </span>
+                                </div>
+                                <div class="col-lg-3">
+                                    <div class="text-end">
+                                        <span class="badge bg-secondary-subtle border border-secondary-subtle text-secondary-emphasis rounded-pill mx-1">
+                                            ${datum.type}
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="fw-light shadow-sm rounded-2 bg-white mt-3 mb-2 p-2 overflow-auto">
+                                    Qualification: ${qualificationsBadges}
+                                </div>
+                            </div>
+                        </div>
+                    `
+                    isSocialFetching = false;
+                } else {
+
+                    let interestsBadges = '';
+                    datum.interests.forEach(interest => {
+                        const interestBadge = `
+                        <span class="badge bg-light-subtle border border-light-subtle text-light-emphasis rounded-pill my-2">
+                            ${interest}
+                        </span>
+                    `
+                        interestsBadges += interestBadge;
+                    })
+
+                    contentOutputArea.innerHTML += `
+                        <div class="bg-light rounded-3 p-3 my-4 shadow-sm">
+                            <div class="row d-flex align-items-center justify-content-center p-3">
+                                <div class="col-lg-9">
+                                    <span type="button" class="fs-3 fw-lighter userDetailEntry" data-username="${datum.username}">
+                                        ${datum.username}
+                                    </span>
+                                    <span class="badge bg-light-subtle border border-light-subtle text-light-emphasis rounded-pill ">
+                                        ${datum.email}
+                                    </span>
+                                </div>
+                                <div class="col-lg-3">
+                                    <div class="text-end">
+                                        <span class="badge bg-secondary-subtle border border-secondary-subtle text-secondary-emphasis rounded-pill mx-1">
+                                            ${datum.type}
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="fw-light shadow-sm rounded-2 bg-white mt-3 mb-2 p-2 overflow-auto">
+                                    Interests: ${interestsBadges}
+                                </div>
+                            </div>
+                        </div>`
+                    isSocialFetching = false;
+                }
+                contentLoadingSpinner.style.display = 'none';
+            })
+        })
+    }
+
+    document.getElementById('followersButton').addEventListener('click', function() {
+
+        contentOutputArea.innerHTML = '';
+
+        pageOnSocials = 0
+        isSocialFetching = false;
+        isSocialLast = false;
+        fetchingDirection = (fetchingDirection === 'desc') ? 'asc' : 'desc';
+        socialFetchingOption = 'followers'
+        fetchingTopic = 'socials'
+        fetchAndRenderSocials(pageOnSocials, fetchingDirection, socialFetchingOption)
+    })
+
+    document.getElementById('followingsButton').addEventListener('click', function() {
+
+        contentOutputArea.innerHTML = '';
+
+        pageOnSocials = 0
+        isSocialFetching = false;
+        isSocialLast = false;
+        fetchingDirection = (fetchingDirection === 'desc') ? 'asc' : 'desc';
+        socialFetchingOption = 'followings'
+        fetchingTopic = 'socials'
+        fetchAndRenderSocials(pageOnSocials, fetchingDirection, socialFetchingOption)
+    })
+
+    window.onscroll = function () {
+        if ((window.innerHeight + window.scrollY) + 0.5 >= document.body.offsetHeight) {
+
+            if (fetchingTopic === 'course') {
+                if (isCourseFetching || isCourseLast) {
+                    // do nothing
+                } else {
+                    pageOnCourses += 1;
+                    fetchAndRenderCourses(courseFetchingOption, pageOnCourses, fetchingDirection);
+                }
+            } else if (fetchingTopic === 'review') {
+                if (isReviewFetching || isReviewLast) {
+                    // do nothing
+                } else {
+                    pageOnReviews += 1;
+                    fetchAndRenderReviews(pageOnReviews);
+                }
+            } else if (fetchingTopic === 'socials') {
+                if (isSocialFetching || isSocialLast) {
+                    // do nothing
+                } else {
+                    pageOnSocials += 1;
+                    fetchAndRenderSocials(pageOnSocials, fetchingDirection, socialFetchingOption);
+                }
+            }
+        }
+    }
+
+    document.addEventListener('click', function (event) {
+        if (event.target.classList.contains('userDetailEntry')) {
+            const button = event.target;
+            const username = button.getAttribute('data-username')
+
+            window.location.href = `/user-details?username=${username}`
+        }
+    })
+
+    const updateFollowersCount = () => {
+        fetch(`/followers-count?username=${username}`)
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('followersCount').textContent = data.count;
+            });
+    };
+    updateFollowersCount();
+
+    const updateFollowingsCount = () => {
+        fetch(`/followings-count?username=${username}`)
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('followingsCount').textContent = data.count;
+            });
+    };
+    updateFollowingsCount();
+
+    function formatDate(timestamp) {
+        return new Date(timestamp).toLocaleDateString("en-US");
+    }
+
+    function getRegistrationStatusEmoji(status) {
+        switch (status) {
+            case 'ABORTED':
+                return '💔';
+            case 'ENROLLED':
+                return '❤️';
+            default:
+                return '';
+        }
+    }
+
+    function getSentimentEmoji(sentiment) {
+        switch (sentiment) {
+            case 'NEUTRAL':
+                return '😐';
+            case 'LOVED':
+                return '❤️';
+            case 'IMPRESSED':
+                return '🤩';
+            case 'MIXED':
+                return '🤔';
+            case 'INSPIRED':
+                return '🌟';
+            case 'OVERWHELMED':
+                return '😲';
+            case 'DISLIKED':
+                return '😞';
+            case 'CONFUSED':
+                return '😕';
+            default:
+                return '';
+        }
+    }
+
+    const enrolledCoursesButtonTooltip = document.getElementById('enrolledCoursesButton')
+    const tooltip1 = bootstrap.Tooltip.getOrCreateInstance(enrolledCoursesButtonTooltip)
+
+    const followersButtonTooltip = document.getElementById('followersButton')
+    const tooltip2 = bootstrap.Tooltip.getOrCreateInstance(followersButtonTooltip)
+
+    const followingsButtonTooltip = document.getElementById('followingsButton')
+    const tooltip3 = bootstrap.Tooltip.getOrCreateInstance(followingsButtonTooltip)
 
 </script>
 </html>

@@ -92,7 +92,7 @@
                 <span id="wishedCoursesButton" type="button"
                       class="badge bg-success-subtle text-success-emphasis rounded-pill">Wished courses</span>
                 <span id="myReviewsButton" type="button"
-                      class="badge bg-warning-subtle text-warning-emphasis rounded-pill">My Reviews</span>
+                      class="badge bg-warning-subtle text-warning-emphasis rounded-pill">Reviews</span>
                 <span id="followersButton" type="button"
                       class="badge bg-light-subtle border border-light-subtle text-light-emphasis rounded-pill position-relative mx-2"
                       data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Click to toggle direction"
@@ -108,7 +108,6 @@
                      <span id="followingsCount"
                            class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"></span>
                 </span>
-
             </div>
             <div>
                 <div id="contentOutputArea" class="row">
@@ -261,13 +260,14 @@
         })
     })
 
-    let fetchingTopic = null;
-    let courseFetchingOption = 'enrolled';
-    let pageOnCourses = 0;
-    let fetchingDirection = 'desc'
     const contentLoadingSpinner = document.getElementById('contentLoadingSpinner')
+    let fetchingTopic = null;
+
+    let pageOnCourses = 0;
     let isCourseFetching = false;
     let isCourseLast = false;
+    let fetchingDirection = 'desc'
+    let courseFetchingOption = 'enrolled';
 
     const getCourses = (option, page, direction) => {
         return fetch(`/student/${option}-course?username=${username}&page=${page}&limit=5&direction=${direction}`)
@@ -412,6 +412,16 @@
                 })
         }
     })
+
+    document.addEventListener('click', function (event) {
+            if (event.target.classList.contains('courseDetailsEntry')) {
+                const button = event.target;
+                const courseId = button.getAttribute('data-course-id');
+
+                window.location.href = `course/details-page?courseId=${courseId}`
+            }
+        }
+    )
 
     let pageOnReviews = 0;
     let isReviewFetching = false;
@@ -637,16 +647,6 @@
             }
         }
     }
-
-    document.addEventListener('click', function (event) {
-            if (event.target.classList.contains('courseDetailsEntry')) {
-                const button = event.target;
-                const courseId = button.getAttribute('data-course-id');
-
-                window.location.href = `course/details-page?courseId=${courseId}`
-            }
-        }
-    )
 
     let isRequestLast = false;
     let isRequestsFetching = false;
