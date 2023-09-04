@@ -66,6 +66,7 @@ public class UserController implements Controller {
             router.get("/student/wished-course").handler(this::handleStudentWishedCourse);
             router.get("/student/review").handler(this::handleStudentReview);
             router.get("/user-details").handler(this::handleUserDetails);
+            router.get("/follow/request").handler(this::handleFollowRequestGet);
         }
         {   // POST handlers
             router.post("/signup/student").handler(BodyHandler.create()).handler(this::handleStudentSignup);
@@ -74,9 +75,46 @@ public class UserController implements Controller {
             router.post("/student/interest").handler(BodyHandler.create()).handler(this::handleStudentInterest);
             router.post("/registration/modify-status").handler(this::handleRegistrationModifyStatus);
             router.post("/follow/request").handler(this::handleFollowRequestPost);
+            router.post("/follow/request-modify").handler(this::handleFollowRequestModify);
         }
     }
 
+    private void handleFollowRequestModify(RoutingContext routingContext) {
+
+        UserProjection authentication = routingContext.session().get("Authentication");
+        Long requestId = Long.parseLong(routingContext.request().getParam("requestId"));
+
+        JsonObject data = new JsonObject().put("status", userService.updateRequestStatus(requestId, authentication));
+
+        routingContext.response().setStatusCode(200).end(data.encode());
+    }
+
+    private void handleFollowRequestGet(RoutingContext routingContext) {
+
+        UserProjection authentication = routingContext.session().get("Authentication");
+
+        if (authentication == null) {
+            logger.info("[ Authentication entry point ]");
+            routingContext.response().setStatusCode(401).end();
+            return;
+        }
+
+        String option = routingContext.request().getParam("option");
+        Optional<Integer> page = Optional.of(Integer.parseInt(routingContext.request().getParam("page")));
+        Optional<Integer> limit = Optional.of(Integer.parseInt(routingContext.request().getParam("limit")));
+
+        List<UserProjection> users = userService.getRequestsPaginatedByRecipientIdAndByStatus(
+                authentication.getId(),
+                page.orElse(0),
+                limit.orElse(7),
+                option);
+
+        JsonObject data = new JsonObject().put("users", users);
+
+        routingContext.response().setStatusCode(200).end(data.encode());
+    }
+
+    // TODO: User can't add her/himself
     private void handleFollowRequestPost(RoutingContext routingContext) {
 
         UserProjection authentication = routingContext.session().get("Authentication");

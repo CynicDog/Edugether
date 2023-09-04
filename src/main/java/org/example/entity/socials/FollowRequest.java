@@ -1,8 +1,10 @@
 package org.example.entity.socials;
 
 import org.example.util.enums.FOLLOW_REQUEST_STATUS;
+import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
+import java.util.Date;
 
 @Entity
 @Table(uniqueConstraints = @UniqueConstraint(columnNames = { "senderId", "recipientId" }))
@@ -14,7 +16,10 @@ public class FollowRequest {
     private Long recipientId;
 
     @Enumerated(EnumType.STRING)
-    private FOLLOW_REQUEST_STATUS followRequestStatus;
+    private FOLLOW_REQUEST_STATUS followRequestStatus = FOLLOW_REQUEST_STATUS.PENDING;
+
+    @CreationTimestamp
+    private Date createDate = new Date();
 
     public FollowRequest() {
     }
@@ -51,5 +56,13 @@ public class FollowRequest {
 
     public void setFollowRequestStatus(FOLLOW_REQUEST_STATUS followRequestStatus) {
         this.followRequestStatus = followRequestStatus;
+    }
+
+    public Date getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(Date createDate) {
+        this.createDate = createDate;
     }
 }

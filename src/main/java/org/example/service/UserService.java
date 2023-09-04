@@ -2,13 +2,16 @@ package org.example.service;
 
 import at.favre.lib.crypto.bcrypt.BCrypt;
 import io.vertx.core.json.JsonObject;
+import org.example.entity.socials.Follow;
 import org.example.entity.socials.FollowRequest;
 import org.example.entity.users.Student;
 import org.example.entity.users.Teacher;
 import org.example.entity.users.User;
 import org.example.projection.UserProjection;
+import org.example.repository.FollowRepository;
 import org.example.repository.FollowRequestRepository;
 import org.example.repository.UserRepository;
+import org.example.util.enums.FOLLOW_REQUEST_STATUS;
 import org.example.util.enums.TYPE;
 import org.jboss.logging.Logger;
 
@@ -20,9 +23,12 @@ public class UserService {
     private final UserRepository userRepository;
     private final FollowRequestRepository followRequestRepository;
 
-    public UserService(UserRepository userRepository, FollowRequestRepository followRequestRepository) {
+    private final FollowRepository followRepository;
+
+    public UserService(UserRepository userRepository, FollowRequestRepository followRequestRepository, FollowRepository followRepository) {
         this.userRepository = userRepository;
         this.followRequestRepository = followRequestRepository;
+        this.followRepository = followRepository;
     }
 
     public void registerStudent(JsonObject userCommand) {
@@ -108,4 +114,50 @@ public class UserService {
             throw e;
         }
     }
+
+    public List<UserProjection> getRequestsPaginatedByRecipientIdAndByStatus(Long recipientId, Integer page, Integer limit, String option) {
+
+        if (option.equals("pending")) {
+            return followRequestRepository.getPendingRequestsByRecipientId(recipientId, page, limit);
+        } else if (option.equals("accepted")) {
+            return followRequestRepository.getAcceptedRequestsByRecipientId(recipientId, page, limit);
+        } else if (option.equals("declined")) {
+            return followRequestRepository.getDeclinedRequestsByRecipientId(recipientId, page, limit);
+        } else {
+            return followRequestRepository.getSentRequestsByRecipientId(recipientId, page, limit);
+        }
+    }
+
+    public String updateRequestStatus(Long requestId, UserProjection authentication) {
+
+        FollowRequest followRequest = followRequestRepository.getRequestById(requestId);
+
+        if (followRequest.getRecipientId() == authentication.getId()) {
+
+            Follow follow = followRepository.getFollowByFollowerAndFollowed(followRequest.getSenderId(), followRequest.getRecipientId());
+
+            if (followRequest.getFollowRequestStatus().equals(FOLLOW_REQUEST_STATUS.PENDING)) {
+                if (follow == null) {
+                    follow = new Follow(followRequest.getSenderId(), followRequest.getRecipientId());
+                    followRepository.insertFollow(follow);
+                }
+                followRequest.setFollowRequestStatus(FOLLOW_REQUEST_STATUS.ACCEPTED);
+            } else if (followRequest.getFollowRequestStatus().equals(FOLLOW_REQUEST_STATUS.ACCEPTED)) {
+                if (follow != null) {
+                    followRepository.deleteFollow(follow);
+                }
+                followRequest.setFollowRequestStatus(FOLLOW_REQUEST_STATUS.DECLINED);
+            } else {
+                if (follow == null) {
+                    follow = new Follow(followRequest.getSenderId(), followRequest.getRecipientId());
+                    followRepository.insertFollow(follow);
+                }
+                followRequest.setFollowRequestStatus(FOLLOW_REQUEST_STATUS.ACCEPTED);
+            }
+        }
+        followRequestRepository.updateFollowRequest(followRequest);
+
+        return followRequest.getFollowRequestStatus().toString();
+    }
+
 }

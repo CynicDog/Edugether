@@ -45,8 +45,39 @@
                     </div>
                 </div>
                 <div class="shadow-sm p-4 mb-3 bg-body-tertiary rounded">
-                    <h4 class="fw-lighter py-2">Join me!</h4>
-                    <p class="mb-0">upcoming society events</p>
+                    <h4 class="fw-lighter py-2">🥂 Socials</h4>
+                    <div id="pendingRequests"
+                         type="button"
+                         class="badge bg-light-subtle border border-light-subtle text-light-emphasis rounded-pill ">
+                        Pending
+                    </div>
+                    <div id="acceptedRequests"
+                         type="button"
+                         class="badge bg-light-subtle border border-light-subtle text-light-emphasis rounded-pill ">
+                        Accepted
+                    </div>
+                    <div id="declinedRequests"
+                         type="button"
+                         class="badge bg-light-subtle border border-light-subtle text-light-emphasis rounded-pill ">
+                        Declined
+                    </div>
+                    <div id="sentRequests"
+                         type="button"
+                         class="badge bg-light-subtle border border-light-subtle text-light-emphasis rounded-pill ">
+                        Sent
+                    </div>
+                    <hr/>
+                    <div id="requestsOutputArea" class="overflow-scroll" style="max-height: 200px">
+                    </div>
+                    <div class="text-center">
+                        <div class="btn border border-0 disabled">
+                            <div id="requestLoadingSpinner"
+                                 class="spinner-border spinner-border-sm text-primary m-1" role="status"
+                                 style="display: none;">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -475,6 +506,157 @@
             }
         }
     )
+
+    let isRequestLast = false;
+    let isRequestsFetching = false;
+    let pageOnRequests = 0
+    let requestFetchingOption = 'pending'
+
+    const requestLoadingSpinner = document.getElementById('requestLoadingSpinner')
+    const requestsOutputArea = document.getElementById('requestsOutputArea')
+
+    const getRequests = (option, page) => {
+        return fetch(`/follow/request?option=${option}&page=${page}&limit=5`).then(response => response.json())
+    }
+
+    function fetchAndRenderRequests(option, page) {
+        isRequestsFetching = true
+        requestLoadingSpinner.style.display = 'block';
+
+        getRequests(option, page).then(data => {
+
+            if (data.length < 5) {
+                isRequestLast = true;
+                isRequestsFetching = false;
+                requestLoadingSpinner.style.display = 'none';
+            }
+
+            data.users.forEach(datum => {
+
+                function getStatusClasses(status) {
+                    switch (status) {
+                        case 'PENDING':
+                            return 'badge bg-primary-subtle text-primary-emphasis rounded-pill my-1 requestStatusButton';
+                        case 'ACCEPTED':
+                            return 'badge bg-success-subtle text-success-emphasis rounded-pill my-1 requestStatusButton';
+                        case 'DECLINED':
+                            return 'badge bg-danger-subtle text-danger-emphasis rounded-pill my-1 requestStatusButton';
+                        default:
+                            return 'badge bg-warning-subtle text-warning-emphasis rounded-pill my-1 requestStatusButton';
+                    }
+                }
+
+                const statusClasses = getStatusClasses(datum.requestStatus);
+
+                requestsOutputArea.innerHTML += `
+                    <div class="border rounded p-2 my-2 d-flex align-items-center">
+                        <div class="fw-light mx-1 userDetailEntry" type="button"  data-username="${datum.username}">${datum.username}</div>
+                        <div class="ms-auto">
+                            <span type="button"
+                                  data-request-id="${datum.followRequestId}"
+                                  class="${statusClasses}">${datum.requestStatus}</span>
+                        </div>
+                    </div>
+                    `
+                requestLoadingSpinner.style.display = 'none';
+                isRequestsFetching = false;
+            })
+        })
+    }
+
+    fetchAndRenderRequests(requestFetchingOption, pageOnRequests);
+
+    document.getElementById('pendingRequests').addEventListener('click', function () {
+        requestsOutputArea.innerHTML = ''
+
+        pageOnRequests = 0
+        isRequestLast = false;
+        requestFetchingOption = 'pending'
+        fetchAndRenderRequests(requestFetchingOption, pageOnRequests);
+    })
+
+    document.getElementById('acceptedRequests').addEventListener('click', function () {
+        requestsOutputArea.innerHTML = ''
+
+        pageOnRequests = 0
+        isRequestLast = false;
+        requestFetchingOption = 'accepted'
+        fetchAndRenderRequests(requestFetchingOption, pageOnRequests);
+    })
+
+    document.getElementById('declinedRequests').addEventListener('click', function () {
+        requestsOutputArea.innerHTML = ''
+
+        pageOnRequests = 0
+        isRequestLast = false;
+        requestFetchingOption = 'declined'
+        fetchAndRenderRequests(requestFetchingOption, pageOnRequests);
+    })
+
+    document.getElementById('sentRequests').addEventListener('click', function () {
+        requestsOutputArea.innerHTML = ''
+
+        pageOnRequests = 0
+        isRequestLast = false;
+        requestFetchingOption = 'sent'
+        fetchAndRenderRequests(requestFetchingOption, pageOnRequests);
+    })
+
+    requestsOutputArea.addEventListener('scroll', function () {
+
+        const scrollPos = this.scrollTop + this.clientHeight;
+        const scrollHeight = this.scrollHeight;
+
+        if (scrollPos + .5 >= scrollHeight) {
+            if (isRequestsFetching || isRequestLast) {
+                // do nothing
+            } else {
+                pageOnRequests += 1;
+                fetchAndRenderRequests(requestFetchingOption, pageOnRequests);
+            }
+        }
+    })
+
+    document.addEventListener('click', function (event) {
+        if (event.target.classList.contains('requestStatusButton')) {
+            const button = event.target;
+            const requestId = button.getAttribute('data-request-id')
+
+            fetch(`/follow/request-modify?requestId=${requestId}`, {
+                method: "POST"
+            })
+                .then(response => response.json())
+                .then(status => {
+
+                    function getStatusClasses(status) {
+                        switch (status) {
+                            case 'PENDING':
+                                return 'badge bg-primary-subtle text-primary-emphasis rounded-pill my-1 requestStatusButton';
+                            case 'ACCEPTED':
+                                return 'badge bg-success-subtle text-success-emphasis rounded-pill my-1 requestStatusButton';
+                            case 'DECLINED':
+                                return 'badge bg-danger-subtle text-danger-emphasis rounded-pill my-1 requestStatusButton';
+                            default:
+                                return 'badge bg-warning-subtle text-warning-emphasis rounded-pill my-1 requestStatusButton';
+                        }
+                    }
+
+                    const newStatusClasses = getStatusClasses(status);
+
+                    button.textContent = status.status;
+                    button.className = newStatusClasses;
+                })
+        }
+    })
+
+    document.addEventListener('click', function (event) {
+        if (event.target.classList.contains('userDetailEntry')) {
+            const button = event.target;
+            const username = button.getAttribute('data-username')
+
+            window.location.href = `/user-details?username=${username}`
+        }
+    })
 
     function showMessagingToast(message) {
         const messagingToast = document.getElementById('messagingToast');
