@@ -6,13 +6,6 @@
   <component name="ChangeListManager">
     <list default="true" id="83ac0769-501d-47c5-aa4c-9efb288ea6db" name="Changes" comment="modified">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/controller/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/controller/UserController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/repository/CourseRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/repository/CourseRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/repository/ReviewRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/repository/ReviewRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/repository/implementation/CourseRepositoryImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/repository/implementation/CourseRepositoryImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/repository/implementation/ReviewRepositoryImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/repository/implementation/ReviewRepositoryImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/service/CourseService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/service/CourseService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/public/course-details.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/public/course-details.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/public/student-mypage.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/public/student-mypage.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -213,7 +206,22 @@
       <workItem from="1693195184248" duration="5036000" />
       <workItem from="1693221692107" duration="2027000" />
       <workItem from="1693224743674" duration="5000" />
-      <workItem from="1693267197480" duration="14167000" />
+      <workItem from="1693267197480" duration="15334000" />
+      <workItem from="1693289858319" duration="91000" />
+      <workItem from="1693290005313" duration="2358000" />
+      <workItem from="1693296338524" duration="636000" />
+      <workItem from="1693306344502" duration="2796000" />
+      <workItem from="1693364996542" duration="913000" />
+      <workItem from="1693373916803" duration="1809000" />
+      <workItem from="1693392708480" duration="5000" />
+      <workItem from="1693394599990" duration="165000" />
+      <workItem from="1693395369434" duration="244000" />
+      <workItem from="1693441462363" duration="612000" />
+      <workItem from="1693448000808" duration="1010000" />
+      <workItem from="1693538270266" duration="599000" />
+      <workItem from="1693544659439" duration="1193000" />
+      <workItem from="1693664518454" duration="66000" />
+      <workItem from="1693789817085" duration="713000" />
     </task>
     <task id="LOCAL-00001" summary="init (dependencies, entities)">
       <created>1692451459255</created>
@@ -432,7 +440,14 @@
       <option name="project" value="LOCAL" />
       <updated>1693275875246</updated>
     </task>
-    <option name="localTasksCounter" value="32" />
+    <task id="LOCAL-00032" summary="modified">
+      <created>1693286277873</created>
+      <option name="number" value="00032" />
+      <option name="presentableId" value="LOCAL-00032" />
+      <option name="project" value="LOCAL" />
+      <updated>1693286277873</updated>
+    </task>
+    <option name="localTasksCounter" value="33" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

@@ -7,6 +7,11 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.6.0/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        .custom-tooltip {
+            --bs-tooltip-font-size: .7rem;
+        }
+    </style>
 </head>
 <body>
 <div id="navbar-placeholder"></div>
@@ -49,17 +54,15 @@
             <div class="pb-4 mb-4 border-bottom text-end">
                 <span id="enrolledCoursesButton"
                       type="button"
-                      class="badge bg-primary-subtle text-primary-emphasis rounded-pill">Enrolled courses(newest)
+                      class="badge bg-primary-subtle text-primary-emphasis rounded-pill"
+                      data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Click to toggle direction" data-bs-custom-class="custom-tooltip">Enrolled courses
                 </span>
-                <span id="enrolledCoursesOldestButton"
-                      type="button"
-                      class="badge bg-primary-subtle text-primary-emphasis rounded-pill">(oldest)</span>
                 <span id="wishedCoursesButton" type="button"
                       class="badge bg-success-subtle text-success-emphasis rounded-pill">Wished courses</span>
                 <span id="myReviewsButton" type="button"
                       class="badge bg-warning-subtle text-warning-emphasis rounded-pill">My Reviews</span>
-                <span id="criticizedCoursesButton" type="button"
-                      class="badge bg-danger-subtle text-danger-emphasis rounded-pill">button4</span>
+                <span id="subjectsButton" type="button"
+                      class="badge bg-danger-subtle text-danger-emphasis rounded-pill">Subjects</span>
             </div>
             <div>
                 <div id="contentOutputArea" class="row">
@@ -332,18 +335,7 @@
 
         pageOnCourses = 0
         courseFetchingOption = 'enrolled'
-        fetchingDirection = 'desc'
-        fetchingTopic = 'course'
-        fetchAndRenderCourses(courseFetchingOption, pageOnCourses, fetchingDirection)
-    })
-
-    document.getElementById('enrolledCoursesOldestButton').addEventListener('click', function () {
-
-        contentOutputArea.innerHTML = '';
-
-        pageOnCourses = 0
-        courseFetchingOption = 'enrolled'
-        fetchingDirection = 'asc'
+        fetchingDirection = (fetchingDirection === 'desc') ? 'asc' : 'desc';
         fetchingTopic = 'course'
         fetchAndRenderCourses(courseFetchingOption, pageOnCourses, fetchingDirection)
     })
@@ -351,6 +343,7 @@
     document.getElementById('wishedCoursesButton').addEventListener('click', function () {
 
         contentOutputArea.innerHTML = '';
+
         pageOnCourses = 0
         courseFetchingOption = 'wished'
         fetchingDirection = 'desc'
@@ -401,19 +394,18 @@
                         <div class="bg-light rounded-3 p-3 my-3 shadow-sm">
                             <div class="row d-flex align-items-center justify-content-center">
                                 <div class="col-lg-9">
-                                    <span type="button" class="badge bg-warning-subtle border border-warning-subtle text-warning-emphasis rounded-pill" data-course-id="${datum.course.id}">
+                                    <span type="button" class="badge bg-warning-subtle border border-warning-subtle text-warning-emphasis rounded-pill courseDetailsEntry" data-course-id="${datum.course.id}">
                                         ${datum.course.name}
                                     </span>
                                     <span type="button" class="badge bg-light-subtle border border-light-subtle text-light-emphasis rounded-pill ">
                                         ${datum.course.teacher.username}
                                     </span>
-                                        <span class="badge bg-light-subtle border border-light-subtle text-light-emphasis rounded-pill mx-1">
-                                            ${datum.reviewSentiment} ${getSentimentEmoji(datum.reviewSentiment)}
-                                        </span>
                                 </div>
                                 <div class="col-lg-3">
                                     <div class="text-end">
-
+                                        <span class="badge bg-light-subtle border border-light-subtle text-light-emphasis rounded-pill mx-1">
+                                            ${datum.reviewSentiment} ${getSentimentEmoji(datum.reviewSentiment)}
+                                        </span>
                                     </div>
                                 </div>
                             </div>
@@ -436,6 +428,7 @@
     document.getElementById('myReviewsButton').addEventListener('click', function () {
 
         contentOutputArea.innerHTML = '';
+
         pageOnReviews = 0
         fetchingTopic = 'review'
         fetchAndRenderReviews(pageOnReviews);
@@ -461,6 +454,17 @@
             }
         }
     }
+
+    // TODO
+    document.getElementById('subjectsButton').addEventListener('click', function() {
+
+        fetch(`/student/subject?username=${username}`)
+            .then(response => response.json())
+            .then(data => {
+                console.log(data)
+            })
+        ;
+    })
 
     document.addEventListener('click', function (event) {
             if (event.target.classList.contains('courseDetailsEntry')) {
@@ -581,5 +585,9 @@
                 return '';
         }
     }
+
+    const enrolledCoursesButtonTooltip = document.getElementById('enrolledCoursesButton')
+    const tooltip = bootstrap.Tooltip.getOrCreateInstance(enrolledCoursesButtonTooltip)
+
 </script>
 </html>
