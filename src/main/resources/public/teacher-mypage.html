@@ -88,7 +88,9 @@
                       class="badge bg-primary-subtle text-primary-emphasis rounded-pill">
                     📕 Add course</span>
                 <span id="coursesButton" type="button"
-                      class="badge bg-success-subtle text-success-emphasis rounded-pill">
+                      class="badge bg-success-subtle text-success-emphasis rounded-pill"
+                      data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Click to toggle direction"
+                      data-bs-custom-class="custom-tooltip">
                     Courses</span>
                 <span id="followersButton" type="button"
                       class="badge bg-light-subtle border border-light-subtle text-light-emphasis rounded-pill position-relative mx-2"
@@ -643,16 +645,16 @@
         }
     })
 
-    const getCourses = page => {
-        return fetch(`/teacher/course?username=${username}&page=${page}&limit=3`).then(response => response.json());
+    const getCourses = (page, direction) => {
+        return fetch(`/teacher/course?username=${username}&page=${page}&limit=3&direction=${direction}`).then(response => response.json());
     }
 
-    function fetchAndRenderCourses(page) {
+    function fetchAndRenderCourses(page, direction) {
 
         isCourseFetching = true;
         contentLoadingSpinner.style.display = 'block';
 
-        getCourses(page).then(data => {
+        getCourses(page, direction).then(data => {
             if (data.length < 3) {
                 isCourseLast = true;
             }
@@ -676,8 +678,8 @@
                                 <div class="d-flex flex-column h-100 p-5 pb-3 text-white text-shadow-1">
                                     <div>
                                         <div class="d-flex">
-                                            <div class="badge bg-primary-subtle border border-primary-subtle text-primary-emphasis rounded-pill me-auto my-2">${course.subject}</div>
-                                            <div type="button" class="badge text-bg-secondary rounded-pill fw-light my-2 courseStatusButton" data-course-id="${course.id}">${course.courseStatus} ${getCourseStatusEmoji(course.courseStatus)}</div>
+                                            <div class="badge text-bg-secondary rounded-pill fw-light me-auto my-2">${course.subject}</div>
+                                            <div type="button" class="badge bg-light-subtle border border-light-subtle text-light-emphasis rounded-pill fw-light my-2 courseStatusButton" data-course-id="${course.id}">${course.courseStatus} ${getCourseStatusEmoji(course.courseStatus)}</div>
                                         </div>
                                     </div>
                                     <div>
@@ -707,7 +709,7 @@
     }
 
     // initial fetching
-    fetchAndRenderCourses(pageOnCourses);
+    fetchAndRenderCourses(pageOnCourses, fetchingDirection);
 
     document.getElementById('coursesButton').addEventListener('click', function () {
 
@@ -716,8 +718,9 @@
         pageOnCourses = 0
         isCourseFetching = false;
         isCourseLast = false;
+        fetchingDirection = (fetchingDirection === 'desc') ? 'asc' : 'desc';
         fetchingTopic = 'course'
-        fetchAndRenderCourses(pageOnCourses)
+        fetchAndRenderCourses(pageOnCourses, fetchingDirection)
     })
 
     const getSocials = (page, direction, option) => {
@@ -1003,17 +1006,20 @@
             case 'OPEN':
                 return '☀️';
             case 'CLOSED':
-                return '🌧️';
+                return '☔️';
             default:
                 return '';
         }
     }
 
     const followersButtonTooltip = document.getElementById('followersButton')
-    const tooltip2 = bootstrap.Tooltip.getOrCreateInstance(followersButtonTooltip)
+    const tooltip1 = bootstrap.Tooltip.getOrCreateInstance(followersButtonTooltip)
 
     const followingsButtonTooltip = document.getElementById('followingsButton')
-    const tooltip3 = bootstrap.Tooltip.getOrCreateInstance(followingsButtonTooltip)
+    const tooltip2 = bootstrap.Tooltip.getOrCreateInstance(followingsButtonTooltip)
+
+    const coursesButtonTooltip = document.getElementById('coursesButton')
+    const tooltip3 = bootstrap.Tooltip.getOrCreateInstance(coursesButtonTooltip)
 
 </script>
 </html>

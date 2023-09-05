@@ -285,6 +285,23 @@ public class CourseRepositoryImpl implements CourseRepository {
     }
 
     @Override
+    public List<Course> getPaginatedCoursesByUsernameOrderByPublishedDateAsc(String username, Integer page, Integer limit) {
+        return JpaOperationUtil.apply(entityManagerFactory, em -> {
+
+            int startIndex = page * limit;
+            TypedQuery<Course> query = em.createQuery(
+                    "select distinct c from Course c left join fetch c.wishers where c.teacher.username = :username order by c.publishedDate asc", Course.class);
+
+            query.setParameter("username", username);
+
+            query.setFirstResult(startIndex);
+            query.setMaxResults(limit);
+
+            return query.getResultList();
+        });
+    }
+
+    @Override
     public List<CourseProjection> getPaginatedCoursesByPublishedDateAsc(Integer page, Integer limit) {
         return JpaOperationUtil.apply(entityManagerFactory, em -> {
 

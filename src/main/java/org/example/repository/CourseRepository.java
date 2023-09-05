@@ -14,6 +14,7 @@ public interface CourseRepository {
     void insertCourse(Course course);
     List<CourseProjection> getPaginatedCoursesByPublishedDateDesc(Integer page, Integer limit);
     List<Course> getPaginatedCoursesByUsernameOrderByPublishedDateDesc(String username, Integer page, Integer limit);
+    List<Course> getPaginatedCoursesByUsernameOrderByPublishedDateAsc(String username, Integer page, Integer limit);
     List<CourseProjection> getPaginatedCoursesByPublishedDateAsc(Integer page, Integer limit);
     void insertRegistration(Registration registration);
     boolean isRegistered(Long studentId, Long courseId);
@@ -29,7 +30,6 @@ public interface CourseRepository {
     List<CourseProjection> getPaginatedCoursesByReviewSentimentAcclaimed(Integer page, Integer limit);
     List<CourseProjection> getPaginatedCoursesByReviewSentimentMixed(Integer page, Integer limit);
     List<CourseProjection> getPaginatedCoursesByReviewSentimentCriticized(Integer page, Integer limit);
-
 }
 
 

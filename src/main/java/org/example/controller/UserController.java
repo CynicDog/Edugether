@@ -274,7 +274,15 @@ public class UserController implements Controller {
         Optional<Integer> page = Optional.of(Integer.parseInt(routingContext.request().getParam("page")));
         Optional<Integer> limit = Optional.of(Integer.parseInt(routingContext.request().getParam("limit")));
 
-        List<Course> courses = courseService.getPaginatedCoursesByPublishedDateAndByUsernameDescending(username, page.orElse(0), limit.orElse(3));
+        Optional<String> direction = Optional.of(routingContext.request().getParam("direction"));
+
+        List<Course> courses = null;
+
+        if (direction.get().equals("asc")) {
+            courses = courseService.getPaginatedCoursesByPublishedDateAndByUsernameAsc(username, page.orElse(0), limit.orElse(3));
+        } else {
+            courses = courseService.getPaginatedCoursesByPublishedDateAndByUsernameDesc(username, page.orElse(0), limit.orElse(3));
+        }
 
         JsonObject data = new JsonObject().put("courses", courses);
 

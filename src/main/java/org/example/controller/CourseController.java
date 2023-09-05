@@ -119,7 +119,7 @@ public class CourseController implements Controller {
         Optional<Integer> page = Optional.of(Integer.parseInt(routingContext.request().getParam("page")));
         Optional<Integer> limit = Optional.of(Integer.parseInt(routingContext.request().getParam("limit")));
 
-        List<ReviewProjection> reviews = courseService.getPaginatedReviewsByCourseIdAndCreateDateDescending(courseId, page.orElse(0), limit.orElse(4));
+        List<ReviewProjection> reviews = courseService.getPaginatedReviewsByCourseIdAndCreateDateDesc(courseId, page.orElse(0), limit.orElse(4));
 
         JsonObject data = new JsonObject().put("reviews", reviews);
 

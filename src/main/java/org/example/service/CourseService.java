@@ -146,12 +146,17 @@ public class CourseService {
         return courseRepository.getStudentsByRegistration_CourseId(courseId);
     }
 
-    public List<Course> getPaginatedCoursesByPublishedDateAndByUsernameDescending(String username, Integer page, Integer limit) {
+    public List<Course> getPaginatedCoursesByPublishedDateAndByUsernameDesc(String username, Integer page, Integer limit) {
 
         return courseRepository.getPaginatedCoursesByUsernameOrderByPublishedDateDesc(username, page, limit);
     }
 
-    public List<ReviewProjection> getPaginatedReviewsByCourseIdAndCreateDateDescending(Long courseId, Integer page, Integer limit) {
+    public List<Course> getPaginatedCoursesByPublishedDateAndByUsernameAsc(String username, Integer page, Integer limit) {
+
+        return courseRepository.getPaginatedCoursesByUsernameOrderByPublishedDateAsc(username, page, limit);
+    }
+
+    public List<ReviewProjection> getPaginatedReviewsByCourseIdAndCreateDateDesc(Long courseId, Integer page, Integer limit) {
 
         return reviewRepository.getPaginatedReviewsByCourseIdOrderByCreateDateDesc(courseId, page, limit);
     }
