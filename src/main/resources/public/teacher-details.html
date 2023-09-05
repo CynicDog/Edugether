@@ -194,6 +194,18 @@
                 isCourseLast = true;
             }
             data.courses.forEach(course => {
+
+                let wisherBadges = '';
+                course.wishers.forEach(wisher => {
+                    const wisherBadge = `
+                        <span type="button"
+                              class="badge text-bg-secondary rounded-pill fw-light my-2 mx-1 userDetailEntry" data-username="${wisher.username}">
+                            ${wisher.username}
+                        </span>
+                    `
+                    wisherBadges += wisherBadge;
+                })
+
                 contentOutputArea.innerHTML += `
                     <div class="row">
                         <div class="col my-3">
@@ -207,8 +219,8 @@
                                     </div>
                                     <div>
                                         <h3 type="button" class="pt-3 display-6 lh-1 fw-bold courseDetailsEntry" data-course-id="${course.id}"> ${course.name}</h3>
-                                        <div class="fw-lighter my-3">Wishers
-                                        // TODO: wishers
+                                        <div class="fw-lighter my-3">Wishers:
+                                            ${wisherBadges}
                                         </div>
                                         <ul class="d-flex list-unstyled mt-auto">
                                             <li class="ms-auto d-flex align-items-center me-3">
