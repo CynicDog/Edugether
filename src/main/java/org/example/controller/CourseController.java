@@ -62,9 +62,28 @@ public class CourseController implements Controller {
             router.post("/course/register").handler(BodyHandler.create()).handler(this::handleCourseRegister);
             router.post("/course/enroll").handler(BodyHandler.create()).handler(this::handleCourseEnroll);
             router.post("/course/wish").handler(BodyHandler.create()).handler(this::handleCourseWish);
+            router.post("/course/status-modify").handler(this::handleCourseStatusModify);
             router.post("/review/register").handler(BodyHandler.create()).handler(this::handleReviewRegister);
             router.post("/review/like").handler(this::handleReviewLike);
         }
+    }
+
+    private void handleCourseStatusModify(RoutingContext routingContext) {
+
+        //            fetch(`/course/status-modify?id=${courseId}`)
+        UserProjection authentication = routingContext.session().get("Authentication");
+
+        if (authentication == null) {
+            logger.info("[ Authentication entry point ]");
+            routingContext.response().setStatusCode(401).end();
+            return;
+        }
+
+        Long courseId = Long.parseLong(routingContext.request().getParam("id"));
+
+        String status = courseService.modifyCourseStatus(courseId);
+
+        routingContext.response().setStatusCode(200).end(status);
     }
 
     private void handleReviewLike(RoutingContext routingContext) {

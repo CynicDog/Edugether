@@ -13,6 +13,7 @@ import org.example.projection.ReviewProjection;
 import org.example.repository.CourseRepository;
 import org.example.repository.ReviewRepository;
 import org.example.repository.UserRepository;
+import org.example.util.enums.COURSE_STATUS;
 import org.example.util.enums.FETCHING_OPTION;
 import org.example.util.enums.REGISTRATION_STATUS;
 import org.example.util.enums.REVIEW_SENTIMENT;
@@ -221,5 +222,19 @@ public class CourseService {
         User user = userRepository.loadUserByUsername(username);
 
         return reviewRepository.getPaginatedReviewsByStudentId(user.getId(), page, limit);
+    }
+
+    public String modifyCourseStatus(Long courseId) {
+
+        Course course = courseRepository.getCourseById(courseId);
+
+        COURSE_STATUS modified = (course.getCourseStatus() == COURSE_STATUS.OPEN) ?
+                COURSE_STATUS.CLOSED :
+                COURSE_STATUS.OPEN;
+
+        course.setCourseStatus(modified);
+        courseRepository.updateCourse(course);
+
+        return modified.toString();
     }
 }

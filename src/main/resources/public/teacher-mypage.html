@@ -145,7 +145,8 @@
                     <div class="p-3">
                         <div class="my-2">
                             <div class="form-floating">
-                                <input type="text" class="form-control-plaintext" id="qualificationTitle" name="qualificationTitle" placeholder="">
+                                <input type="text" class="form-control-plaintext" id="qualificationTitle"
+                                       name="qualificationTitle" placeholder="">
                                 <label class="fw-lighter d-flex" for="qualificationTitle">Title
                                     <div class="ms-auto">
                                         <div class="validation qualificationTitle mx-3 text-danger"
@@ -676,7 +677,7 @@
                                     <div>
                                         <div class="d-flex">
                                             <div class="badge bg-primary-subtle border border-primary-subtle text-primary-emphasis rounded-pill me-auto my-2">${course.subject}</div>
-                                            <div class="badge bg-success-subtle border border-success-subtle text-success-emphasis rounded-pill my-2">${course.courseStatus}</div>
+                                            <div type="button" class="badge text-bg-secondary rounded-pill fw-light my-2 courseStatusButton" data-course-id="${course.id}">${course.courseStatus} ${getCourseStatusEmoji(course.courseStatus)}</div>
                                         </div>
                                     </div>
                                     <div>
@@ -822,7 +823,7 @@
     let isSocialFetching = false;
     let isSocialLast = false;
 
-    document.getElementById('followersButton').addEventListener('click', function() {
+    document.getElementById('followersButton').addEventListener('click', function () {
 
         contentOutputArea.innerHTML = '';
 
@@ -835,7 +836,7 @@
         fetchAndRenderSocials(pageOnSocials, fetchingDirection, socialFetchingOption)
     })
 
-    document.getElementById('followingsButton').addEventListener('click', function() {
+    document.getElementById('followingsButton').addEventListener('click', function () {
 
         contentOutputArea.innerHTML = '';
 
@@ -870,14 +871,28 @@
     }
 
     document.addEventListener('click', function (event) {
-            if (event.target.classList.contains('courseDetailsEntry')) {
-                const button = event.target;
-                const courseId = button.getAttribute('data-course-id');
+        if (event.target.classList.contains('courseDetailsEntry')) {
+            const button = event.target;
+            const courseId = button.getAttribute('data-course-id');
 
-                window.location.href = `course/details-page?courseId=${courseId}`
-            }
-        }
+            window.location.href = `course/details-page?courseId=${courseId}`
+        }}
     )
+
+    document.addEventListener('click', function (event) {
+        if (event.target.classList.contains('courseStatusButton')) {
+            const button = event.target;
+            const courseId = button.getAttribute('data-course-id');
+
+            fetch(`/course/status-modify?id=${courseId}`, {
+                method: "POST"
+            })
+                .then(response => response.text())
+                .then(status => {
+                    button.textContent = status + " " + getCourseStatusEmoji(status);
+                });
+        }
+    })
 
     function showMessagingToast(message) {
         const messagingToast = document.getElementById('messagingToast');
@@ -982,6 +997,17 @@
             });
     };
     updateFollowingsCount();
+
+    function getCourseStatusEmoji(status) {
+        switch (status) {
+            case 'OPEN':
+                return '☀️';
+            case 'CLOSED':
+                return '🌧️';
+            default:
+                return '';
+        }
+    }
 
     const followersButtonTooltip = document.getElementById('followersButton')
     const tooltip2 = bootstrap.Tooltip.getOrCreateInstance(followersButtonTooltip)

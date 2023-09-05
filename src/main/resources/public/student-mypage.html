@@ -302,7 +302,7 @@
                                             <div class="col-md-5 text-end fw-lighter">
                                                 <span type="button"
                                                     data-registration-id="${datum.id}"
-                                                    class="badge bg-light-subtle border border-light-subtle text-light-emphasis rounded-pill mx-1 my-2 registrationModify">
+                                                    class="badge bg-light-subtle border border-light-subtle text-light-emphasis rounded-pill mx-1 my-2 registrationStatusButton">
                                                     ${datum.registrationStatus} ${getRegistrationStatusEmoji(datum.registrationStatus)}
                                                 </span>
                                             </div>
@@ -400,7 +400,7 @@
     })
 
     document.addEventListener('click', function (event) {
-        if (event.target.classList.contains('registrationModify')) {
+        if (event.target.classList.contains('registrationStatusButton')) {
             const button = event.target;
             const registrationId = button.getAttribute('data-registration-id')
 
