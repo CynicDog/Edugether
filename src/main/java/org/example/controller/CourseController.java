@@ -198,7 +198,7 @@ public class CourseController implements Controller {
             courseService.enrollOnCourse(authentication.getUsername(), courseId);
             routingContext.response().setStatusCode(200).setStatusMessage("Successfully enrolled on the course!").end();
         } catch (Exception e) {
-            routingContext.response().setStatusCode(500).setStatusMessage("Already enrolled on.").end();
+            routingContext.response().setStatusCode(500).setStatusMessage(e.getMessage()).end();
         }
     }
 

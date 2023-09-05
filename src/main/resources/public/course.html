@@ -43,6 +43,8 @@
                   class="badge bg-danger-subtle text-danger-emphasis rounded-pill">Criticized</span>
             <span id="oldestCoursesButton" type="button"
                   class="badge bg-dark-subtle text-dark-emphasis rounded-pill">Oldest</span>
+            <span id="openedCoursesButton" type="button"
+                  class="badge bg-light-subtle border border-light-subtle text-light-emphasis rounded-pill">Open Only</span>
         </div>
     </div>
     <div id="coursesOutputArea" class="row row-cols-1 row-cols-lg-3 align-items-stretch g-4 py-5">
@@ -195,9 +197,8 @@
                                 <div class="d-flex flex-column h-100 p-5 pb-3 text-white text-shadow-1">
                                     <div class="row">
                                         <div class="col-8">
-                                            <div class="badge text-bg-secondary rounded-pill fw-light me-auto my-2">
-                                                ${course.subject}
-                                            </div>
+                                            <div class="badge text-bg-secondary rounded-pill fw-light me-auto my-2">${course.subject}</div>
+                                            <div class="badge bg-light-subtle border border-light-subtle text-light-emphasis rounded-pill fw-light my-2">${course.status} ${getCourseStatusEmoji(course.status)}</div>
                                         </div>
                                         <div class="col-2">
                                             <div class="btn btn-dark btn-sm my-1 enrollCourseButton" data-course-id="${course.id}" style="font-size: .8rem">enroll</div>
@@ -301,6 +302,17 @@
             coursesOutputArea.innerHTML = '';
 
             courseFetchingOption = 'criticized'
+            isCourseFetching = false;
+            isCourseLast = false;
+            pageOnCourses = 0;
+
+            fetchAndRenderCourses(courseFetchingOption, pageOnCourses)
+        })
+
+        document.getElementById('openedCoursesButton').addEventListener('click', function () {
+            coursesOutputArea.innerHTML = '';
+
+            courseFetchingOption = 'openedOnly'
             isCourseFetching = false;
             isCourseLast = false;
             pageOnCourses = 0;
@@ -613,6 +625,17 @@
             return new Date(timestamp).toLocaleDateString("en-US");
         }
     })
+
+    function getCourseStatusEmoji(status) {
+        switch (status) {
+            case 'OPEN':
+                return '☀️';
+            case 'CLOSED':
+                return '☔️';
+            default:
+                return '';
+        }
+    }
 
     // if got back from authentication entry point, reload the page.
     window.onpageshow = function (event) {

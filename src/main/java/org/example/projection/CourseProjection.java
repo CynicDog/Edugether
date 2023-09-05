@@ -1,5 +1,6 @@
 package org.example.projection;
 
+import org.example.util.enums.COURSE_STATUS;
 import org.example.util.enums.SUBJECT_TITLE;
 
 import java.util.Date;
@@ -12,6 +13,8 @@ public class CourseProjection {
     private Date startingDay;
     private Date endingDay;
     private SUBJECT_TITLE subject;
+    private COURSE_STATUS status;
+
     private String teacherUsername;
 
     public CourseProjection(Long id, String name, String description, Date startingDay, Date endingDay, SUBJECT_TITLE subject, String teacherUsername) {
@@ -21,6 +24,17 @@ public class CourseProjection {
         this.startingDay = startingDay;
         this.endingDay = endingDay;
         this.subject = subject;
+        this.teacherUsername = teacherUsername;
+    }
+
+    public CourseProjection(Long id, String name, String description, Date startingDay, Date endingDay, SUBJECT_TITLE subject, COURSE_STATUS status, String teacherUsername) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.startingDay = startingDay;
+        this.endingDay = endingDay;
+        this.subject = subject;
+        this.status = status;
         this.teacherUsername = teacherUsername;
     }
 
@@ -35,6 +49,10 @@ public class CourseProjection {
 
     public Long getId() {
         return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -75,6 +93,14 @@ public class CourseProjection {
 
     public void setSubject(SUBJECT_TITLE subject) {
         this.subject = subject;
+    }
+
+    public COURSE_STATUS getStatus() {
+        return status;
+    }
+
+    public void setStatus(COURSE_STATUS status) {
+        this.status = status;
     }
 
     public String getTeacherUsername() {

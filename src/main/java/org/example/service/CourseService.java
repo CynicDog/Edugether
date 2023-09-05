@@ -70,8 +70,10 @@ public class CourseService {
             return courseRepository.getPaginatedCoursesByReviewSentimentAcclaimed(page, limit);
         } else if (option.equals(FETCHING_OPTION.MIXED.toString().toLowerCase())) {
             return courseRepository.getPaginatedCoursesByReviewSentimentMixed(page, limit);
-        } else { // criticized
+        } else if (option.equals(FETCHING_OPTION.CRITICIZED.toString().toLowerCase())){
             return courseRepository.getPaginatedCoursesByReviewSentimentCriticized(page, limit);
+        } else { // open only
+            return courseRepository.getPaginatedCoursesByReviewOpened(page, limit);
         }
     }
 
@@ -80,13 +82,17 @@ public class CourseService {
         Student student = userRepository.loadStudentByUsername(username);
         Course course = courseRepository.getCourseById(courseId);
 
+        if (course.getCourseStatus().equals(COURSE_STATUS.CLOSED)) {
+            throw new IllegalStateException("Course got closed :(");
+        }
+
         Registration registration = new Registration(student, course);
 
         try {
             courseRepository.insertRegistration(registration);
         } catch (Exception e) {
             logger.info("[ enrollOnCourse(String username, Long courseId) ]: " + e.getMessage());
-            throw e;
+            throw new IllegalStateException("Already enrolled on.");
         }
     }
 
@@ -95,7 +101,11 @@ public class CourseService {
         Student student = userRepository.loadStudentByUsername(username);
         Course course = courseRepository.getCourseById(courseId);
 
-        // TODO: `ManyToMany` unique constraints exception throwing fails ..... why?
+        if (course.getCourseStatus().equals(COURSE_STATUS.CLOSED)) {
+            throw new IllegalStateException("Course got closed :(");
+        }
+
+        // TODO: `ManyToMany` unique constraints violation doesn't throw exception ..... why?
         if (course.getWishers().stream().anyMatch(wisher -> wisher.getUsername().equals(username))) {
             logger.info("course.getWishers().contains(student)");
             throw new IllegalStateException("Already wished for.");
