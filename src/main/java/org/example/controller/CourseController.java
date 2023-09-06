@@ -48,16 +48,21 @@ public class CourseController implements Controller {
             router.get("/course").handler(routingContext -> {
                 routingContext.response().putHeader("Content-Type", "text/html").sendFile(PUBLIC + "course.html");
             });
-            router.get("/course/subjects").handler(this::handleCourseSubjects);
-            router.get("/courses").handler(this::handleCourses);
             router.get("/course/details-page").handler(routingContext -> {
                 routingContext.response().putHeader("Content-Type", "text/html").sendFile(PUBLIC + "course-details.html");
             });
-            
-            router.get("/review/sentiments").handler(this::handleReviewSentiments);
+
+            router.get("/course/subjects").handler(this::handleCourseSubjects);
+            router.get("/courses").handler(this::handleCourses);
             router.get("/course/details").handler(this::handleCourseDetails);
             router.get("/course/reviews").handler(this::handleCourseReviews);
+            router.get("/course/most-popular").handler(this::handleMostPopularCourse);
+            router.get("/course/most-wished").handler(this::handleMostWishedCourse);
+            router.get("/course/most-recent").handler(this::handleMostRecentCourses);
+
+            router.get("/review/sentiments").handler(this::handleReviewSentiments);
         }
+
         {   // POST handlers
             router.post("/course/register").handler(BodyHandler.create()).handler(this::handleCourseRegister);
             router.post("/course/enroll").handler(BodyHandler.create()).handler(this::handleCourseEnroll);
@@ -66,6 +71,30 @@ public class CourseController implements Controller {
             router.post("/review/register").handler(BodyHandler.create()).handler(this::handleReviewRegister);
             router.post("/review/like").handler(this::handleReviewLike);
         }
+    }
+
+    private void handleMostRecentCourses(RoutingContext routingContext) {
+
+        List<CourseProjection> courses = courseService.getMostRecentCourses(3);
+
+        JsonObject data = new JsonObject().put("courses", courses);
+        routingContext.response().setStatusCode(200).end(data.encode());
+    }
+
+    private void handleMostWishedCourse(RoutingContext routingContext) {
+
+        CourseProjection course = courseService.getMostWishedCourse();
+
+        JsonObject data = new JsonObject().put("course", course);
+        routingContext.response().setStatusCode(200).end(data.encode());
+    }
+
+    private void handleMostPopularCourse(RoutingContext routingContext) {
+
+        CourseProjection course = courseService.getMostPopularCourse();
+
+        JsonObject data = new JsonObject().put("course", course);
+        routingContext.response().setStatusCode(200).end(data.encode());
     }
 
     private void handleCourseStatusModify(RoutingContext routingContext) {

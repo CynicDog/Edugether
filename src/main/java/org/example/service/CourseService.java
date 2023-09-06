@@ -252,4 +252,19 @@ public class CourseService {
 
         return modified.toString();
     }
+
+    public CourseProjection getMostPopularCourse() {
+
+        return courseRepository.getCourseByRegistrationCount();
+    }
+
+    public CourseProjection getMostWishedCourse() {
+
+        return courseRepository.getCourseByWishCount();
+    }
+
+    public List<CourseProjection> getMostRecentCourses(int limit) {
+
+        return courseRepository.getCoursesOrderByPublishedDateLimit(limit);
+    }
 }

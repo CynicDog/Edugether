@@ -31,6 +31,9 @@ public interface CourseRepository {
     List<CourseProjection> getPaginatedCoursesByReviewSentimentMixed(Integer page, Integer limit);
     List<CourseProjection> getPaginatedCoursesByReviewSentimentCriticized(Integer page, Integer limit);
     List<CourseProjection> getPaginatedCoursesByReviewOpened(Integer page, Integer limit);
+    CourseProjection getCourseByRegistrationCount();
+    CourseProjection getCourseByWishCount();
+    List<CourseProjection> getCoursesOrderByPublishedDateLimit(int limit);
 }
 
 

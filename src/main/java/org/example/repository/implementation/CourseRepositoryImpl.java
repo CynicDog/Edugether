@@ -373,9 +373,81 @@ public class CourseRepositoryImpl implements CourseRepository {
                     "c.endingDay, " +
                     "c.subject, " +
                     "c.courseStatus, " +
-                    "c.teacher.username) from Course c " + "order by c.publishedDate desc", CourseProjection.class);
+                    "c.teacher.username) from Course c " +
+                    "order by c.publishedDate desc", CourseProjection.class);
 
             query.setFirstResult(startIndex);
+            query.setMaxResults(limit);
+
+            return query.getResultList();
+        });
+    }
+
+    @Override
+    public CourseProjection getCourseByRegistrationCount() {
+        return JpaOperationUtil.apply(entityManagerFactory, em -> {
+
+            TypedQuery<CourseProjection> query = em.createQuery(
+                    "select new org.example.projection.CourseProjection(" +
+                            "c.id, " +
+                            "c.name, " +
+                            "c.description, " +
+                            "c.startingDay, " +
+                            "c.endingDay, " +
+                            "c.subject, " +
+                            "c.courseStatus, " +
+                            "c.teacher.username) " +
+                            "from Course c " +
+                            "left join Registration r on r.course.id = c.id " +
+                            "group by c.id, c.name, c.description, c.startingDay, c.endingDay, c.subject, c.teacher.username " +
+                            "order by count(r.id) desc", CourseProjection.class);
+
+            query.setMaxResults(1);
+
+            return query.getSingleResult();
+        });
+    }
+
+    @Override
+    public CourseProjection getCourseByWishCount() {
+        return (CourseProjection) JpaOperationUtil.apply(entityManagerFactory, em -> {
+
+            Query query = em.createNativeQuery("select " +
+                    "c.id, " +
+                    "c.name, " +
+                    "c.startingDay, " +
+                    "c.endingDay, " +
+                    "c.subject, " +
+                    "u.username as teacherUsername " +
+                    "from Course c " +
+                    "inner join Teacher t on C.teacherId = t.id " +
+                    "inner join User u on t.id = u.id " +
+                    "inner join WishListCourses wlc on c.id = wlc.courseId " +
+                    "group by c.id, c.name, c.startingDay, c.endingDay, c.subject, u.username " +
+                    "order by count(wlc.courseId) desc", "CourseProjectionMapping");
+
+            query.setMaxResults(1);
+
+            return query.getSingleResult();
+        });
+    }
+
+    @Override
+    public List<CourseProjection> getCoursesOrderByPublishedDateLimit(int limit) {
+        return JpaOperationUtil.apply(entityManagerFactory, em -> {
+
+            TypedQuery<CourseProjection> query = em.createQuery("select new org.example.projection.CourseProjection(" +
+                    "c.id, " +
+                    "c.name, " +
+                    "c.description, " +
+                    "c.startingDay, " +
+                    "c.endingDay, " +
+                    "c.subject, " +
+                    "c.courseStatus, " +
+                    "c.teacher.username) from Course c " +
+                    "order by c.publishedDate desc", CourseProjection.class);
+
+            query.setFirstResult(0);
             query.setMaxResults(limit);
 
             return query.getResultList();
