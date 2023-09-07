@@ -83,6 +83,42 @@ public class ReviewRepositoryImpl implements ReviewRepository {
     }
 
     @Override
+    public ReviewProjection getReviewByCount(int limit) {
+        return JpaOperationUtil.apply(entityManagerFactory, em -> {
+
+            TypedQuery<ReviewProjection> query = em.createQuery(
+                    "select new org.example.projection.ReviewProjection(" +
+                            "r.id, " +
+                            "r.course.id, " +
+                            "r.writer, " +
+                            "r.course.teacher.id, " +
+                            "r.reviewSentiment, " +
+                            "r.createDate, " +
+                            "r.content, " +
+                            "count (l) " +
+                            ") from Review r " +
+                            "left join r.likers l " +
+                            "group by r.id, r.writer, r.course.teacher.id, r.reviewSentiment, r.createDate, r.content " +
+                            "order by count (l) desc ",
+                    ReviewProjection.class
+            );
+
+            query.setMaxResults(limit);
+            ReviewProjection found = query.getSingleResult();
+
+            BigInteger likedByTeacher = (BigInteger) em.createNativeQuery(
+                            "select count(*) from LikedReviews where reviewId = :reviewId and userId = :courseTeacherId")
+                    .setParameter("reviewId", found.getId())
+                    .setParameter("courseTeacherId", found.getCourseTeacherId())
+                    .getSingleResult();
+
+            found.setLikedByTeacher(likedByTeacher);
+
+            return found;
+        });
+    }
+
+    @Override
     public void insertReview(Review review) {
         try {
             JpaOperationUtil.consume(entityManagerFactory, em -> {

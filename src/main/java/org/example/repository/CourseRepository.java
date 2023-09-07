@@ -6,6 +6,7 @@ import org.example.entity.academics.Review;
 import org.example.entity.users.Student;
 import org.example.projection.CourseProjection;
 import org.example.projection.RegistrationProjection;
+import org.example.projection.ReviewProjection;
 
 import java.util.List;
 
@@ -31,8 +32,9 @@ public interface CourseRepository {
     List<CourseProjection> getPaginatedCoursesByReviewSentimentMixed(Integer page, Integer limit);
     List<CourseProjection> getPaginatedCoursesByReviewSentimentCriticized(Integer page, Integer limit);
     List<CourseProjection> getPaginatedCoursesByReviewOpened(Integer page, Integer limit);
-    CourseProjection getCourseByRegistrationCount();
-    CourseProjection getCourseByWishCount();
+    CourseProjection getCourseByRegistrationCount(int limit);
+    CourseProjection getCourseByWishCount(int limit);
+    CourseProjection getCourseByReviewCount(int limit);
     List<CourseProjection> getCoursesOrderByPublishedDateLimit(int limit);
 }
 

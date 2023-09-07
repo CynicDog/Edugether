@@ -214,7 +214,7 @@
                                     <div>
                                         <div class="d-flex">
                                             <div class="badge bg-primary-subtle border border-primary-subtle text-primary-emphasis rounded-pill me-auto my-2">${course.subject}</div>
-                                            <div class="badge bg-success-subtle border border-success-subtle text-success-emphasis rounded-pill my-2">${course.courseStatus}</div>
+                                            <div class="badge bg-light-subtle border border-light-subtle text-light-emphasis rounded-pill my-2">${course.courseStatus} ${getCourseStatusEmoji(course.courseStatus)}</div>
                                         </div>
                                     </div>
                                     <div>
@@ -528,6 +528,17 @@
             });
     };
     updateFollowingsCount();
+
+    function getCourseStatusEmoji(status) {
+        switch (status) {
+            case 'OPEN':
+                return '☀️';
+            case 'CLOSED':
+                return '☔️';
+            default:
+                return '';
+        }
+    }
 
     const followersButtonTooltip = document.getElementById('followersButton')
     const tooltip2 = bootstrap.Tooltip.getOrCreateInstance(followersButtonTooltip)

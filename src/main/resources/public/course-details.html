@@ -13,34 +13,36 @@
     <div class="row mt-4">
         <div class="col-md-3 py-4">
             <div class="position-sticky" style="top: 2rem;">
-                <div class="my-4 py-4">
-                    <div class="my-4 fw-lighter fs-4">
-                        About Teacher
-                    </div>
-                    <div class="my-4 fw-light fs-6">
-                        Teacher
-                        <span type="button" id="teacherNameArea"
-                              class="badge bg-success-subtle border border-success-subtle text-success-emphasis rounded-pill">
+                <div class="bg-body-tertiary rounded-4 shadow-sm p-3 mt-3">
+                    <div>
+                        <div class="my-1 fw-lighter fs-4">
+                            About Teacher
+                        </div>
+                        <div class="my-4 fw-light fs-6">
+                            Teacher
+                            <span type="button" id="teacherNameArea"
+                                  class="badge bg-success-subtle border border-success-subtle text-success-emphasis rounded-pill">
                         </span>
-                        has been around since
-                        <span id="teacherJoinedDateArea"
-                              class="badge bg-success-subtle border border-success-subtle text-success-emphasis rounded-pill">
+                            has been around since
+                            <span id="teacherJoinedDateArea"
+                                  class="badge bg-success-subtle border border-success-subtle text-success-emphasis rounded-pill">
                         </span>
-                        . Whether you're a beginner or a seasoned
-                        <span id="courseSubjectArea"
-                              class="badge bg-primary-subtle border border-primary-subtle text-primary-emphasis rounded-pill">
+                            . Whether you're a beginner or a seasoned
+                            <span id="courseSubjectArea"
+                                  class="badge bg-primary-subtle border border-primary-subtle text-primary-emphasis rounded-pill">
                         </span> enthusiast, the teacher is here to help you. You can contact to the teacher via
-                        <span id="teacherEmailArea"
-                              class="badge bg-success-subtle border border-success-subtle text-success-emphasis rounded-pill">
+                            <span id="teacherEmailArea"
+                                  class="badge bg-success-subtle border border-success-subtle text-success-emphasis rounded-pill">
                         </span>. Let's learn together!
+                        </div>
                     </div>
-                </div>
-                <div class="my-3">
-                    <div class="my-1 fw-lighter fs-4">
-                        Course participants (<span id="participantsNumberArea" class="fs-5"></span>)
-                    </div>
-                    <div class="my-2 fw-light fs-6">
-                        <div id="participantsArea">
+                    <div>
+                        <div class="my-1 fw-lighter fs-4">
+                            Course participants (<span id="participantsNumberArea" class="fs-5"></span>)
+                        </div>
+                        <div class="my-2 fw-light fs-6">
+                            <div id="participantsArea">
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -60,7 +62,9 @@
                 <div id="courseDescriptionArea" class="fw-light">
                 </div>
                 <div class="my-3">
-                    <div id="enrollCourseButton" class="btn btn-light btn-sm my-1" style="font-size: .8rem">🧑🏻‍💻 Enroll</div>
+                    <div id="enrollCourseButton" class="btn btn-light btn-sm my-1" style="font-size: .8rem">🧑🏻‍💻
+                        Enroll
+                    </div>
                 </div>
             </div>
             <div class="row">
@@ -179,7 +183,7 @@
         flushSubmitButton();
     })
 
-    document.getElementById('enrollCourseButton').addEventListener('click', function() {
+    document.getElementById('enrollCourseButton').addEventListener('click', function () {
         fetch(`/course/enroll?courseId=${courseId}`, {
             method: "POST"
         }).then(response => {
@@ -307,6 +311,7 @@
     }
 
     const teacherNameArea = document.getElementById('teacherNameArea');
+
     function fetchAndRenderCourse(courseId) {
 
         getCourseDetails(courseId).then(data => {
@@ -320,7 +325,7 @@
 
             let teacherUsername = data.course.teacher.username
             teacherNameArea.textContent = teacherUsername
-            teacherNameArea.addEventListener('click', function() {
+            teacherNameArea.addEventListener('click', function () {
                 window.location.href = `/user-details?username=${teacherUsername}`
             })
 
@@ -455,7 +460,7 @@
         }
     })
 
-    document.addEventListener('click', function(event) {
+    document.addEventListener('click', function (event) {
         if (event.target.classList.contains('studentDetailsButton')) {
             const button = event.target;
             const studentUsername = button.getAttribute('data-student-username')
@@ -464,7 +469,7 @@
         }
     })
 
-    document.addEventListener('click', function(event) {
+    document.addEventListener('click', function (event) {
         if (event.target.classList.contains('writerFollowEntry')) {
             const button = event.target;
             const writerId = button.getAttribute('data-writer-id')

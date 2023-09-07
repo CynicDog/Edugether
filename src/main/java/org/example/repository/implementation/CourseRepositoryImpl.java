@@ -384,7 +384,7 @@ public class CourseRepositoryImpl implements CourseRepository {
     }
 
     @Override
-    public CourseProjection getCourseByRegistrationCount() {
+    public CourseProjection getCourseByRegistrationCount(int limit) {
         return JpaOperationUtil.apply(entityManagerFactory, em -> {
 
             TypedQuery<CourseProjection> query = em.createQuery(
@@ -402,14 +402,14 @@ public class CourseRepositoryImpl implements CourseRepository {
                             "group by c.id, c.name, c.description, c.startingDay, c.endingDay, c.subject, c.teacher.username " +
                             "order by count(r.id) desc", CourseProjection.class);
 
-            query.setMaxResults(1);
+            query.setMaxResults(limit);
 
             return query.getSingleResult();
         });
     }
 
     @Override
-    public CourseProjection getCourseByWishCount() {
+    public CourseProjection getCourseByWishCount(int limit) {
         return (CourseProjection) JpaOperationUtil.apply(entityManagerFactory, em -> {
 
             Query query = em.createNativeQuery("select " +
@@ -426,7 +426,32 @@ public class CourseRepositoryImpl implements CourseRepository {
                     "group by c.id, c.name, c.startingDay, c.endingDay, c.subject, u.username " +
                     "order by count(wlc.courseId) desc", "CourseProjectionMapping");
 
-            query.setMaxResults(1);
+            query.setMaxResults(limit);
+
+            return query.getSingleResult();
+        });
+    }
+
+    @Override
+    public CourseProjection getCourseByReviewCount(int limit) {
+        return JpaOperationUtil.apply(entityManagerFactory, em -> {
+
+            TypedQuery<CourseProjection> query = em.createQuery(
+                    "select new org.example.projection.CourseProjection(" +
+                            "c.id, " +
+                            "c.name, " +
+                            "c.description, " +
+                            "c.startingDay, " +
+                            "c.endingDay, " +
+                            "c.subject, " +
+                            "c.courseStatus, " +
+                            "c.teacher.username) " +
+                            "from Course c " +
+                            "left join Review r on r.course.id = c.id " +
+                            "group by c.id, c.name, c.description, c.startingDay, c.endingDay, c.subject, c.teacher.username " +
+                            "order by count(r.id) desc", CourseProjection.class);
+
+            query.setMaxResults(limit);
 
             return query.getSingleResult();
         });

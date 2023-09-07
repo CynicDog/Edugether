@@ -15,4 +15,5 @@ public interface ReviewRepository {
     Review getReviewById(Long reviewId);
     BigInteger getReviewLikedCount(Long reviewId);
     List<Review> getPaginatedReviewsByStudentId(Long studentId, Integer page, Integer limit);
+    ReviewProjection getReviewByCount(int limit);
 }

@@ -145,14 +145,14 @@
             </div>
         </div>
     </div>
-    <div class="row g-5">
+    <div class="row g-5 pb-2">
         <div class="col-md-8">
             <article class="blog-post">
                 <h2 class="display-5 link-body-emphasis mb-1">Edugether:</h2>
                 <h3 class="fs-4">Empowering Education Through Collaboration and Interactive Learning</h3>
                 <hr>
                 <div class="my-4">
-                    <h2>📚 Course Creation and Management</h2>
+                    <h2>📚 Course Creation and Enrollment.</h2>
                     <p class="shadow-sm bg-body-tertiary p-3 rounded-3">Teachers are the heart and soul of the education
                         system,
                         and Edugether recognizes this by offering a
@@ -161,26 +161,30 @@
                         setting important details such as the course name, description, subject category, and schedules.
                         This streamlined process allows educators to focus on what they do best — teaching.
                     </p>
+                    <div class="row mb-2">
+                        <div id="mostPopularCourseOutputArea" class="col-lg-6 ">
+                        </div>
+                        <div id="mostWishedCourseOutputArea" class="col-lg-6 ">
+                        </div>
+                    </div>
                 </div>
                 <div class="my-4">
-                    <h2>🗣️ Engaging Discussions</h2>
+                    <h2>🗣️ Engaging Discussions.</h2>
                     <p class="shadow-sm bg-body-tertiary p-3 rounded-3">Course detail pages on Edugether offer a dynamic
                         environment for discussions. Users can see who has enrolled in the course and participate in the
                         conversation by leaving comments. What sets Edugether apart is its unique feature that allows
                         students and teachers to like comments and follow commenters, fostering a sense of community and
                         interaction.
                     </p>
+                    <div class="row mb-2">
+                        <div id="mostReviewedCourseOutputArea" class="col-lg-6 ">
+                        </div>
+                        <div id="mostFavoredReviewOutputArea" class="col-lg-6 ">
+                        </div>
+                    </div>
                 </div>
                 <div class="my-4">
-                    <h2>🧑‍💻 Interactive Learning</h2>
-                    <p class="shadow-sm bg-body-tertiary p-3 rounded-3">Edugether encourages students to actively engage
-                        in their learning journey. On course detail pages, students can leave messages, ask questions,
-                        and share their thoughts with peers and instructors. This interactive environment promotes
-                        collaboration and a deeper understanding of the course content.
-                    </p>
-                </div>
-                <div class="my-4">
-                    <h2>🤝 Building Connections</h2>
+                    <h2>🤝 Building Connections.</h2>
                     <p class="shadow-sm bg-body-tertiary p-3 rounded-3">Edugether goes beyond traditional learning by
                         allowing students to follow and connect with peers and instructors who inspire them. This
                         feature fosters a sense of community, networking, and collaboration, all of which are essential
@@ -192,17 +196,11 @@
         <div class="col-md-4">
             <div class="position-sticky my-3" style="top: 2rem;">
                 <div class="p-4 mb-3 bg-body-tertiary rounded">
-                    <h4 class="fst-italic">Recent courses</h4>
+                    <h4 class="fst-italic">Recent Courses</h4>
                     <div id="recentCoursesOutputArea">
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
-    <div class="row mb-2">
-        <div id="mostPopularCourseOutputArea" class="col-md-6">
-        </div>
-        <div id="mostWishedCourseOutputArea" class="col-md-6">
         </div>
     </div>
 </main>
@@ -266,18 +264,19 @@
         })
     })
 
-    function fetchAndRenderMostPopularCourse() {
+    const getCoursesOnHome = option => fetch(`/courses/on-home?option=${option}`).then(response => response.json());
 
-        fetch(`/course/most-popular`)
-            .then(response => response.json())
+    function fetchAndRenderCoursesOnHome(option, area) {
+
+        getCoursesOnHome(option)
             .then(data => {
-                document.getElementById('mostPopularCourseOutputArea').innerHTML += `
+                area.innerHTML += `
                     <div class="row g-0 rounded-4 shadow-sm  mb-4 shadow-sm ">
                         <div class="col p-4 ">
-                            <strong class="d-inline-block text-primary-emphasis fw-lighter fst-italic fs-4 mb-2"> The most popular course </strong>
-                            <h3 class="mb-0"> ${data.course.name}</h3>
+                            <strong class="d-inline-block text-primary-emphasis fw-lighter fst-italic fs-4 mb-2"> The most ${option} course </strong>
+                            <h3 class="mb-0 fs-4"> ${data.course.name}</h3>
                             <div class="mb-4 text-body-secondary my-1"> ${data.course.teacherUsername}</div>
-                            <a href="/course/details-page?courseId=${data.course.id}" class="link-secondary link-underline-opacity-0">
+                            <a href="/course/details-page?courseId=${data.course.id}" class="fw-light link-secondary link-underline-opacity-0">
                                 See details...
                             </a>
                         </div>
@@ -286,29 +285,70 @@
             })
     }
 
-    fetchAndRenderMostPopularCourse()
+    fetchAndRenderCoursesOnHome('popular', document.getElementById('mostPopularCourseOutputArea'))
+    fetchAndRenderCoursesOnHome('wished', document.getElementById('mostWishedCourseOutputArea'))
+    fetchAndRenderCoursesOnHome('reviewed', document.getElementById('mostReviewedCourseOutputArea'))
 
-    function fetchAndRenderMostWishedCourse() {
+    function fetchAndRenderPopularReview() {
 
-        fetch(`/course/most-wished`)
+        fetch(`/review/popular`)
             .then(response => response.json())
             .then(data => {
-                document.getElementById('mostWishedCourseOutputArea').innerHTML += `
+
+                const likedByTeacherDiv = data.review.likedByTeacher === 1 ? '<span id="likedByTeacher" class="badge bg-light-subtle border border-light-subtle text-light-emphasis rounded-pill">❤️ by teacher</span>' : '';
+                const truncatedContent = (data.review.content.split(' ').length > 15)
+                    ? `${data.review.content.split(' ').slice(0, 15).join(' ')} (...)`
+                    : data.review.content;
+
+                document.getElementById('mostFavoredReviewOutputArea').innerHTML += `
                     <div class="row g-0 rounded-4 shadow-sm  mb-4 shadow-sm ">
                         <div class="col p-4 ">
-                            <strong class="d-inline-block text-primary-emphasis fw-lighter fst-italic fs-4 mb-2"> The most sought-after course </strong>
-                            <h3 class="mb-0"> ${data.course.name}</h3>
-                            <div class="mb-4 text-body-secondary my-1"> ${data.course.teacherUsername}</div>
-                            <a href="/course/details-page?courseId=${data.course.id}" class="link-secondary link-underline-opacity-0">
-                                See details...
-                            </a>
+                            <strong class="d-inline-block text-primary-emphasis fw-lighter fst-italic fs-4 mb-2"> The most favored
+                                review </strong>
+                            <div class="bg-light rounded-3 p-1">
+                                <div class="row d-flex">
+                                    <div class="col-lg-8">
+                                        <span type="button"
+                                              class="badge bg-success-subtle border border-success-subtle text-success-emphasis rounded-pill mx-1 studentDetailsButton"
+                                              data-student-username="${data.review.writer.username}">
+                                            ${data.review.writer.username}
+                                        </span>
+                                        <span class="badge bg-light-subtle border border-light-subtle text-light-emphasis rounded-pill mx-1">
+                                            ${data.review.reviewSentiment} ${getSentimentEmoji(data.review.reviewSentiment)}
+                                        </span>
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <div class="text-end">
+                                            <span type="button"
+                                                  class="badge bg-dark-subtle border border-dark-subtle text-dark-emphasis rounded-pill reviewLikeButton"
+                                                  data-review-id="${data.review.id}">
+                                                like(<span class="fw-medium">${data.review.likedCount}</span>)
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="fw-light my-1">
+                                    ${truncatedContent}
+                                </div>
+                                <div class="text-end">
+                                    ${likedByTeacherDiv}
+                                    <span class="badge bg-light-subtle border border-light-subtle text-light-emphasis rounded-pill">
+                                        ${formatDate(data.review.createDate)}
+                                    </span>
+                                </div>
+                            </div>
+
+                                <a href="/course/details-page?courseId=${data.review.courseId}" class="fw-light link-secondary link-underline-opacity-0">
+                                    See details...
+                                </a>
+
                         </div>
                     </div>
                 `
             })
     }
 
-    fetchAndRenderMostWishedCourse()
+    fetchAndRenderPopularReview()
 
     function fetchAndRenderRecentCourses() {
 
@@ -332,12 +372,40 @@
 
     fetchAndRenderRecentCourses()
 
+    function getSentimentEmoji(sentiment) {
+        switch (sentiment) {
+            case 'NEUTRAL':
+                return '😐';
+            case 'LOVED':
+                return '❤️';
+            case 'IMPRESSED':
+                return '🤩';
+            case 'MIXED':
+                return '🤔';
+            case 'INSPIRED':
+                return '🌟';
+            case 'OVERWHELMED':
+                return '😲';
+            case 'DISLIKED':
+                return '😞';
+            case 'CONFUSED':
+                return '😕';
+            default:
+                return '';
+        }
+    }
+
+    function formatDate(timestamp) {
+        return new Date(timestamp).toLocaleDateString("en-US");
+    }
+
     // if got back from authentication entry point, reload the page.
     window.onpageshow = function (event) {
         if (event.persisted) {
             location.reload();
         }
     };
+
 </script>
 </body>
 </html>

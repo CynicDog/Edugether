@@ -255,12 +255,22 @@ public class CourseService {
 
     public CourseProjection getMostPopularCourse() {
 
-        return courseRepository.getCourseByRegistrationCount();
+        return courseRepository.getCourseByRegistrationCount(1);
     }
 
     public CourseProjection getMostWishedCourse() {
 
-        return courseRepository.getCourseByWishCount();
+        return courseRepository.getCourseByWishCount(1);
+    }
+
+    public CourseProjection getMostReviewedCourse() {
+
+        return courseRepository.getCourseByReviewCount(1);
+    }
+
+    public ReviewProjection getMostPopularReview() {
+
+        return reviewRepository.getReviewByCount(1);
     }
 
     public List<CourseProjection> getMostRecentCourses(int limit) {

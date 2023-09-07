@@ -9,6 +9,7 @@ import io.vertx.ext.web.handler.SessionHandler;
 import io.vertx.ext.web.handler.StaticHandler;
 import io.vertx.ext.web.sstore.LocalSessionStore;
 import org.example.entity.academics.Course;
+import org.example.entity.academics.Review;
 import org.example.entity.users.Student;
 import org.example.projection.CourseProjection;
 import org.example.projection.ReviewProjection;
@@ -56,11 +57,12 @@ public class CourseController implements Controller {
             router.get("/courses").handler(this::handleCourses);
             router.get("/course/details").handler(this::handleCourseDetails);
             router.get("/course/reviews").handler(this::handleCourseReviews);
-            router.get("/course/most-popular").handler(this::handleMostPopularCourse);
-            router.get("/course/most-wished").handler(this::handleMostWishedCourse);
+
+            router.get("/courses/on-home").handler(this::handleCoursesOnHome);
             router.get("/course/most-recent").handler(this::handleMostRecentCourses);
 
             router.get("/review/sentiments").handler(this::handleReviewSentiments);
+            router.get("/review/popular").handler(this::handleReviewPopular);
         }
 
         {   // POST handlers
@@ -73,6 +75,31 @@ public class CourseController implements Controller {
         }
     }
 
+    private void handleReviewPopular(RoutingContext routingContext) {
+
+        ReviewProjection review = courseService.getMostPopularReview();
+
+        JsonObject data = new JsonObject().put("review", review);
+        routingContext.response().setStatusCode(200).end(data.encode());
+    }
+
+    private void handleCoursesOnHome(RoutingContext routingContext) {
+
+        String option = routingContext.request().getParam("option");
+
+        CourseProjection course = null;
+        if (option.equals("popular")) {
+            course = courseService.getMostPopularCourse();
+        } else if (option.equals("wished")) {
+            course = courseService.getMostWishedCourse();
+        } else if (option.equals("reviewed")) {
+            course = courseService.getMostReviewedCourse();
+        }
+
+        JsonObject data = new JsonObject().put("course", course);
+        routingContext.response().setStatusCode(200).end(data.encode());
+    }
+
     private void handleMostRecentCourses(RoutingContext routingContext) {
 
         List<CourseProjection> courses = courseService.getMostRecentCourses(3);
@@ -81,25 +108,8 @@ public class CourseController implements Controller {
         routingContext.response().setStatusCode(200).end(data.encode());
     }
 
-    private void handleMostWishedCourse(RoutingContext routingContext) {
-
-        CourseProjection course = courseService.getMostWishedCourse();
-
-        JsonObject data = new JsonObject().put("course", course);
-        routingContext.response().setStatusCode(200).end(data.encode());
-    }
-
-    private void handleMostPopularCourse(RoutingContext routingContext) {
-
-        CourseProjection course = courseService.getMostPopularCourse();
-
-        JsonObject data = new JsonObject().put("course", course);
-        routingContext.response().setStatusCode(200).end(data.encode());
-    }
-
     private void handleCourseStatusModify(RoutingContext routingContext) {
 
-        //            fetch(`/course/status-modify?id=${courseId}`)
         UserProjection authentication = routingContext.session().get("Authentication");
 
         if (authentication == null) {
@@ -111,7 +121,6 @@ public class CourseController implements Controller {
         Long courseId = Long.parseLong(routingContext.request().getParam("id"));
 
         String status = courseService.modifyCourseStatus(courseId);
-
         routingContext.response().setStatusCode(200).end(status);
     }
 
@@ -151,7 +160,6 @@ public class CourseController implements Controller {
         List<ReviewProjection> reviews = courseService.getPaginatedReviewsByCourseIdAndCreateDateDesc(courseId, page.orElse(0), limit.orElse(4));
 
         JsonObject data = new JsonObject().put("reviews", reviews);
-
         routingContext.response().setStatusCode(200).end(data.encode());
     }
 
@@ -202,7 +210,6 @@ public class CourseController implements Controller {
         List<String> subjectNames = Arrays.stream(REVIEW_SENTIMENT.values()).map(Enum::name).map(String::toLowerCase).collect(Collectors.toList());
 
         JsonObject data = new JsonObject().put("sentimentNames", subjectNames);
-
         routingContext.response().setStatusCode(200).end(data.encode());
     }
 
@@ -310,7 +317,6 @@ public class CourseController implements Controller {
         List<String> subjectNames = Arrays.stream(SUBJECT_TITLE.values()).map(Enum::name).map(String::toLowerCase).collect(Collectors.toList());
 
         JsonObject data = new JsonObject().put("subjectNames", subjectNames);
-
         routingContext.response().setStatusCode(200).end(data.encode());
     }
 }
