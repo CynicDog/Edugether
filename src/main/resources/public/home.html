@@ -319,9 +319,7 @@
                                     </div>
                                     <div class="col-lg-4">
                                         <div class="text-end">
-                                            <span type="button"
-                                                  class="badge bg-dark-subtle border border-dark-subtle text-dark-emphasis rounded-pill reviewLikeButton"
-                                                  data-review-id="${data.review.id}">
+                                            <span class="badge bg-dark-subtle border border-dark-subtle text-dark-emphasis rounded-pill ">
                                                 like(<span class="fw-medium">${data.review.likedCount}</span>)
                                             </span>
                                         </div>
@@ -369,8 +367,16 @@
                 })
             })
     }
-
     fetchAndRenderRecentCourses()
+
+    document.addEventListener('click', function (event) {
+        if (event.target.classList.contains('studentDetailsButton')) {
+            const button = event.target;
+            const studentUsername = button.getAttribute('data-student-username')
+
+            window.location.href = `/user-details?username=${studentUsername}`
+        }
+    })
 
     function getSentimentEmoji(sentiment) {
         switch (sentiment) {
