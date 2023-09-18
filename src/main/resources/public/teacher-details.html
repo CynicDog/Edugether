@@ -252,8 +252,9 @@
         pageOnCourses = 0
         isCourseFetching = false;
         isCourseLast = false;
+        fetchingDirection = (fetchingDirection === 'desc') ? 'asc' : 'desc';
         fetchingTopic = 'course';
-        fetchAndRenderCourses(pageOnCourses)
+        fetchAndRenderCourses(pageOnCourses, fetchingDirection)
     })
 
     let socialFetchingOption = 'followers';
