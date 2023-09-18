@@ -860,7 +860,7 @@
                     // do nothing
                 } else {
                     pageOnCourses += 1;
-                    fetchAndRenderCourses(pageOnCourses);
+                    fetchAndRenderCourses(pageOnCourses, fetchingDirection);
                 }
             } else if (fetchingTopic === 'socials') {
                 if (isSocialFetching || isSocialLast) {
