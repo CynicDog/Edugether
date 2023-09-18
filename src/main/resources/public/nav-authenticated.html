@@ -14,7 +14,7 @@
                 </li>
                 <li class="nav-item">
                     <a type="button" class="nav-link" onclick="function myPage() {
-                        window.location.href = `/my-page?username=${localStorage.getItem('Authentication')}`
+                        window.location.href = `/my-page?username=${sessionStorage.getItem('Authentication')}`
                     } myPage()">👨🏻‍💻 My Page</a>
                 </li>
             </ul>
@@ -23,7 +23,7 @@
                     <a type="button" class="nav-link" onclick="function sessionClear() {
 
                         const credentials = {
-                            username: localStorage.getItem('Authentication')
+                            username: sessionStorage.getItem('Authentication')
                         };
 
                         fetch(`/logout`, {
@@ -31,7 +31,7 @@
                             body: JSON.stringify(credentials)
                         }).then(response => {
                             if (response.ok) {
-                                localStorage.clear();
+                                sessionStorage.clear();
                                 window.location.href = '/home';
                             }
                         })

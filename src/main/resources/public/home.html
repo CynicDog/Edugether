@@ -213,7 +213,7 @@
 <script>
     document.addEventListener("DOMContentLoaded", function () {
 
-        const username = localStorage.getItem("Authentication");
+        const username = sessionStorage.getItem("Authentication");
 
         if (username !== null) {
             fetch(`/nav-authenticated`)

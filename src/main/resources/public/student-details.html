@@ -231,7 +231,7 @@
     let courseFetchingOption = 'enrolled';
 
     const getCourses = (option, page, direction) => {
-        return fetch(`/student/${option}-course?username=${username}&page=${page}&limit=5&direction=${direction}`)
+        return fetch(`/student/${option}-course?username=${username}&page=${page}&limit=3&direction=${direction}`)
             .then(response => response.json());
     }
 

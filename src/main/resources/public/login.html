@@ -91,7 +91,7 @@
                     showMessagingToast(response.statusText)
                 }
             }).then(data => {
-                localStorage.setItem("Authentication", data.username);
+                sessionStorage.setItem("Authentication", data.username);
                 window.history.back();
             })
         })

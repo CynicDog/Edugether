@@ -5,8 +5,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="83ac0769-501d-47c5-aa4c-9efb288ea6db" name="Changes" comment="modified">
-      <change afterPath="$PROJECT_DIR$/src/test/java/org/example/HttpClientTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/org/example/CardinalityTest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/1101b1af-169c-40f0-92b9-33d0d526db18.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/1101b1af-169c-40f0-92b9-33d0d526db18.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/public/course-details.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/public/course-details.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/public/course.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/public/course.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/public/home.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/public/home.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/public/login.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/public/login.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/public/society-entry.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/public/society-entry.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/public/student-details.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/public/student-details.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/public/teacher-details.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/public/teacher-details.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -49,7 +56,7 @@
     &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
     &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
     &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/Users/ginsenglee/Documents/GitHub/vertx/Edugether/src/main/resources/public&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/Users/ginsenglee/Documents/GitHub/Java/vertx/Edugether&quot;,
     &quot;list.type.of.created.stylesheet&quot;: &quot;CSS&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
@@ -228,21 +235,22 @@
       <workItem from="1693916234704" duration="5031000" />
       <workItem from="1693963997301" duration="124000" />
       <workItem from="1693964361809" duration="12115000" />
-      <workItem from="1694045073416" duration="12705000" />
-    </task>
-    <task id="LOCAL-00001" summary="init (dependencies, entities)">
-      <created>1692451459255</created>
-      <option name="number" value="00001" />
-      <option name="presentableId" value="LOCAL-00001" />
-      <option name="project" value="LOCAL" />
-      <updated>1692451459255</updated>
-    </task>
-    <task id="LOCAL-00002" summary="user insertion / authentication">
-      <created>1692462293087</created>
-      <option name="number" value="00002" />
-      <option name="presentableId" value="LOCAL-00002" />
-      <option name="project" value="LOCAL" />
-      <updated>1692462293087</updated>
+      <workItem from="1694045073416" duration="12734000" />
+      <workItem from="1694063641999" duration="2732000" />
+      <workItem from="1694067339358" duration="609000" />
+      <workItem from="1694071987282" duration="608000" />
+      <workItem from="1694159065576" duration="599000" />
+      <workItem from="1694310162746" duration="4434000" />
+      <workItem from="1694390709149" duration="2000" />
+      <workItem from="1694399476167" duration="204000" />
+      <workItem from="1694402250328" duration="604000" />
+      <workItem from="1694477158397" duration="121000" />
+      <workItem from="1694585579484" duration="21000" />
+      <workItem from="1694601192865" duration="620000" />
+      <workItem from="1694605931137" duration="11467000" />
+      <workItem from="1694654480669" duration="1922000" />
+      <workItem from="1694659630984" duration="5399000" />
+      <workItem from="1694998847759" duration="19473000" />
     </task>
     <task id="LOCAL-00003" summary="modified">
       <created>1692494627489</created>
@@ -566,7 +574,28 @@
       <option name="project" value="LOCAL" />
       <updated>1694057468434</updated>
     </task>
-    <option name="localTasksCounter" value="49" />
+    <task id="LOCAL-00049" summary="modified">
+      <created>1694058597241</created>
+      <option name="number" value="00049" />
+      <option name="presentableId" value="LOCAL-00049" />
+      <option name="project" value="LOCAL" />
+      <updated>1694058597241</updated>
+    </task>
+    <task id="LOCAL-00050" summary="modified">
+      <created>1695011553862</created>
+      <option name="number" value="00050" />
+      <option name="presentableId" value="LOCAL-00050" />
+      <option name="project" value="LOCAL" />
+      <updated>1695011553863</updated>
+    </task>
+    <task id="LOCAL-00051" summary="modified">
+      <created>1695018065333</created>
+      <option name="number" value="00051" />
+      <option name="presentableId" value="LOCAL-00051" />
+      <option name="project" value="LOCAL" />
+      <updated>1695018065333</updated>
+    </task>
+    <option name="localTasksCounter" value="52" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
