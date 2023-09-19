@@ -8,20 +8,13 @@ import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
 import io.vertx.junit5.VertxExtension;
 import io.vertx.junit5.VertxTestContext;
-import org.example.entity.academics.Course;
 import org.example.entity.users.User;
-import org.example.repository.*;
-import org.example.repository.implementation.*;
 import org.example.service.CourseService;
 import org.example.service.UserService;
 
-import org.example.util.enums.SUBJECT_TITLE;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
 
 import java.security.NoSuchAlgorithmException;
 
@@ -29,38 +22,26 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(VertxExtension.class)
 public class HttpClientTest {
-
-    private final EntityManagerFactory emf;
-    private final UserRepository userRepository;
-    private final CourseRepository courseRepository;
-    private final ReviewRepository reviewRepository;
-    private final FollowRequestRepository followRequestRepository;
-    private final FollowRepository followRepository;
     private final UserService userService;
     private final CourseService courseService;
 
-    String studentUsername = "test_studentUsername";
-    String teacherUsername = "test_teacherUsername";
-    String courseName = "test_courseName";
-
     public HttpClientTest() throws NoSuchAlgorithmException {
-        this.emf = Persistence.createEntityManagerFactory("edugether");
 
-        this.userRepository = new UserRepositoryImpl(emf);
-        this.courseRepository = new CourseRepositoryImpl(emf);
-        this.reviewRepository = new ReviewRepositoryImpl(emf);
-        this.followRequestRepository = new FollowRequestRepositoryImpl(emf);
-        this.followRepository = new FollowRepositoryImpl(emf);
-
-        this.userService = new UserService(userRepository, followRequestRepository, followRepository);
-        this.courseService = new CourseService(courseRepository, userRepository, reviewRepository);
+        // static dependency injection pattern
+        this.userService = EdugetherMainApp.getUserService();
+        this.courseService = EdugetherMainApp.getCourseService();
     }
 
     @BeforeEach
     public void setUp(Vertx vertx, VertxTestContext testContext) {
 
-        vertx.deployVerticle(new EdugetherMainApp()).onSuccess(success -> testContext.completeNow()).onFailure(failure -> testContext.failNow(failure));
+        vertx.deployVerticle(new EdugetherMainApp())
+                .onSuccess(success -> testContext.completeNow())
+                .onFailure(failure -> testContext.failNow(failure));
     }
+
+    String studentUsername = "test_studentUsername";
+    String teacherUsername = "test_teacherUsername";
 
     @Test
     public void registerStudentTest(Vertx vertx, VertxTestContext testContext) {

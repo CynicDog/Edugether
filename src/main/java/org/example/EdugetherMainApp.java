@@ -17,7 +17,10 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 
 public class EdugetherMainApp extends AbstractVerticle {
-    private final EntityManagerFactory emf = Persistence.createEntityManagerFactory("edugether");
+    private static final EntityManagerFactory emf = Persistence.createEntityManagerFactory("edugether");
+
+    public static UserService userService = null;
+    public static CourseService courseService = null;
 
     @Override
     public void start(Promise<Void> startPromise) throws Exception {
@@ -31,8 +34,8 @@ public class EdugetherMainApp extends AbstractVerticle {
         FollowRequestRepository followRequestRepository = new FollowRequestRepositoryImpl(emf);
         FollowRepository followRepository = new FollowRepositoryImpl(emf);
 
-        UserService userService = new UserService(userRepository, followRequestRepository, followRepository);
-        CourseService courseService = new CourseService(courseRepository, userRepository, reviewRepository);
+        userService = new UserService(userRepository, followRequestRepository, followRepository);
+        courseService = new CourseService(courseRepository, userRepository, reviewRepository);
 
         UserController userController = new UserController(userService, courseService);
         userController.registerRoutes(vertx, router);
@@ -57,5 +60,15 @@ public class EdugetherMainApp extends AbstractVerticle {
 
         Vertx vertx = Vertx.vertx();
         vertx.deployVerticle(new EdugetherMainApp());
+    }
+
+    public static UserService getUserService() {
+
+        return userService;
+    }
+
+    public static CourseService getCourseService() {
+
+        return courseService;
     }
 }
