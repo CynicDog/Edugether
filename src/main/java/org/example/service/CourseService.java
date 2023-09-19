@@ -277,4 +277,14 @@ public class CourseService {
 
         return courseRepository.getCoursesOrderByPublishedDateLimit(limit);
     }
+
+    public Course getCourseByCourseName(String courseName) {
+
+        return courseRepository.getCourseByCourseName(courseName);
+    }
+
+    public void deleteCourseByCourseName(String courseName) {
+
+        courseRepository.deleteCourseByCourseName(courseName);
+    }
 }

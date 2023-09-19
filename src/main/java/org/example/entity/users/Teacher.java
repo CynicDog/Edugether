@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Set;
 
 @Entity
-public class Teacher extends User{
+public class Teacher extends User {
 
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(

@@ -5,15 +5,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="83ac0769-501d-47c5-aa4c-9efb288ea6db" name="Changes" comment="modified">
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/1101b1af-169c-40f0-92b9-33d0d526db18.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/1101b1af-169c-40f0-92b9-33d0d526db18.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/public/course-details.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/public/course-details.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/public/course.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/public/course.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/public/home.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/public/home.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/public/login.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/public/login.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/public/society-entry.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/public/society-entry.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/public/student-details.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/public/student-details.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/public/teacher-details.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/public/teacher-details.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/controller/CourseController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/controller/CourseController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/entity/users/Teacher.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/entity/users/Teacher.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/repository/CourseRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/repository/CourseRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/repository/implementation/CourseRepositoryImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/repository/implementation/CourseRepositoryImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/service/CourseService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/service/CourseService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/org/example/HttpClientTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/org/example/HttpClientTest.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -86,6 +85,9 @@
     <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
       <recent name="org.example.util" />
     </key>
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="org.example" />
+    </key>
   </component>
   <component name="RunManager" selected="Application.EdugetherMainApp">
     <configuration name="EdugetherMainApp" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
@@ -101,20 +103,7 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="MainVerticle" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="org.example.MainVerticle" />
-      <module name="ChatApp" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="org.example.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="org.example.chatapp in Edugether" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="HttpClientTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="Edugether" />
       <extension name="coverage">
         <pattern>
@@ -122,54 +111,68 @@
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
-      <option name="PACKAGE_NAME" value="org.example.chatapp" />
-      <option name="TEST_OBJECT" value="package" />
+      <option name="PACKAGE_NAME" value="org.example" />
+      <option name="MAIN_CLASS_NAME" value="org.example.HttpClientTest" />
+      <option name="TEST_OBJECT" value="class" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="Edugether-1.0-SNAPSHOT.jar" type="JarApplication" temporary="true">
-      <option name="JAR_PATH" value="$PROJECT_DIR$/target/Edugether-1.0-SNAPSHOT.jar" />
-      <method v="2" />
+    <configuration name="HttpClientTest.checkUsernameUniqueness" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="Edugether" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="org.example.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="org.example" />
+      <option name="MAIN_CLASS_NAME" value="org.example.HttpClientTest" />
+      <option name="METHOD_NAME" value="checkUsernameUniqueness(io.vertx.core.Vertx,io.vertx.junit5.VertxTestContext)" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
     </configuration>
-    <configuration name="[Local] org.example.chatapp.MainVerticle::startUpUserVerticle" type="aws.lambda" factoryName="Local" temporary="true" nameIsGenerated="true">
-      <option name="credentialProviderId" />
-      <option name="regionId" value="us-east-1" />
-      <option name="debugHost" value="localhost" />
-      <option name="architecture" />
-      <option name="environmentVariables">
-        <map />
-      </option>
-      <option name="handler" value="org.example.chatapp.MainVerticle::startUpUserVerticle" />
-      <option name="image" value="false" />
-      <option name="logicalFunctionName" />
-      <option name="memorySize" value="128" />
-      <option name="pathMappings">
-        <list />
-      </option>
-      <option name="platform" />
-      <option name="runtime" />
-      <option name="templateFile" />
-      <option name="timeout" value="300" />
-      <option name="useTemplate" value="false" />
-      <option name="input" />
-      <option name="inputIsFile" value="false" />
-      <sam>
-        <option name="additionalBuildArgs" />
-        <option name="additionalLocalArgs" />
-        <option name="buildInContainer" value="false" />
-        <option name="dockerNetwork" />
-        <option name="skipImagePull" value="false" />
-      </sam>
-      <method v="2" />
+    <configuration name="HttpClientTest.login" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="Edugether" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="org.example.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="org.example" />
+      <option name="MAIN_CLASS_NAME" value="org.example.HttpClientTest" />
+      <option name="METHOD_NAME" value="login(io.vertx.core.Vertx,io.vertx.junit5.VertxTestContext)" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="HttpClientTest.registerCourse" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="Edugether" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="org.example.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="org.example" />
+      <option name="MAIN_CLASS_NAME" value="org.example.HttpClientTest" />
+      <option name="METHOD_NAME" value="registerCourse(io.vertx.core.Vertx,io.vertx.junit5.VertxTestContext)" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
     </configuration>
     <recent_temporary>
       <list>
         <item itemvalue="Application.EdugetherMainApp" />
-        <item itemvalue="JUnit.org.example.chatapp in Edugether" />
-        <item itemvalue="JAR Application.Edugether-1.0-SNAPSHOT.jar" />
-        <item itemvalue="Application.MainVerticle" />
-        <item itemvalue="AWS Lambda.[Local] org.example.chatapp.MainVerticle::startUpUserVerticle" />
+        <item itemvalue="JUnit.HttpClientTest.login" />
+        <item itemvalue="JUnit.HttpClientTest.registerCourse" />
+        <item itemvalue="JUnit.HttpClientTest.checkUsernameUniqueness" />
+        <item itemvalue="JUnit.HttpClientTest" />
       </list>
     </recent_temporary>
   </component>
@@ -250,21 +253,9 @@
       <workItem from="1694605931137" duration="11467000" />
       <workItem from="1694654480669" duration="1922000" />
       <workItem from="1694659630984" duration="5399000" />
-      <workItem from="1694998847759" duration="19473000" />
-    </task>
-    <task id="LOCAL-00003" summary="modified">
-      <created>1692494627489</created>
-      <option name="number" value="00003" />
-      <option name="presentableId" value="LOCAL-00003" />
-      <option name="project" value="LOCAL" />
-      <updated>1692494627489</updated>
-    </task>
-    <task id="LOCAL-00004" summary="logout">
-      <created>1692510743477</created>
-      <option name="number" value="00004" />
-      <option name="presentableId" value="LOCAL-00004" />
-      <option name="project" value="LOCAL" />
-      <updated>1692510743477</updated>
+      <workItem from="1694998847759" duration="20436000" />
+      <workItem from="1695081504381" duration="2842000" />
+      <workItem from="1695086749090" duration="19817000" />
     </task>
     <task id="LOCAL-00005" summary="logout">
       <created>1692510835697</created>
@@ -595,7 +586,21 @@
       <option name="project" value="LOCAL" />
       <updated>1695018065333</updated>
     </task>
-    <option name="localTasksCounter" value="52" />
+    <task id="LOCAL-00052" summary="modified">
+      <created>1695021612422</created>
+      <option name="number" value="00052" />
+      <option name="presentableId" value="LOCAL-00052" />
+      <option name="project" value="LOCAL" />
+      <updated>1695021612422</updated>
+    </task>
+    <task id="LOCAL-00053" summary="modified">
+      <created>1695098456323</created>
+      <option name="number" value="00053" />
+      <option name="presentableId" value="LOCAL-00053" />
+      <option name="project" value="LOCAL" />
+      <updated>1695098456323</updated>
+    </task>
+    <option name="localTasksCounter" value="54" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -619,6 +624,16 @@
     <MESSAGE value="student signup" />
     <MESSAGE value="modified" />
     <option name="LAST_COMMIT_MESSAGE" value="modified" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <breakpoint enabled="true" type="java-exception">
+          <properties class="javax.persistence.NoResultException" package="javax.persistence" />
+          <option name="timeStamp" value="1" />
+        </breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/Edugether$MainVerticle.ic" NAME="MainVerticle Coverage Results" MODIFIED="1693136535896" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">

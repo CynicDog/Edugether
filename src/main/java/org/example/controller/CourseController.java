@@ -9,7 +9,6 @@ import io.vertx.ext.web.handler.SessionHandler;
 import io.vertx.ext.web.handler.StaticHandler;
 import io.vertx.ext.web.sstore.LocalSessionStore;
 import org.example.entity.academics.Course;
-import org.example.entity.academics.Review;
 import org.example.entity.users.Student;
 import org.example.projection.CourseProjection;
 import org.example.projection.ReviewProjection;

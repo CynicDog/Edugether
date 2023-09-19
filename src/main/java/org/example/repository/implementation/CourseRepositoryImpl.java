@@ -528,4 +528,28 @@ public class CourseRepositoryImpl implements CourseRepository {
             throw e;
         }
     }
+
+    @Override
+    public Course getCourseByCourseName(String courseName) {
+        return JpaOperationUtil.apply(entityManagerFactory, em -> {
+
+            Course course = em.createQuery("select c from Course c where c.name = :courseName", Course.class)
+                    .setParameter("courseName", courseName)
+                    .getSingleResult();
+
+            return course;
+        });
+    }
+
+    @Override
+    public void deleteCourseByCourseName(String courseName) {
+        JpaOperationUtil.consume(entityManagerFactory, em -> {
+
+            Course course = em.createQuery("select c from Course c where c.name = :courseName", Course.class)
+                    .setParameter("courseName", courseName)
+                    .getSingleResult();
+
+            em.remove(course);
+        });
+    }
 }

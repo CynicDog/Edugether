@@ -36,6 +36,8 @@ public interface CourseRepository {
     CourseProjection getCourseByWishCount(int limit);
     CourseProjection getCourseByReviewCount(int limit);
     List<CourseProjection> getCoursesOrderByPublishedDateLimit(int limit);
+    Course getCourseByCourseName(String courseName);
+    void deleteCourseByCourseName(String courseName);
 }
 
 
