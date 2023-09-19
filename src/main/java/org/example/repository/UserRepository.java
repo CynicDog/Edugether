@@ -20,4 +20,5 @@ public interface UserRepository {
     void updateUser(User user);
     Student getStudentById(Long studentId);
     User getUserById(Long userId);
+    void deleteUserByUsername(String username);
 }

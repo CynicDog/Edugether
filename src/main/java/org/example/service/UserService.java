@@ -87,6 +87,11 @@ public class UserService {
         return userRepository.loadUserByUsername(name);
     }
 
+    public void deleteByUsername(String username) {
+
+        userRepository.deleteUserByUsername(username);
+    }
+
     public void registerQualification(String username, String qualification) {
 
         Teacher teacher = userRepository.loadTeacherByUsername(username);

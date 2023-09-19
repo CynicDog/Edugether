@@ -118,4 +118,15 @@ public class UserRepositoryImpl implements UserRepository {
             return em.find(User.class, userId);
         });
     }
+
+    @Override
+    public void deleteUserByUsername(String username) {
+         JpaOperationUtil.consume(entityManagerFactory, em -> {
+            User found = em.createQuery("select u from User u where u.username = :username", User.class)
+                    .setParameter("username", username)
+                    .getSingleResult();
+
+            em.remove(found);
+        });
+    }
 }
