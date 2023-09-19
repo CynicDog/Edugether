@@ -22,6 +22,20 @@ import java.util.*;
                         @ColumnResult(name = "subject", type = String.class),
                         @ColumnResult(name = "teacherUsername", type = String.class)
                 }))
+@SqlResultSetMapping(
+        name = "CourseProjectionMappingBenchmark",
+        classes = @ConstructorResult(
+                targetClass = CourseProjection.class,
+                columns = {
+                        @ColumnResult(name = "id", type = Long.class),
+                        @ColumnResult(name = "name", type = String.class),
+                        @ColumnResult(name = "description", type = String.class),
+                        @ColumnResult(name = "startingDay", type = Date.class),
+                        @ColumnResult(name = "endingDay", type = Date.class),
+                        @ColumnResult(name = "subject", type = String.class),
+                        @ColumnResult(name = "status", type = String.class),
+                        @ColumnResult(name = "teacherUsername", type = String.class)
+                }))
 @Entity
 public class Course {
 

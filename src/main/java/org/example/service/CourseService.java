@@ -77,6 +77,12 @@ public class CourseService {
         }
     }
 
+    // for benchmark comparison on `courseRepository.getPaginatedCoursesByPublishedDateDesc(page, limit)` method
+    public List<CourseProjection> getPaginatedCoursesByPublishedDateDescNative(Integer page, Integer limit) {
+
+        return courseRepository.getPaginatedCoursesByPublishedDateDescNative(page, limit);
+    }
+
     public void enrollOnCourse(String username, Long courseId) {
 
         Student student = userRepository.loadStudentByUsername(username);

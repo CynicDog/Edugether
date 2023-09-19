@@ -38,6 +38,19 @@ public class CourseProjection {
         this.teacherUsername = teacherUsername;
     }
 
+    // for SqlResultSetMapping
+    public CourseProjection(Long id, String name, String description, Date startingDay, Date endingDay, String subject, String status, String teacherUsername) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.startingDay = startingDay;
+        this.endingDay = endingDay;
+        this.subject = SUBJECT_TITLE.valueOf(subject);
+        this.status = COURSE_STATUS.valueOf(status);
+        this.teacherUsername = teacherUsername;
+    }
+
+    // for SqlResultSetMapping
     public CourseProjection(Long id, String name, Date startingDay, Date endingDay, String subject, String teacherUsername) {
         this.id = id;
         this.name = name;

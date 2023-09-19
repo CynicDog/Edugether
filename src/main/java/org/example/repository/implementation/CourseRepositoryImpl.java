@@ -384,6 +384,33 @@ public class CourseRepositoryImpl implements CourseRepository {
     }
 
     @Override
+    public List<CourseProjection> getPaginatedCoursesByPublishedDateDescNative(Integer page, Integer limit) {
+        return JpaOperationUtil.apply(entityManagerFactory, em -> {
+
+            int startIndex = page * limit;
+
+            Query query = em.createNativeQuery("select "+
+                    "c.id, " +
+                    "c.name, " +
+                    "c.description, " +
+                    "c.startingDay, " +
+                    "c.endingDay, " +
+                    "c.subject, " +
+                    "c.courseStatus as status, " +
+                    "u.username as teacherUsername " +
+                    "from Course c " +
+                    "inner join Teacher t on c.teacherId = t.id " +
+                    "inner join User u on t.id = u.id " +
+                    "order by c.publishedDate desc ", "CourseProjectionMappingBenchmark");
+
+            query.setFirstResult(startIndex);
+            query.setMaxResults(limit);
+
+            return query.getResultList();
+        });
+    }
+
+    @Override
     public CourseProjection getCourseByRegistrationCount(int limit) {
         return JpaOperationUtil.apply(entityManagerFactory, em -> {
 

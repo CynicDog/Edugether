@@ -38,6 +38,7 @@ public interface CourseRepository {
     List<CourseProjection> getCoursesOrderByPublishedDateLimit(int limit);
     Course getCourseByCourseName(String courseName);
     void deleteCourseByCourseName(String courseName);
+    public List<CourseProjection> getPaginatedCoursesByPublishedDateDescNative(Integer page, Integer limit);
 }
 
 

@@ -7,9 +7,11 @@
     <list default="true" id="83ac0769-501d-47c5-aa4c-9efb288ea6db" name="Changes" comment="modified">
       <change afterPath="$PROJECT_DIR$/src/test/java/org/example/BenchmarkTest.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/EdugetherMainApp.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/EdugetherMainApp.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/org/example/HttpClientTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/org/example/HttpClientTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/entity/academics/Course.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/entity/academics/Course.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/projection/CourseProjection.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/projection/CourseProjection.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/repository/CourseRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/repository/CourseRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/repository/implementation/CourseRepositoryImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/repository/implementation/CourseRepositoryImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/service/CourseService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/service/CourseService.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -44,32 +46,33 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;DefaultHtmlFileTemplate&quot;: &quot;HTML File&quot;,
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/Users/ginsenglee/Documents/GitHub/Java/vertx/Edugether&quot;,
-    &quot;list.type.of.created.stylesheet&quot;: &quot;CSS&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Project&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "DefaultHtmlFileTemplate": "HTML File",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "ToolWindowRun.ShowToolbar": "false",
+    "WebServerToolWindowFactoryState": "false",
+    "git-widget-placeholder": "main",
+    "last_opened_file_path": "/Users/ginsenglee/Documents/GitHub/Java/vertx/Edugether",
+    "list.type.of.created.stylesheet": "CSS",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "project.structure.last.edited": "Project",
+    "project.structure.proportion": "0.0",
+    "project.structure.side.proportion": "0.0",
+    "vue.rearranger.settings.migration": "true"
   },
-  &quot;keyToStringList&quot;: {
-    &quot;DatabaseDriversLRU&quot;: [
-      &quot;mysql&quot;
+  "keyToStringList": {
+    "DatabaseDriversLRU": [
+      "mysql"
     ]
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/src/main/resources/public" />
@@ -86,7 +89,7 @@
       <recent name="org.example" />
     </key>
   </component>
-  <component name="RunManager" selected="JUnit.HttpClientTest">
+  <component name="RunManager" selected="JUnit.BenchmarkTest">
     <configuration name="EdugetherMainApp" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="org.example.EdugetherMainApp" />
       <module name="Edugether" />
@@ -100,7 +103,7 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="BusinessOperationTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="BenchmarkTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="Edugether" />
       <extension name="coverage">
         <pattern>
@@ -109,40 +112,21 @@
         </pattern>
       </extension>
       <option name="PACKAGE_NAME" value="org.example" />
-      <option name="MAIN_CLASS_NAME" value="org.example.BusinessOperationTest" />
+      <option name="MAIN_CLASS_NAME" value="org.example.BenchmarkTest" />
       <option name="TEST_OBJECT" value="class" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="BusinessOperationTest.login" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="BenchmarkTest_jmhType and 3 more" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="Edugether" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="org.example.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="PACKAGE_NAME" value="org.example" />
-      <option name="MAIN_CLASS_NAME" value="org.example.BusinessOperationTest" />
-      <option name="METHOD_NAME" value="login(io.vertx.core.Vertx,io.vertx.junit5.VertxTestContext)" />
-      <option name="TEST_OBJECT" value="method" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="BusinessOperationTest.registerCourse" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="Edugether" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="org.example.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="PACKAGE_NAME" value="org.example" />
-      <option name="MAIN_CLASS_NAME" value="org.example.BusinessOperationTest" />
-      <option name="METHOD_NAME" value="registerCourse(io.vertx.core.Vertx,io.vertx.junit5.VertxTestContext)" />
-      <option name="TEST_OBJECT" value="method" />
+      <option name="TEST_OBJECT" value="pattern" />
+      <patterns>
+        <pattern testClass="org.example.jmh_generated.BenchmarkTest_jmhType" />
+        <pattern testClass="org.example.jmh_generated.BenchmarkTest_jmhType_B1" />
+        <pattern testClass="org.example.jmh_generated.BenchmarkTest_jmhType_B2" />
+        <pattern testClass="org.example.jmh_generated.BenchmarkTest_jmhType_B3" />
+      </patterns>
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -162,13 +146,19 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="BenchmarkTest.AVGT_getPaginatedCoursesByOptionNative$" type="jmh-id" temporary="true" program-parameters="org.example.BenchmarkTest.AVGT_getPaginatedCoursesByOptionNative$" working-dir="$MODULE_WORKING_DIR$" benchmark-type="METHOD" benchmark-class="org.example.BenchmarkTest" isAlternativeJrePathEnabled="false">
+      <module name="Edugether" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="JUnit.BenchmarkTest" />
+        <item itemvalue="JUnit.BenchmarkTest_jmhType and 3 more" />
+        <item itemvalue="Jmh.BenchmarkTest.AVGT_getPaginatedCoursesByOptionNative$" />
         <item itemvalue="JUnit.HttpClientTest" />
         <item itemvalue="Application.EdugetherMainApp" />
-        <item itemvalue="JUnit.BusinessOperationTest" />
-        <item itemvalue="JUnit.BusinessOperationTest.login" />
-        <item itemvalue="JUnit.BusinessOperationTest.registerCourse" />
       </list>
     </recent_temporary>
   </component>
@@ -251,14 +241,7 @@
       <workItem from="1694659630984" duration="5399000" />
       <workItem from="1694998847759" duration="20436000" />
       <workItem from="1695081504381" duration="2842000" />
-      <workItem from="1695086749090" duration="24338000" />
-    </task>
-    <task id="LOCAL-00006" summary="logout">
-      <created>1692511152281</created>
-      <option name="number" value="00006" />
-      <option name="presentableId" value="LOCAL-00006" />
-      <option name="project" value="LOCAL" />
-      <updated>1692511152281</updated>
+      <workItem from="1695086749090" duration="32885000" />
     </task>
     <task id="LOCAL-00007" summary="logout">
       <created>1692511184183</created>
@@ -596,7 +579,14 @@
       <option name="project" value="LOCAL" />
       <updated>1695109489701</updated>
     </task>
-    <option name="localTasksCounter" value="55" />
+    <task id="LOCAL-00055" summary="modified">
+      <created>1695113967159</created>
+      <option name="number" value="00055" />
+      <option name="presentableId" value="LOCAL-00055" />
+      <option name="project" value="LOCAL" />
+      <updated>1695113967159</updated>
+    </task>
+    <option name="localTasksCounter" value="56" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
